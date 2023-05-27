@@ -1,0 +1,17 @@
+.editor-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #282c34;
+    padding: 20px;
+    box-sizing: border-box;
+}
+  
+.ace_editor {
+    width: 100%;
+    min-height: 500px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+  
