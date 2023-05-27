@@ -7,6 +7,7 @@ import "ace-builds/src-noconflict/theme-monokai";
 
 function CodeEditor() {
   const [value, setValue] = useState("");
+  const [output, setOutput] = useState("");
 
   const userInputHandler = (newValue) => {
     setValue(newValue);
@@ -47,6 +48,7 @@ function CodeEditor() {
 
     const output = await textResponse.json();
     console.log(output);
+    setOutput(output.stdout);
   };
 
   return (
@@ -74,6 +76,10 @@ function CodeEditor() {
       </div>
       <div>
         <button onClick={submitHandler}>Run</button>
+      </div>
+      <div>
+          <h3>Output: </h3>
+          <p>{output}</p>
       </div>
     </>
   );
