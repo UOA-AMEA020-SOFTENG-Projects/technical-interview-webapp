@@ -86,6 +86,7 @@ function CodeEditor() {
       console.log("status: " + textResponse.status);
       setErrorMsg("Something went wrong.");
       setIsErrorVisible(true);
+      return;
     }
 
     const output = await textResponse.json();
@@ -95,6 +96,7 @@ function CodeEditor() {
     if (output.outcome !== 15) {
       setErrorMsg("Something went wrong.");
       setIsErrorVisible(true);
+      return;
     }
 
     // make fetch call to submit the text description of the answer
@@ -118,6 +120,7 @@ function CodeEditor() {
       console.log("status: " + similarityResponse.status);
       setErrorMsg("Something went wrong.");
       setIsErrorVisible(true);
+      return;
     }
 
     const similarityScore = await similarityResponse.json();
@@ -125,6 +128,9 @@ function CodeEditor() {
     // update the state variables with the new values so that the component rerenders and they display at the same time
     setOutput(output.stdout);
     setSimilarity(similarityScore.similarityScore);
+
+    // reset 
+    setDescription("");
   };
 
   useEffect(() => {
