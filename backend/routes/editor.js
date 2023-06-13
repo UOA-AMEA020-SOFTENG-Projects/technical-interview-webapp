@@ -22,6 +22,8 @@ editorRouter.put("/editor/similarity", async (req, res) => {
 
         const python = spawn('python', ['./sbert/sbert.py', '--text1', submittedAnswer, '--text2', modelAnswer]);
 
+        // has to be inside a promise because the spawn callbacks are asynchronous and without wrapping them inside a promise 
+        // the endpoint will return before they resolve
         let dataPromise = new Promise((resolve, reject) => {
             python.stdout.on('data', (data) => {
                 console.log(`Similarity Score: ${data}`);
