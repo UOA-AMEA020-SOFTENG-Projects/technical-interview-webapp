@@ -1,6 +1,13 @@
 import express from "express";
 import cors from 'cors';
 import editorRouter from "./routes/editor.js";
+import connectDB from "./database/mongoose.js";
+import * as url from "url";
+import path from "path";
+import contentRouter from "./routes/content.js";
+import problemRouter from "./routes/problem.js";
+import topicRouter from "./routes/topic.js";
+import userRouter from "./routes/user.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -8,12 +15,34 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(cors());
 
-// test endpoint
-app.get('/', (req, res) => {
-    res.send('Hello World!')
-})
+connectDB();
 
 app.use(editorRouter);
+app.use(contentRouter);
+app.use(problemRouter);
+app.use(topicRouter);
+app.use(userRouter);
+
+app.use((error, req, res, next) => {
+  const status = error.status || 500;
+  const message = error.message || "Something went wrong.";
+  res.status(status).json({ message: message });
+});
+
+// Make the "public" folder available statically, all the images and static files we can serve
+// to the front end from this folder directly
+const dirname = url.fileURLToPath(new URL(".", import.meta.url));
+app.use(express.static(path.join(dirname, "./public")));
+
+if (process.env.NODE_ENV === "production") {
+  console.log("Running in production!");
+
+  app.use(express.static(path.join(dirname, "../frontend/dist")));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(dirname, "../frontend/dist/index.html"));
+  });
+}
 
 app.listen(PORT, () => {
   console.log(`Server has started listening on port ${PORT}`);
