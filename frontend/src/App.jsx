@@ -6,7 +6,7 @@ const App = () => {
 
   return (
     <>  
-      <h1>This is a simple code editor</h1>
+      <h1>Code Editor</h1>
       <CodeEditor />
     </>
   )

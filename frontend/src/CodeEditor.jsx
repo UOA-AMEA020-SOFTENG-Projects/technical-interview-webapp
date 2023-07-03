@@ -57,12 +57,18 @@ function CodeEditor() {
     }
   };
 
+  /**
+   * When an input is being supplied, the input can't come from the command line, it must be accepted as stdin 
+   * e.g.) using scanner in java or input() in python
+   */
+
   const submitHandler = () => {
     const codeData = {
       run_spec: {
         language_id: selectedLanguage,
         sourcefilename: fileName,
         sourcecode: value,
+        input: "3 1221",
       },
     };
     submitCode(codeData);
@@ -118,6 +124,7 @@ function CodeEditor() {
 
     if (!similarityResponse.ok) {
       console.log("status: " + similarityResponse.status);
+      console.log("err" + output.stderr);
       setErrorMsg("Something went wrong.");
       setIsErrorVisible(true);
       return;
