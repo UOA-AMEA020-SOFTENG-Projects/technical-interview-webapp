@@ -1,6 +1,6 @@
 import express from "express";
 import { Topic } from "../models/topic.js";
-import { createTopic, updateTopic } from "../dao/topicDAO.js";
+import { createTopic, updateTopic, getTopics, getProblemsByTopic } from "../dao/topicDAO.js";
 
 const topicRouter = new express.Router();
 
@@ -35,6 +35,24 @@ topicRouter.put("/topic/:id", validateTopicBody, async (req, res) => {
   try {
     const updatedTopic = await updateTopic(req.params.id, req.body);
     res.json(updatedTopic);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+topicRouter.get("/topic", async (req, res) => {
+  try {
+    const topics = await getTopics();
+    res.json(topics);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+topicRouter.get("/topic/:id/problems", async (req, res) => {
+  try {
+    const problems = await getProblemsByTopic(req.params.id);
+    res.json(problems);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
