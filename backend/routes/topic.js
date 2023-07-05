@@ -8,7 +8,6 @@ const topicRouter = new express.Router();
 const validateTopicBody = (req, res, next) => {
   // get all the keys of the schema for Topic other than the id and the version fields
   const validKeys = Object.keys(Topic.schema.paths).filter((path) => path !== "_id" && path !== "__v");
-  console.log(validKeys,11)
   
   const reqKeys = Object.keys(req.body);
   
