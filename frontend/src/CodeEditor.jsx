@@ -112,14 +112,12 @@ function CodeEditor() {
       const similarityScore = similarityResponse.data;
   
       // update the state variables with the new values so that the component rerenders and they display at the same time
-      setOutput(output.stdout);
       setSimilarity(similarityScore.similarityScore);
   
       // reset 
       setDescription("");
     } catch (error) {
-      console.log("status: " + error.response.status);
-      console.log("err" + output.stderr);
+      console.log("Error: " + error.message);
       setErrorMsg("Something went wrong.");
       setIsErrorVisible(true);
     }
