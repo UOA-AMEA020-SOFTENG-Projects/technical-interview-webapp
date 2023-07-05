@@ -13,7 +13,6 @@ const problemSchema = new mongoose.Schema(
     boilerplateCode: [
       {
         language: String,
-        currentSolution: String, // their working added to the boilerplate
         boilerplate: String, 
       },
     ],

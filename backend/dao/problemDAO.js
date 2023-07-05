@@ -23,13 +23,13 @@ const deleteProblem = async (id) => {
   return await Problem.findByIdAndDelete(id);
 };
 
-const addTestCaseToProblem = async (problemId, testCase) => {
-  if (invalidId(id)) {
+const addTestCasesToProblem = async (problemId, testCases) => {
+  if (invalidId(problemId)) {
     throw new Error('Id format invalid')
   }
   const problem = await Problem.findById(problemId);
   if (!problem) throw new Error('Problem not found');
-  problem.testCases.push(testCase);
+  testCases.forEach(testCase => problem.testCases.push(testCase));
   await problem.save();
   return problem;
 };
@@ -43,4 +43,26 @@ const getProblem = async (id) => {
   return problem;
 };
 
-export { createProblem, deleteProblem, registerProblemToTopic, addTestCaseToProblem, getProblem };
+const addTestCaseToProblem = async (problemId, testCase) => {
+  if (invalidId(problemId)) {
+    throw new Error('Id format invalid')
+  }
+  const problem = await Problem.findById(problemId);
+  if (!problem) throw new Error('Problem not found');
+  problem.testCases.push(testCase);
+  await problem.save();
+  return problem;
+};
+
+const addBoilerplateToProblem = async (problemId, boilerplate) => {
+  if (invalidId(problemId)) {
+    throw new Error('Id format invalid')
+  }
+  const problem = await Problem.findById(problemId);
+  if (!problem) throw new Error('Problem not found');
+  problem.boilerplateCode.push(boilerplate);
+  await problem.save();
+  return problem;
+};
+
+export { createProblem, deleteProblem, registerProblemToTopic, addTestCasesToProblem, getProblem, addTestCaseToProblem, addBoilerplateToProblem };

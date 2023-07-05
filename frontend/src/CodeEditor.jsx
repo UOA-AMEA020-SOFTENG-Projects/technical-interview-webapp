@@ -62,6 +62,9 @@ function CodeEditor() {
    * e.g.) using scanner in java or input() in python
    */
 
+  // run code: req.body is the code, query param is the selected language 
+  // run tests: req.bodu -> code, query param -> language, and path param is problem id
+
   const submitHandler = () => {
     const codeData = {
       run_spec: {
