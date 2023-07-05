@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import AceEditor from "react-ace";
+import axios from 'axios';
 
 import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/mode-java";
@@ -11,15 +12,18 @@ import "ace-builds/src-noconflict/mode-c_cpp";
 import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/mode-php";
 
+const PROBLEM_ID = "64a549f0b23e2af9677c9243";
+
 function CodeEditor() {
   const [value, setValue] = useState("");
   const [output, setOutput] = useState("");
   const [similarity, setSimilarity] = useState("");
   const [selectedLanguage, setSelectedLanguage] = useState("java");
-  const [fileName, setFileName] = useState("javaOutput.java");
   const [errorMsg, setErrorMsg] = useState("");
   const [isErrorVisible, setIsErrorVisible] = useState(false);
   const [description, setDescription] = useState("");
+  const [testResults, setTestResults] = useState([]);
+
 
   const userInputHandler = (newValue) => {
     setValue(newValue);
@@ -31,30 +35,6 @@ function CodeEditor() {
 
   const dropDownChangeHandler = (event) => {
     setSelectedLanguage(event.target.value);
-
-    // set the output filename and ext based on the language chosen
-    switch (event.target.value) {
-      case "c":
-        setFileName(event.target.value + "-output.c");
-        break;
-      case "java":
-        setFileName(event.target.value + "Output.java");
-        break;
-      case "nodejs":
-        setFileName(event.target.value + "-output.js");
-        break;
-      case "python3":
-        setFileName(event.target.value + "-output.py");
-        break;
-      case "cpp":
-        setFileName(event.target.value + "-output.cpp");
-        break;
-      case "php":
-        setFileName(event.target.value + "-output.php");
-        break;
-      default:
-        console.log("Please select a valid language");
-    }
   };
 
   /**
@@ -65,48 +45,58 @@ function CodeEditor() {
   // run code: req.body is the code, query param is the selected language 
   // run tests: req.bodu -> code, query param -> language, and path param is problem id
 
-  const submitHandler = () => {
-    const codeData = {
-      run_spec: {
-        language_id: selectedLanguage,
-        sourcefilename: fileName,
-        sourcecode: value,
-        input: "3 1221",
-      },
-    };
-    submitCode(codeData);
+  const submitHandler = async () => {
+    try {
+
+      console.log("-----------------------------")
+      console.log("code: " + value, 52);
+      console.log("selected language: " + selectedLanguage, 53)
+      console.log("-----------------------------")
+
+      // call endpoint 2 here
+      const response = await axios.post(
+        "http://localhost:3000/editor/code",
+        { code: value },
+        { params: { language_id: selectedLanguage } }
+      );
+
+      if (response.status !== 200) {
+        setErrorMsg("Something went wrong.");
+        setIsErrorVisible(true);
+        return;
+      }
+
+      setOutput(response.data.output);
+    } catch (error) {
+      setErrorMsg(error.message);
+      setIsErrorVisible(true);
+    }
   };
 
-  const submitCode = async (code) => {
-    // make fetch call to submit the code
+  const testSubmitHandler = async () => {
+    try {
+      // call endpoint 3 here
+      const response = await axios.post(
+        `http://localhost:3000/editor/${PROBLEM_ID}/testCase`,
+        { code: value },
+        { params: { language_id: selectedLanguage } }
+      );
 
-    const textResponse = await fetch(
-      "http://localhost:4000/jobe/index.php/restapi/runs",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(code),
+      if (response.status !== 200) {
+        setErrorMsg("Something went wrong.");
+        setIsErrorVisible(true);
+        return;
       }
-    );
 
-    if (!textResponse.ok) {
-      console.log("status: " + textResponse.status);
-      setErrorMsg("Something went wrong.");
+      setTestResults(response.data.testResults);
+    } catch (error) {
+      setErrorMsg(error.message);
       setIsErrorVisible(true);
-      return;
     }
+  }
 
-    const output = await textResponse.json();
-
-    console.log(output);
-
-    if (output.outcome !== 15) {
-      setErrorMsg("Something went wrong.");
-      setIsErrorVisible(true);
-      return;
-    }
+  const submitExplanationHandler = async () => {
+    // call endpoint 1 here
 
     // make fetch call to submit the text description of the answer
 
@@ -115,7 +105,7 @@ function CodeEditor() {
     };
 
     const similarityResponse = await fetch(
-      "http://localhost:3000/editor/similarity",
+      "http://localhost:3000/editor/similarity/" + PROBLEM_ID,
       {
         method: "PUT",
         headers: {
@@ -141,7 +131,7 @@ function CodeEditor() {
 
     // reset 
     setDescription("");
-  };
+  }
 
   useEffect(() => {
     if (isErrorVisible) {
@@ -210,7 +200,9 @@ function CodeEditor() {
         />
       </div>
       <div style={{ paddingTop: "7px" }}>
-        <button onClick={submitHandler}>Run</button>
+        <button onClick={submitHandler}>Run Code</button>
+        <button onClick={testSubmitHandler}>Run Test Cases</button>
+        <button onClick={submitExplanationHandler}>Submit Explanation</button>
       </div>
       <div>
         <h3>Output: </h3>
@@ -222,6 +214,13 @@ function CodeEditor() {
           better!):
         </h3>
         <p>{similarity}</p>
+      </div>
+      <div>
+        {/* Display the test case results here */}
+        <h3>Test Case Results: </h3>
+        {testResults.map((result, index) => (
+          <p key={index}>Test Case {result.testcase}: {result.passed ? "Passed" : "Failed"}</p>
+        ))}
       </div>
       {isErrorVisible && (
         <div

@@ -6,6 +6,7 @@ import { Problem } from "../models/problem.js";
 
 const editorRouter = new express.Router();
 
+// endpoint 1: text similarity
 editorRouter.put("/editor/similarity/:problemId", async (req, res) => {
   try {
     // Fetch problem from the database by its ID
@@ -62,6 +63,13 @@ editorRouter.post("/editor/code", async (req, res) => {
   try {
     const sourcecode = req.body.code;
     const selectedLanguage = req.query.language_id;
+
+    console.log("-------------------------------------------")
+    console.log("code: " + sourcecode,67);
+    console.log("selected language: " + selectedLanguage, 68); 
+    console.log("-------------------------------------------")
+
+
     let fileName = '';
 
     switch (selectedLanguage) {
@@ -106,16 +114,19 @@ editorRouter.post("/editor/code", async (req, res) => {
     );
 
     if (response.status !== 200) {
+      console.log("here!",117)
       return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: 'Error with Jobe server connection' });
     }
 
     if (response.data.outcome !== 15) {
+      console.log("here!",122)
       return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: response.data.cmpinfo, outcome: response.data.outcome });
     }
 
     return res.status(StatusCodes.OK).json({ output: response.data.stdout });
 
   } catch (error) {
+    console.log("here!",129)
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: error.message });
   }
 });
@@ -184,6 +195,10 @@ editorRouter.post("/editor/:problemId/testCase", async (req, res) => {
           }
         }
       );
+
+      console.log("----------------------------------")
+      console.log(response.data);
+      console.log("----------------------------------")
   
       if (response.status !== 200) {
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: 'Error with Jobe server connection' });
