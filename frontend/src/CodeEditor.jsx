@@ -43,15 +43,10 @@ function CodeEditor() {
    */
 
   // run code: req.body is the code, query param is the selected language 
-  // run tests: req.bodu -> code, query param -> language, and path param is problem id
+  // run tests: req.body -> code, query param -> language, and path param is problem id
 
   const submitHandler = async () => {
     try {
-
-      console.log("-----------------------------")
-      console.log("code: " + value, 52);
-      console.log("selected language: " + selectedLanguage, 53)
-      console.log("-----------------------------")
 
       // call endpoint 2 here
       const response = await axios.post(
@@ -97,40 +92,37 @@ function CodeEditor() {
 
   const submitExplanationHandler = async () => {
     // call endpoint 1 here
-
+  
     // make fetch call to submit the text description of the answer
-
     let textDescription = {
       answer: description,
     };
-
-    const similarityResponse = await fetch(
-      "http://localhost:3000/editor/similarity/" + PROBLEM_ID,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(textDescription),
-      }
-    );
-
-    if (!similarityResponse.ok) {
-      console.log("status: " + similarityResponse.status);
+  
+    try {
+      const similarityResponse = await axios.put(
+        "http://localhost:3000/editor/similarity/" + PROBLEM_ID,
+        textDescription,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+  
+      const similarityScore = similarityResponse.data;
+  
+      // update the state variables with the new values so that the component rerenders and they display at the same time
+      setOutput(output.stdout);
+      setSimilarity(similarityScore.similarityScore);
+  
+      // reset 
+      setDescription("");
+    } catch (error) {
+      console.log("status: " + error.response.status);
       console.log("err" + output.stderr);
       setErrorMsg("Something went wrong.");
       setIsErrorVisible(true);
-      return;
     }
-
-    const similarityScore = await similarityResponse.json();
-
-    // update the state variables with the new values so that the component rerenders and they display at the same time
-    setOutput(output.stdout);
-    setSimilarity(similarityScore.similarityScore);
-
-    // reset 
-    setDescription("");
   }
 
   useEffect(() => {

@@ -69,7 +69,6 @@ editorRouter.post("/editor/code", async (req, res) => {
     console.log("selected language: " + selectedLanguage, 68); 
     console.log("-------------------------------------------")
 
-
     let fileName = '';
 
     switch (selectedLanguage) {
@@ -114,19 +113,16 @@ editorRouter.post("/editor/code", async (req, res) => {
     );
 
     if (response.status !== 200) {
-      console.log("here!",117)
       return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: 'Error with Jobe server connection' });
     }
 
     if (response.data.outcome !== 15) {
-      console.log("here!",122)
       return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: response.data.cmpinfo, outcome: response.data.outcome });
     }
 
     return res.status(StatusCodes.OK).json({ output: response.data.stdout });
 
   } catch (error) {
-    console.log("here!",129)
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: error.message });
   }
 });
