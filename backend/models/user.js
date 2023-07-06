@@ -18,18 +18,24 @@ const userSchema = new mongoose.Schema(
           ref: "Topic",
         },
         percentage: Number,
-        problemsCompleted: [
-          {
-            type: Schema.Types.ObjectId,
-            ref: "Problem",
-          },
-        ],
-        problemsIncorrect: [
-          {
-            type: Schema.Types.ObjectId,
-            ref: "Problem",
-          },
-        ],
+      },
+      {
+        timestamps: {},
+      }
+    ],
+    problemsCompleted: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Problem",
+      },
+      {
+        timestamps: {},
+      }
+    ],
+    problemsIncorrect: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Problem",
       },
       {
         timestamps: {},

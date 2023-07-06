@@ -1,10 +1,17 @@
 import { Content } from "../models/content.js";
+import { Topic } from "../models/topic.js";
 import invalidId from "../util/validator.js";
 
 const createContent = async (contentData) => {
   const newContent = new Content(contentData);
   return await newContent.save();
 };
+
+const registerContentWithTopic = async (topicId, contentId) => {
+  const topic = await Topic.findById(topicId);
+  topic.content = contentId;
+  await topic.save();
+}
 
 const updateContent = async (contentId, updatedData) => {
 
@@ -23,4 +30,4 @@ const updateContent = async (contentId, updatedData) => {
   return updatedContent;
 };
 
-export { createContent, updateContent };
+export { createContent, updateContent, registerContentWithTopic };
