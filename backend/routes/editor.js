@@ -119,7 +119,7 @@ editorRouter.post("/editor/code", async (req, res) => {
     if (response.data.outcome !== 15) {
       return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: response.data.cmpinfo, outcome: response.data.outcome });
     }
-
+    
     return res.status(StatusCodes.OK).json({ output: response.data.stdout });
 
   } catch (error) {

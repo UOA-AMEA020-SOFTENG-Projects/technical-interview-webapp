@@ -1,15 +1,31 @@
-import CodeEditor from './CodeEditor';
-import './App.css'
+import React from "react";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import "./App.css";
+import LandingPage from "./pages/LandingPage.jsx";
+import LoginPage from "./pages/LoginPage.jsx";
+import SignupPage from "./pages/SignupPage.jsx";
+import DashboardPage from "./pages/DashboardPage.jsx";
+import ContentPage from "./pages/ContentPage.jsx";
+import ProblemPage from "./pages/ProblemPage.jsx";
+import ErrorPage from "./pages/ErrorPage.jsx";
+import RootPage from "./pages/RootPage.jsx";
+import HomeRootPage from "./pages/HomeRootPage.jsx";
 
-// npm install react-ace ace-builds brace
-const App = () => {
+const router = createBrowserRouter([
+  {path: "/", element: <RootPage />, errorElement: <ErrorPage />, children: [
+    { index: true, element: <LandingPage /> },
+    { path: "login", element: <LoginPage /> },
+    { path: "signup", element: <SignupPage /> },
+    { path: 'home', element: <HomeRootPage />, children: [
+      { path: "dashboard", element: <DashboardPage /> },
+      { path: "content/:topicId", element: <ContentPage /> },
+      { path: "problem/:problemId", element: <ProblemPage /> },
+    ]},
+  ]},
+]);
 
-  return (
-    <>  
-      <h1>Code Editor</h1>
-      <CodeEditor />
-    </>
-  )
+function App() {
+  return <RouterProvider router={router} />;
 }
 
 export default App;
