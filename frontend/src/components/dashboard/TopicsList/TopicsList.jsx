@@ -1,15 +1,22 @@
 import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { Container, Row, Col, Card, Modal, Button } from 'react-bootstrap';
 
 const TopicsList = ({ topics }) => {
   const [show, setShow] = useState(false);
   const [currentTopic, setCurrentTopic] = useState(null);
 
+  const navigate = useNavigate();
+
   const handleClose = () => setShow(false);
   const handleShow = (topic) => {
     setCurrentTopic(topic);
     setShow(true);
   };
+
+  const navigateContentHandler = (topicId) => {
+    navigate(`/home/content/${topicId}`)
+  }
 
   return (
     <Container className="d-flex justify-content-center align-items-center vh-100">
@@ -39,9 +46,11 @@ const TopicsList = ({ topics }) => {
           <Modal.Title>{currentTopic?.title}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Button variant="primary" className="mb-3">Content</Button>
+          <Button variant="primary" className="mb-3" onClick={() => navigateContentHandler(currentTopic._id)}>Content</Button>
           {currentTopic?.problems.map((problem, i) => (
-            <p key={i}>{problem.title}</p>
+            <Link to={`/home/problem/${problem._id}`} key={i}>
+                <p>{problem.title}</p>
+            </Link>
           ))}
         </Modal.Body>
       </Modal>
