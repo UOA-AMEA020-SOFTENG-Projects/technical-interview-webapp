@@ -15,7 +15,7 @@ const updateTopic = async (id, updatedData) => {
 };
 
 const getTopics = async () => {
-  return await Topic.find({});
+  return await Topic.find({}).populate('problems');;
 };
 
 const getProblemsByTopic = async (topicId) => {
