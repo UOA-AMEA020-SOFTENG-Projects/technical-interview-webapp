@@ -1,18 +1,19 @@
-.formWrapper {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: 80vh;
-    margin-top: 50px;
-    width: 80%;
-  }
   
-  form {
+  .form {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     width: 100%;
+    min-height: 80vh;
+    min-width: 20vw;
+    margin-top: 50px;
+  }
+
+  .label {
+    font-size: 2.5em;
+    font-style: normal;
+    margin-bottom: 1.5rem;
   }
   
   form div {
@@ -20,9 +21,8 @@
     width: 100%;
   }
   
-  input {
-    width: 30rem;
-    padding: 10px;
+  .input {
+    width: 100%;
     font-size: 1.2em;
     border-radius: 5px;
     border: 1px solid #ccc;
@@ -39,9 +39,5 @@
     cursor: pointer;
     margin-right: 1.25rem;
     font-size: 1em;
-  }
-
-  h1 {
-    margin-bottom: 3.5rem;
   }
   

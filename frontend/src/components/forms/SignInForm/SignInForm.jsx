@@ -5,9 +5,9 @@ import styles from "./SignInForm.module.css";
 const SignInForm = () => {
 
   return (
-    <div className={styles.formWrapper}>  
-        <h1>Sign in</h1>
+    <div>
         <Form method="POST" className={styles.form}>
+            <label className={styles.label}>Sign in</label>
             <div>
                 <input
                     type="text"
@@ -15,6 +15,7 @@ const SignInForm = () => {
                     id="username"
                     placeholder="Username..."
                     required
+                    className={styles.input}
                 />
             </div>
             <div>
@@ -24,13 +25,14 @@ const SignInForm = () => {
                     id="password"
                     placeholder="Password..."
                     required
+                    className={styles.input}
                 />
             </div>
             <button type="submit" className={styles.button}>Sign in</button>
+            <Link id="signupLink" to={"/signup"}>
+                <p>Dont have an account? Sign up.</p>
+            </Link>
         </Form>
-        <Link id="signupLink" to={"/signup"}>
-            <p>Dont have an account? Sign up.</p>
-        </Link>
     </div>
   );
 }

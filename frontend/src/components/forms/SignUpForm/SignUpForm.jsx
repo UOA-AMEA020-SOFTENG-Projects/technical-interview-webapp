@@ -5,9 +5,9 @@ import styles from "./SignUpForm.module.css";
 const SignUpForm = () => {
 
   return (
-    <div className={styles.formWrapper}>  
-        <h1>Sign up</h1>
+    <div>  
         <Form method="POST" className={styles.form}>
+            <label className={styles.label}>Sign up</label>
             <div>
                 <input
                     type="text"
@@ -36,10 +36,11 @@ const SignUpForm = () => {
                 />
             </div>
             <button type="submit" className={styles.button}>Sign up</button>
+            <Link id="signinLink" to={"/login"}>
+                <p>Already have an account? Log in.</p>
+            </Link>
         </Form>
-        <Link id="signinLink" to={"/login"}>
-            <p>Already have an account? Log in.</p>
-        </Link>
+        
     </div>
   );
 }
