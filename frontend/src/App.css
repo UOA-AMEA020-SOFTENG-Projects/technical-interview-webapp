@@ -5,11 +5,11 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  max-height: auto;
+  height: auto;
   background-color: #D3D3D3;
   color: black;
   font-family: Arial, sans-serif;
-  overflow: scroll;
+  overflow: auto;
 }
 
 h1 {
