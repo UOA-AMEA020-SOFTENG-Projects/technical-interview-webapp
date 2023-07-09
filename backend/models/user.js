@@ -20,28 +20,17 @@ const userSchema = new mongoose.Schema(
         },
         percentage: Number,
       },
-      {
-        timestamps: {},
-      }
     ],
-    problemsCompleted: [
+    currentSolutions: [
       {
-        type: Schema.Types.ObjectId,
-        ref: "Problem",
-      },
-      {
-        timestamps: {},
+        problem: {
+          type: Schema.Types.ObjectId,
+          ref: "Problem",
+        },
+        language: String,
+        solution: String,
       }
-    ],
-    problemsIncorrect: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Problem",
-      },
-      {
-        timestamps: {},
-      }
-    ],
+    ]
   },
   {
     timestamps: {},
