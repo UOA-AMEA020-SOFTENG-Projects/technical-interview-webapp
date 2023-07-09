@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { Container, Row, Col, Card, Modal, Button } from 'react-bootstrap';
 
 const TopicsList = ({ topics }) => {
   const [show, setShow] = useState(false);
   const [currentTopic, setCurrentTopic] = useState(null);
+  const [ searchParams, setSearchParams ] = useSearchParams();
 
   const navigate = useNavigate();
 
@@ -14,8 +15,13 @@ const TopicsList = ({ topics }) => {
     setShow(true);
   };
 
-  const navigateContentHandler = (topicId) => {
-    navigate(`/home/content/${topicId}`)
+  const navigateContentHandler = (topicId, title) => {
+    navigate(`/home/content/${topicId}`); 
+
+    const topicName = {
+        title: title
+    }
+    setSearchParams(topicName);
   }
 
   return (
@@ -46,7 +52,7 @@ const TopicsList = ({ topics }) => {
           <Modal.Title>{currentTopic?.title}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Button variant="primary" className="mb-3" onClick={() => navigateContentHandler(currentTopic._id)}>Content</Button>
+          <Button variant="primary" className="mb-3" onClick={() => navigateContentHandler(currentTopic._id, currentTopic.title)}>Content</Button>
           {currentTopic?.problems.map((problem, i) => (
             <Link to={`/home/problem/${problem._id}`} key={i}>
                 <p>{problem.title}</p>

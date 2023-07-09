@@ -18,9 +18,7 @@ export default DashboardPage;
 
 export const loader = async ({ request, params }) => {
 
-  
-  ///centres/:centreId/dogs/:dogId
-  // This allows the data to be fetched from here before and then the component can be rendered with the data.
+
   const response = await fetch('http://localhost:3000/topic');
 
   if (!response.ok) {

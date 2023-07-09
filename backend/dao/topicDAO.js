@@ -1,4 +1,5 @@
 import { Topic } from "../models/topic.js";
+import { Content } from "../models/content.js";
 import mongoose from 'mongoose';
 import invalidId from "../util/validator.js";
 
@@ -29,4 +30,18 @@ const getProblemsByTopic = async (topicId) => {
   return topic;
 };
 
-export { createTopic, updateTopic, getTopics, getProblemsByTopic };
+const getContentByTopic = async (topicId) => {
+  if (!invalidId(topicId)) {
+    throw new Error('Invalid ID format');
+  }
+  const topic = await Topic.findById(topicId).populate('content');
+  if (!topic) {
+    throw new Error('Topic not found');
+  }
+  if (!topic.content) {
+    throw new Error('No content found for this topic');
+  }
+  return topic.content;
+};
+
+export { createTopic, updateTopic, getTopics, getProblemsByTopic, getContentByTopic };

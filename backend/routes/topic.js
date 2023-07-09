@@ -40,4 +40,17 @@ topicRouter.get("/topic/:id/problems", async (req, res) => {
   }
 });
 
+topicRouter.get("/topic/:id/content", async (req, res) => {
+  try {
+    const content = await getContentByTopic(req.params.id);
+    if (!content) {
+      res.status(404).json({ message: "No content found for this topic id" });
+      return;
+    }
+    res.json(content);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 export default topicRouter;
