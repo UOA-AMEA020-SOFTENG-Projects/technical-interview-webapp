@@ -17,17 +17,10 @@ const ContentPage = () => {
 
 export default ContentPage;
 
-/**
- * function loader({ request }) {
-  const url = new URL(request.url);
-  const searchTerm = url.searchParams.get("q");
-  return searchProducts(searchTerm);
-}
- */
 
 export const loader = async ({ request, params }) => {
 
-  // getting hte topic name through query param: 
+  // getting the topic name through query param: 
   const url = new URL(request.url);
   const topicName = url.searchParams.get("title");
   
@@ -41,8 +34,6 @@ export const loader = async ({ request, params }) => {
       return json({ message: err.message }, { status: 500 });
   } else {
       const content = await response.json();
-
-      console.log("content for topic: " + content);
 
       return {
         content, 
