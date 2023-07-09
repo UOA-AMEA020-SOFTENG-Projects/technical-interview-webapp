@@ -4,12 +4,12 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
+  height: auto;
   background-color: #D3D3D3;
-  background-size: cover;
   color: black;
   font-family: Arial, sans-serif;
-  overflow: scroll;
+  overflow: auto;
 }
 
 h1 {

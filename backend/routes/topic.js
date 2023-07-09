@@ -1,10 +1,6 @@
 import express from "express";
-import {
-  createTopic,
-  updateTopic,
-  getTopics,
-  getProblemsByTopic,
-} from "../dao/topicDAO.js";
+import { createTopic, updateTopic, getTopics, getProblemsByTopic, getContentByTopic } from "../dao/topicDAO.js";
+
 import { validateTopicBody } from "../middleware/keyValidator.js";
 import { authenticateToken } from "../middleware/authenticator.js";
 import Topic from "../models/topic.js";
@@ -51,75 +47,20 @@ topicRouter.get("/topic/:id/problems", async (req, res) => {
 /**
  * Get content by topic id
  */
-topicRouter.get(
-  "/topic/:topicId/content",
-  authenticateToken,
-  async (req, res, next) => {
-    try {
-      const topicId = req.params.topicId;
+topicRouter.get("/topic/:id/content", async (req, res) => {
+  try {
 
-      // Fetch topic from the database by its ID
-      const topic = await Topic.findById(topicId, "content");
-
-      if (!topic) {
-        return res
-          .status(StatusCodes.NOT_FOUND)
-          .json({ message: "Topic not found" });
-      }
-
-      return res.status(StatusCodes.OK).json(topic.content);
-    } catch (error) {
-      return res
-        .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .json({ message: error.message });
+    const content = await getContentByTopic(req.params.id);
+    if (!content) {
+      res.status(StatusCodes.NOT_FOUND).json({ message: "No content found for this topic id" });
+      return;
     }
+    res.json(content);
+  } catch (err) {
+    console.log(err.message);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: err.message });
   }
-);
+});
 
-/**
- * Add content to existing topic given topic id
- */
-topicRouter.post(
-  "/topic/:topicId/content",
-  authenticateToken,
-  async (req, res, next) => {
-    try {
-      const topicId = req.params.topicId;
-
-      // Validate request body
-      if (!req.body.contentText || !req.body.videoUrl) {
-        return res
-          .status(StatusCodes.BAD_REQUEST)
-          .json({ message: "ContentText and videoUrl are required" });
-      }
-
-      // Fetch topic from the database by its ID
-      const topic = await Topic.findById(topicId);
-
-      if (!topic) {
-        return res
-          .status(StatusCodes.NOT_FOUND)
-          .json({ message: "Topic not found" });
-      }
-
-      // Add new content to the topic
-      topic.content.push({
-        contentText: req.body.contentText,
-        videoUrl: req.body.videoUrl,
-      });
-
-      // Save updated topic
-      await topic.save();
-
-      return res
-        .status(StatusCodes.OK)
-        .json({ message: "Content added successfully" });
-    } catch (error) {
-      return res
-        .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .json({ message: error.message });
-    }
-  }
-);
 
 export default topicRouter;

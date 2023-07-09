@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import AceEditor from "react-ace";
 import axios from 'axios';
+import styles from "./CodeEditor.module.css";
 
 import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/mode-java";
@@ -12,13 +13,11 @@ import "ace-builds/src-noconflict/mode-c_cpp";
 import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/mode-php";
 
-const PROBLEM_ID = "64a549f0b23e2af9677c9243";
-
-function CodeEditor() {
-  const [value, setValue] = useState("");
+function CodeEditor({ problem }) {
+  const [value, setValue] = useState(problem.boilerplateCode[0].boilerplate);
   const [output, setOutput] = useState("");
   const [similarity, setSimilarity] = useState("");
-  const [selectedLanguage, setSelectedLanguage] = useState("java");
+  const [selectedLanguage, setSelectedLanguage] = useState(problem.boilerplateCode[0].language);
   const [errorMsg, setErrorMsg] = useState("");
   const [isErrorVisible, setIsErrorVisible] = useState(false);
   const [description, setDescription] = useState("");
@@ -35,6 +34,15 @@ function CodeEditor() {
 
   const dropDownChangeHandler = (event) => {
     setSelectedLanguage(event.target.value);
+
+    const newBoilerplate = problem.boilerplateCode.find(
+      (boilerplate) => boilerplate.language === event.target.value
+    );
+
+    console.log(newBoilerplate.boilerplate, 44);
+
+    setValue(newBoilerplate.boilerplate);
+  
   };
 
   /**
@@ -72,7 +80,7 @@ function CodeEditor() {
     try {
       // call endpoint 3 here
       const response = await axios.post(
-        `http://localhost:3000/editor/${PROBLEM_ID}/testCase`,
+        `http://localhost:3000/editor/${problem._id}/testCase`,
         { code: value },
         { params: { language_id: selectedLanguage } }
       );
@@ -100,7 +108,7 @@ function CodeEditor() {
   
     try {
       const similarityResponse = await axios.put(
-        "http://localhost:3000/editor/similarity/" + PROBLEM_ID,
+        "http://localhost:3000/editor/similarity/" + problem._id,
         textDescription,
         {
           headers: {
@@ -134,7 +142,12 @@ function CodeEditor() {
   }, [isErrorVisible]);
 
   return (
-    <>
+    <div className={styles.editorWrapper}>
+
+      <div>
+        <h2>{problem.title}</h2>
+        <p>{problem.description}</p>
+      </div>
       <div style={{ paddingBottom: "5px" }}>
         <p>{`Selected language is ${selectedLanguage}`}</p>
         <select
@@ -142,13 +155,11 @@ function CodeEditor() {
           default={selectedLanguage}
           onChange={dropDownChangeHandler}
         >
-          <option value="c">C</option>
-          <option value="java">Java</option>
-          <option value="nodejs">NodeJS</option>
-          <option value="python3">Python</option>
-          <option value="php">Php</option>
-          <option value="cpp">C++</option>
-          <option value="pascal">Pascal</option>
+          {problem.boilerplateCode.map((boilerplate, index) => (
+            <option key={index} value={boilerplate.language}>
+              {boilerplate.language}
+            </option>
+          ))}
         </select>
       </div>
       <div>
@@ -226,7 +237,7 @@ function CodeEditor() {
           {errorMsg}
         </div>
       )}
-    </>
+    </div>
   );
 }
 
