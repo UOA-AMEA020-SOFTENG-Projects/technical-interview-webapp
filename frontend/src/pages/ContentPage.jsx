@@ -4,11 +4,13 @@ import TopicContent from "../components/content/TopicContent/TopicContent";
 
 const ContentPage = () => {
 
-  const content = useLoaderData();
+  const data = useLoaderData();
+
+  console.log(data,9)
 
   return (
     <div>
-        <TopicContent content={content} />
+        <TopicContent content={data.content} topicName={data.topicName} />
     </div>
   );
 };
@@ -27,7 +29,7 @@ export const loader = async ({ request, params }) => {
 
   // getting hte topic name through query param: 
   const url = new URL(request.url);
-  const searchTerm = url.searchParams.get("q");
+  const topicName = url.searchParams.get("title");
   
   const topicId = params.topicId;
 
@@ -38,10 +40,13 @@ export const loader = async ({ request, params }) => {
 
       return json({ message: err.message }, { status: 500 });
   } else {
-      const data = await response.json();
+      const content = await response.json();
 
-      console.log("content for topic: " + data);
+      console.log("content for topic: " + content);
 
-      return data;
+      return {
+        content, 
+        topicName
+      };
   }
 }

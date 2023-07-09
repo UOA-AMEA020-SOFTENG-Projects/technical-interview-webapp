@@ -21,6 +21,7 @@ const TopicsList = ({ topics }) => {
     const topicName = {
         title: title
     }
+    
     setSearchParams(topicName);
   }
 

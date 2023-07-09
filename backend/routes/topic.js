@@ -1,5 +1,5 @@
 import express from "express";
-import { createTopic, updateTopic, getTopics, getProblemsByTopic } from "../dao/topicDAO.js";
+import { createTopic, updateTopic, getTopics, getProblemsByTopic, getContentByTopic } from "../dao/topicDAO.js";
 import { validateTopicBody } from "../middleware/keyValidator.js";
 
 const topicRouter = new express.Router();
@@ -42,6 +42,7 @@ topicRouter.get("/topic/:id/problems", async (req, res) => {
 
 topicRouter.get("/topic/:id/content", async (req, res) => {
   try {
+
     const content = await getContentByTopic(req.params.id);
     if (!content) {
       res.status(404).json({ message: "No content found for this topic id" });
@@ -49,6 +50,7 @@ topicRouter.get("/topic/:id/content", async (req, res) => {
     }
     res.json(content);
   } catch (err) {
+    console.log(err.message);
     res.status(500).json({ message: err.message });
   }
 });
