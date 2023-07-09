@@ -5,12 +5,14 @@ const topicSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      unique: true, 
+      unique: true,
     },
-    content: {
-      type: Schema.Types.ObjectId,
-      ref: "Content",
-    },
+    content: [
+      {
+        contentText: String,
+        videoUrl: String,
+      },
+    ],
     problems: [
       {
         type: Schema.Types.ObjectId,
