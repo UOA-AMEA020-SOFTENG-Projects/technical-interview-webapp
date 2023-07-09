@@ -16,11 +16,12 @@ import { loader as problemLoader } from "./pages/ProblemPage.jsx";
 import { loader as contentLoader } from "./pages/ContentPage.jsx";
 import { action as signupAction } from "./pages/SignupPage.jsx";
 import { loader as usernameLoader } from "./pages/HomeRootPage.jsx";
+import { action as loginAction } from "./pages/LoginPage.jsx";
 
 const router = createBrowserRouter([
   {path: "/", element: <RootPage />, errorElement: <ErrorPage />, children: [
     { index: true, element: <LandingPage /> },
-    { path: "login", element: <LoginPage /> },
+    { path: "login", element: <LoginPage />, action: loginAction },
     { path: "signup", element: <SignupPage />, action: signupAction },
     { path: 'home', element: <HomeRootPage />, loader: usernameLoader, children: [
       { path: "dashboard", element: <DashboardPage />, loader: topicsLoader },

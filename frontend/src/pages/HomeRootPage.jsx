@@ -7,8 +7,6 @@ const HomeRootPage = () => {
   const location = useLocation();
   const route = location.pathname;
 
-  console.log(data, 10);
-
   if (route !== '/' && route !== '/login' && route !== '/signup'){
     
     return (

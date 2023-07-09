@@ -1,8 +1,10 @@
 import React from "react";
-import { Form, Link } from "react-router-dom";
+import { Form, Link, useActionData } from "react-router-dom";
 import styles from "./SignInForm.module.css";
 
 const SignInForm = () => {
+  
+  const data = useActionData();
 
   return (
     <div>
@@ -32,6 +34,7 @@ const SignInForm = () => {
             <Link id="signupLink" to={"/signup"}>
                 <p>Dont have an account? Sign up.</p>
             </Link>
+            { data && data.errors && <label style={{ color: 'red' }}>{ data.errors }</label>}
         </Form>
     </div>
   );

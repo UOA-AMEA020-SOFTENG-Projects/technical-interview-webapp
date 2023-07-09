@@ -48,7 +48,7 @@ userRouter.post('/user/login', async (req, res, next) => {
           const accessToken = jwt.sign({username: user.username}, SECRET_KEY);
           res.json({ accessToken: accessToken });
       } else {
-          res.status(401).json({ message: "Unauthorized: Invalid password" });
+          res.status(401).json({ message: "Invalid password" });
       }
   } catch (error) {
       next(error);
