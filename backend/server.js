@@ -7,6 +7,8 @@ import path from "path";
 import problemRouter from "./routes/problem.js";
 import topicRouter from "./routes/topic.js";
 import userRouter from "./routes/user.js";
+import contentRouter from "./routes/content.js";
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -19,6 +21,7 @@ connectDB();
 app.use(editorRouter);
 app.use(problemRouter);
 app.use(topicRouter);
+app.use(contentRouter);
 app.use(userRouter);
 
 app.use((error, req, res, next) => {
