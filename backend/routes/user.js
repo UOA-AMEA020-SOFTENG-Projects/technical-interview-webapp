@@ -4,9 +4,6 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import User from '../models/user.js';
-
-import { authenticateToken } from "../middleware/auth.js";
-
 import { authenticateToken } from "../middleware/authenticator.js";
 
 
