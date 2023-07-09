@@ -6,8 +6,6 @@ const ProblemPage = () => {
 
   const problem = useLoaderData();
 
-  console.log("problem: ", problem, 9);
-
   return (
     <div>
         <CodeEditor problem={problem}/>

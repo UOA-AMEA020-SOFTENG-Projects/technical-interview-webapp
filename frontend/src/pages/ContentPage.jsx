@@ -6,8 +6,6 @@ const ContentPage = () => {
 
   const data = useLoaderData();
 
-  console.log(data,9)
-
   return (
     <div>
         <TopicContent content={data.content} topicName={data.topicName} />
