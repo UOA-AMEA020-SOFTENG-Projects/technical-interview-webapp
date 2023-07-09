@@ -72,5 +72,28 @@ try {
 });
 
 
+userRouter.post('/user/addSolution', authenticateToken, async (req, res, next) => {
+  const { problem, language, solution } = req.body;
+
+  try {
+    // Find the user by username from authenticated user
+    const user = await User.findOne({ username: req.user.username });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    // Push the new solution into the user's currentSolutions array
+    user.currentSolutions.push({ problem, language, solution });
+
+    // Save the updated user document
+    await user.save();
+
+    return res.json({ message: 'Solution added successfully.' });
+  } catch (error) {
+    next(error);
+  }
+});
+
 
 export default userRouter;
