@@ -1,6 +1,9 @@
 .container {
     margin-top: 20rem;
     margin-bottom: 10rem;
+    width: 70vw; /* Adjust this to fit your design */
+    height: auto;
+    overflow-y: auto; 
 }
 
 .heading {
@@ -8,7 +11,8 @@
 }
 
 .card {
-    margin-top: 2rem;
+    height: 100%;
+    width: 100%;
     padding: 2rem;
     border-radius: 0.5rem;
     box-shadow: 0px 10px 20px rgba(0,0,0,0.19), 0px 6px 6px rgba(0,0,0,0.23);
