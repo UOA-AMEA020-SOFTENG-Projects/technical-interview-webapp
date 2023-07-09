@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { useNavigate, Link, useSearchParams } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Container, Row, Col, Card, Modal, Button } from 'react-bootstrap';
 
 const TopicsList = ({ topics }) => {
   const [show, setShow] = useState(false);
   const [currentTopic, setCurrentTopic] = useState(null);
-  const [ searchParams, setSearchParams ] = useSearchParams();
 
   const navigate = useNavigate();
 
@@ -16,13 +15,7 @@ const TopicsList = ({ topics }) => {
   };
 
   const navigateContentHandler = (topicId, title) => {
-    navigate(`/home/content/${topicId}`); 
-
-    const topicName = {
-        title: title
-    }
-    
-    setSearchParams(topicName);
+    navigate(`/home/content/${topicId}?title=${title}`); 
   }
 
   return (

@@ -1,20 +1,30 @@
 import React from "react";
+import { Container, Card } from "react-bootstrap";
+import styles from "./TopicContent.module.css";
+
 
 const TopicContent = ({ content, topicName }) => {
-  
     return (
-    <>
-        <div>
-            <h1>{topicName}</h1>
-        </div>
-        <div>
-            <p>{content.primaryDescription}</p>
-        </div>
-        {content.secondaryDescription && (<p>{content.secondaryDescription}</p>)}
-        <div>
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/1xhahDwbsN8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-    </>
+        <Container className={styles.container}>
+            <Card className={styles.card}>
+                <h1 className={`text-center ${styles.heading}`}>{topicName}</h1>
+                <Card.Body>
+                    <Card.Text>{content.primaryDescription}</Card.Text>
+                    {content.secondaryDescription && <Card.Text>{content.secondaryDescription}</Card.Text>}
+                    <div className={styles.video}>
+                        <iframe className="embed-responsive-item" src={content.videoURL} title="YouTube video player" allowFullScreen></iframe>
+                    </div>
+                    <h5 className="mt-4">Code example:</h5>
+                    <div className={styles.codeContainer}>
+                        <pre>
+                            <code className={styles.code}>
+                                {content.code}
+                            </code>
+                        </pre>
+                    </div>
+                </Card.Body>
+            </Card>
+        </Container>
     );
 };
 

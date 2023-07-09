@@ -31,7 +31,7 @@ const getProblemsByTopic = async (topicId) => {
 };
 
 const getContentByTopic = async (topicId) => {
-  if (!invalidId(topicId)) {
+  if (invalidId(topicId)) {
     throw new Error('Invalid ID format');
   }
   const topic = await Topic.findById(topicId).populate('content');
