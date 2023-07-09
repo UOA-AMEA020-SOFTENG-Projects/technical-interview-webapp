@@ -7,12 +7,10 @@ const topicSchema = new mongoose.Schema(
       type: String,
       unique: true,
     },
-    content: [
-      {
-        contentText: String,
-        videoUrl: String,
-      },
-    ],
+    content: {
+      type: Schema.Types.ObjectId,
+      ref: "Content",
+    },
     problems: [
       {
         type: Schema.Types.ObjectId,
