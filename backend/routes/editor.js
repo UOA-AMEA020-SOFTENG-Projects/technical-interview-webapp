@@ -5,6 +5,7 @@ import { StatusCodes } from "http-status-codes";
 import { Problem } from "../models/problem.js";
 import { authenticateToken } from "../middleware/authenticator.js";
 import User from "../models/user.js";
+import mongoose from "mongoose";
 
 const editorRouter = new express.Router();
 
@@ -59,9 +60,9 @@ editorRouter.put("/editor/similarity/:problemId", async (req, res) => {
 });
 
 // /*
-//   Endpoint #2: runs the code submitted by the user in the frontend on the jobe server 
-//   and returns the output. The endpoint takes the language id as a query param and the code 
-//   is submitted as part of the request body. 
+//   Endpoint #2: runs the code submitted by the user in the frontend on the jobe server
+//   and returns the output. The endpoint takes the language id as a query param and the code
+//   is submitted as part of the request body.
 // */
 // editorRouter.post(
 //   "/editor/:problemId/code",
@@ -180,7 +181,7 @@ editorRouter.put("/editor/similarity/:problemId", async (req, res) => {
 // );
 
 // /*
-//   Endpoint #3: fetches the test cases for the problem and runs them against the code and returns 
+//   Endpoint #3: fetches the test cases for the problem and runs them against the code and returns
 //   the outcome for each test case and whether the code passed each one or not.
 // */
 // editorRouter.post(
@@ -313,6 +314,82 @@ editorRouter.put("/editor/similarity/:problemId", async (req, res) => {
 // );
 
 
+editorRouter.post(
+  "/editor/:problemId/saveSolution",
+  authenticateToken,
+  async (req, res, next) => {
+    try {
+      const sourcecode = req.body.code;
+      const selectedLanguage = req.query.language_id;
+      const problemId = req.params.problemId;
+
+      // Check if the required parameters are provided
+      if (!sourcecode) {
+        return res
+          .status(StatusCodes.BAD_REQUEST)
+          .json({ message: "Source code is required" });
+      }
+
+      if (!selectedLanguage) {
+        return res
+          .status(StatusCodes.BAD_REQUEST)
+          .json({ message: "Language ID is required" });
+      }
+
+      if (!mongoose.Types.ObjectId.isValid(problemId)) {
+        return res
+          .status(StatusCodes.BAD_REQUEST)
+          .json({ message: "Problem ID is not valid" });
+      }
+
+      // Fetch problem from the database by its ID
+      const problem = await Problem.findById(problemId);
+      if (!problem) {
+        return res
+          .status(StatusCodes.NOT_FOUND)
+          .json({ message: "Problem not found" });
+      }
+
+      // Fetch user and update or add solution to currentSolutions
+      const user = await User.findOne({ username: req.user.username });
+      if (!user) {
+        return res
+          .status(StatusCodes.NOT_FOUND)
+          .json({ message: "User not found" });
+      }
+
+      // Check if user's currentSolutions contain an object with both problem id and language
+      const userSolution = user.currentSolutions.find(
+        (solution) =>
+          solution.problem.toString() === problemId &&
+          solution.language === selectedLanguage
+      );
+
+      // If solution exists, update it, otherwise add a new one
+      if (userSolution) {
+        userSolution.solution = sourcecode;
+      } else {
+        user.currentSolutions.push({
+          problem: problemId,
+          language: selectedLanguage,
+          solution: sourcecode,
+        });
+      }
+
+      // Save updated user document
+      await user.save();
+
+      return res
+        .status(StatusCodes.OK)
+        .send({ message: "Solution saved successfully" });
+    } catch (error) {
+      return res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .send({ message: error.message });
+    }
+  }
+);
+
 /*
   Endpoint #2: runs the code submitted by the user in the frontend on the jobe server 
   and returns the output. The endpoint takes the language id as a query param and the code 
@@ -323,12 +400,12 @@ editorRouter.post("/editor/code", async (req, res) => {
     const sourcecode = req.body.code;
     const selectedLanguage = req.query.language_id;
 
-    console.log("-------------------------------------------")
-    console.log("code: " + sourcecode,67);
-    console.log("selected language: " + selectedLanguage, 68); 
-    console.log("-------------------------------------------")
+    console.log("-------------------------------------------");
+    console.log("code: " + sourcecode, 67);
+    console.log("selected language: " + selectedLanguage, 68);
+    console.log("-------------------------------------------");
 
-    let fileName = '';
+    let fileName = "";
 
     switch (selectedLanguage) {
       case "c":
@@ -367,22 +444,27 @@ editorRouter.post("/editor/code", async (req, res) => {
       {
         headers: {
           "Content-Type": "application/json",
-        }
+        },
       }
     );
 
     if (response.status !== 200) {
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: 'Error with Jobe server connection' });
+      return res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .send({ message: "Error with Jobe server connection" });
     }
 
     if (response.data.outcome !== 15) {
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: response.data.cmpinfo, outcome: response.data.outcome });
+      return res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ error: response.data.cmpinfo, outcome: response.data.outcome });
     }
-    
-    return res.status(StatusCodes.OK).json({ output: response.data.stdout });
 
+    return res.status(StatusCodes.OK).json({ output: response.data.stdout });
   } catch (error) {
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: error.message });
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .send({ message: error.message });
   }
 });
 
@@ -399,10 +481,12 @@ editorRouter.post("/editor/:problemId/testCase", async (req, res) => {
     // Fetch problem from the database by its ID
     const problem = await Problem.findById(problemId);
     if (!problem) {
-      return res.status(StatusCodes.NOT_FOUND).json({ message: 'Problem not found' });
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: "Problem not found" });
     }
 
-    let fileName = '';
+    let fileName = "";
 
     switch (selectedLanguage) {
       case "c":
@@ -447,20 +531,25 @@ editorRouter.post("/editor/:problemId/testCase", async (req, res) => {
         {
           headers: {
             "Content-Type": "application/json",
-          }
+          },
         }
       );
 
-      console.log("----------------------------------")
+      console.log("----------------------------------");
       console.log(response.data);
-      console.log("----------------------------------")
-  
+      console.log("----------------------------------");
+
       if (response.status !== 200) {
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: 'Error with Jobe server connection' });
+        return res
+          .status(StatusCodes.INTERNAL_SERVER_ERROR)
+          .send({ message: "Error with Jobe server connection" });
       }
-  
+
       if (response.data.outcome !== 15) {
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: response.data.cmpinfo, outcome: response.data.outcome });
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+          error: response.data.cmpinfo,
+          outcome: response.data.outcome,
+        });
       }
 
       // Check if the output matches the expected output
@@ -472,9 +561,10 @@ editorRouter.post("/editor/:problemId/testCase", async (req, res) => {
     }
 
     return res.status(StatusCodes.OK).json({ testResults });
-
   } catch (error) {
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ message: error.message });
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .send({ message: error.message });
   }
 });
 
