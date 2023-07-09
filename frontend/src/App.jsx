@@ -14,13 +14,15 @@ import HomeRootPage from "./pages/HomeRootPage.jsx";
 import { loader as topicsLoader } from "./pages/DashboardPage.jsx";
 import { loader as problemLoader } from "./pages/ProblemPage.jsx";
 import { loader as contentLoader } from "./pages/ContentPage.jsx";
+import { action as signupAction } from "./pages/SignupPage.jsx";
+import { loader as usernameLoader } from "./pages/HomeRootPage.jsx";
 
 const router = createBrowserRouter([
   {path: "/", element: <RootPage />, errorElement: <ErrorPage />, children: [
     { index: true, element: <LandingPage /> },
     { path: "login", element: <LoginPage /> },
-    { path: "signup", element: <SignupPage /> },
-    { path: 'home', element: <HomeRootPage />, children: [
+    { path: "signup", element: <SignupPage />, action: signupAction },
+    { path: 'home', element: <HomeRootPage />, loader: usernameLoader, children: [
       { path: "dashboard", element: <DashboardPage />, loader: topicsLoader },
       { path: "content/:topicId", element: <ContentPage />, loader: contentLoader },
       { path: "problem/:problemId", element: <ProblemPage />, loader: problemLoader },
