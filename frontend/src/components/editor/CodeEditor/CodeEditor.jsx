@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import AceEditor from "react-ace";
-import axios from 'axios';
+import axios from "axios";
 import styles from "./CodeEditor.module.css";
 
 import "ace-builds/src-noconflict/mode-javascript";
@@ -17,12 +17,13 @@ function CodeEditor({ problem }) {
   const [value, setValue] = useState(problem.boilerplateCode[0].boilerplate);
   const [output, setOutput] = useState("");
   const [similarity, setSimilarity] = useState("");
-  const [selectedLanguage, setSelectedLanguage] = useState(problem.boilerplateCode[0].language);
+  const [selectedLanguage, setSelectedLanguage] = useState(
+    problem.boilerplateCode[0].language
+  );
   const [errorMsg, setErrorMsg] = useState("");
   const [isErrorVisible, setIsErrorVisible] = useState(false);
   const [description, setDescription] = useState("");
   const [testResults, setTestResults] = useState([]);
-
 
   const userInputHandler = (newValue) => {
     setValue(newValue);
@@ -42,20 +43,18 @@ function CodeEditor({ problem }) {
     console.log(newBoilerplate.boilerplate, 44);
 
     setValue(newBoilerplate.boilerplate);
-  
   };
 
   /**
-   * When an input is being supplied, the input can't come from the command line, it must be accepted as stdin 
+   * When an input is being supplied, the input can't come from the command line, it must be accepted as stdin
    * e.g.) using scanner in java or input() in python
    */
 
-  // run code: req.body is the code, query param is the selected language 
+  // run code: req.body is the code, query param is the selected language
   // run tests: req.body -> code, query param -> language, and path param is problem id
 
   const submitHandler = async () => {
     try {
-
       // call endpoint 2 here
       const response = await axios.post(
         "http://localhost:3000/editor/code",
@@ -96,16 +95,16 @@ function CodeEditor({ problem }) {
       setErrorMsg(error.message);
       setIsErrorVisible(true);
     }
-  }
+  };
 
   const submitExplanationHandler = async () => {
     // call endpoint 1 here
-  
+
     // make fetch call to submit the text description of the answer
     let textDescription = {
       answer: description,
     };
-  
+
     try {
       const similarityResponse = await axios.put(
         "http://localhost:3000/editor/similarity/" + problem._id,
@@ -116,20 +115,20 @@ function CodeEditor({ problem }) {
           },
         }
       );
-  
+
       const similarityScore = similarityResponse.data;
-  
+
       // update the state variables with the new values so that the component rerenders and they display at the same time
       setSimilarity(similarityScore.similarityScore);
-  
-      // reset 
+
+      // reset
       setDescription("");
     } catch (error) {
       console.log("Error: " + error.message);
       setErrorMsg("Something went wrong.");
       setIsErrorVisible(true);
     }
-  }
+  };
 
   useEffect(() => {
     if (isErrorVisible) {
@@ -143,7 +142,6 @@ function CodeEditor({ problem }) {
 
   return (
     <div className={styles.editorWrapper}>
-
       <div>
         <h2>{problem.title}</h2>
         <p>{problem.description}</p>
@@ -181,9 +179,11 @@ function CodeEditor({ problem }) {
             showLineNumbers: true,
             tabSize: 2,
           }}
+          width="70%"
+          height="600px"
         />
       </div>
-      <div style={{ marginTop: "5%" }}>
+      <div style={{ marginTop: "5%", width: "70%" }}>
         <textarea
           value={description}
           onChange={descriptionHandler}
@@ -217,10 +217,11 @@ function CodeEditor({ problem }) {
         <p>{similarity}</p>
       </div>
       <div>
-        {/* Display the test case results here */}
         <h3>Test Case Results: </h3>
         {testResults.map((result, index) => (
-          <p key={index}>Test Case {result.testcase}: {result.passed ? "Passed" : "Failed"}</p>
+          <p key={index}>
+            Test Case {result.testcase}: {result.passed ? "Passed" : "Failed"}
+          </p>
         ))}
       </div>
       {isErrorVisible && (
