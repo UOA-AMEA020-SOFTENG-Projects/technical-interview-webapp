@@ -4,7 +4,6 @@ import editorRouter from "./routes/editor.js";
 import connectDB from "./database/mongoose.js";
 import * as url from "url";
 import path from "path";
-import contentRouter from "./routes/content.js";
 import problemRouter from "./routes/problem.js";
 import topicRouter from "./routes/topic.js";
 import userRouter from "./routes/user.js";
@@ -18,7 +17,6 @@ app.use(cors());
 connectDB();
 
 app.use(editorRouter);
-app.use(contentRouter);
 app.use(problemRouter);
 app.use(topicRouter);
 app.use(userRouter);
