@@ -1,10 +1,14 @@
 import React from "react";
-import { Form, Link, useActionData } from "react-router-dom";
+import { Form, Link, useActionData,useNavigation } from "react-router-dom";
 import styles from "./SignUpForm.module.css";
 
 const SignUpForm = () => {
   
   const data = useActionData();
+
+  const navigation = useNavigation();
+
+  const isSubmitting = navigation.state === 'submitting';
 
   return (
     <div> 
@@ -37,7 +41,7 @@ const SignUpForm = () => {
                     required
                 />
             </div>
-            <button type="submit" className={styles.button}>Sign up</button>
+            <button type="submit" disabled={isSubmitting} className={styles.button}>{isSubmitting ? 'Submitting...' : 'Sign Up'}</button>
             <Link id="signinLink" to={"/login"}>
                 <p>Already have an account? Log in.</p>
             </Link>
