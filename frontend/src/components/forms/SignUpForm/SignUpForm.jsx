@@ -1,11 +1,13 @@
 import React from "react";
-import { Form, Link } from "react-router-dom";
+import { Form, Link, useActionData } from "react-router-dom";
 import styles from "./SignUpForm.module.css";
 
 const SignUpForm = () => {
+  
+  const data = useActionData();
 
   return (
-    <div>  
+    <div> 
         <Form method="POST" className={styles.form}>
             <label className={styles.label}>Sign up</label>
             <div>
@@ -39,6 +41,7 @@ const SignUpForm = () => {
             <Link id="signinLink" to={"/login"}>
                 <p>Already have an account? Log in.</p>
             </Link>
+            { data && data.errors && <label style={{ color: 'red' }}>{ data.errors }</label>}
         </Form>
         
     </div>
