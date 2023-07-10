@@ -30,7 +30,19 @@ const userSchema = new mongoose.Schema(
         language: String,
         solution: String,
       }
-    ]
+    ],
+    problemsCompleted: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Problem",
+      },
+    ],
+    problemsRecommended: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Problem",
+      },
+    ],
   },
   {
     timestamps: {},
