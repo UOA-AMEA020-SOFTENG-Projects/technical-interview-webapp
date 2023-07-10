@@ -8,6 +8,7 @@ import problemRouter from "./routes/problem.js";
 import topicRouter from "./routes/topic.js";
 import userRouter from "./routes/user.js";
 import contentRouter from "./routes/content.js";
+import questionRouter from "./routes/question.js";
 
 
 const app = express();
@@ -23,6 +24,7 @@ app.use(problemRouter);
 app.use(topicRouter);
 app.use(contentRouter);
 app.use(userRouter);
+app.use(questionRouter);
 
 app.use((error, req, res, next) => {
   const status = error.status || 500;
