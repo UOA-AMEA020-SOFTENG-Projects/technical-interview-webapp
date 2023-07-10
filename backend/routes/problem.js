@@ -208,4 +208,30 @@ problemRouter.put(
   }
 );
 
+/**
+ * Check if problem is recommended to user
+ */
+problemRouter.get(
+  "/problem/:problemId/recommended",
+  authenticateToken,
+  async (req, res, next) => {
+    try {
+      const { problemId } = req.params;
+
+      const user = await User.findOne({ username: req.user.username });
+      if (!user) {
+        return res.status(404).json({ message: "Cannot find user" });
+      }
+
+      const isRecommended = user.problemsRecommended.includes(problemId);
+
+      res.status(200).json({ isRecommended });
+    } catch (err) {
+      res
+        .status(500)
+        .json({ message: "Error checking recommendation status", error: err });
+    }
+  }
+);
+
 export default problemRouter;
