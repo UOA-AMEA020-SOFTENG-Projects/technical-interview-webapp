@@ -3,6 +3,7 @@ import "../../../../config/aceConfig.js";
 import useSolution from "../../../hooks/useSolution";
 import useUpdateSolution from "../../../hooks/useUpdateSolution";
 import AceEditor from "react-ace";
+import Button from 'react-bootstrap/Button';
 import axios from "axios";
 import styles from "./CodeEditor.module.css";
 import { themes } from "../../../../config/themes.js";
@@ -265,31 +266,49 @@ function CodeEditor({ problem }) {
             height="600px"
           />
         </div>
-        <div
-          style={{
-            width: "30%",
-            backgroundColor: "#8FAC51",
-            height: "20rem",
-            borderRadius: "10px",
-            padding: "20px",
-            overflow: "auto"
-          }}
-        >
-          <h3>Test Case Results: </h3>
-          {testResults.map((result, index) => (
-            <p key={index} style={{ paddingTop: "1rem" }}>
-              Test Case {result.testcase}:
-              {result.passed ? (
-                <span style={{ color: "green", fontWeight: "bold", paddingLeft: "10px" }}>
-                  ✔ Passed
-                </span>
-              ) : (
-                <span style={{ color: "red", fontWeight: "bold", paddingLeft: "10px" }}>
-                  ✘ Failed
-                </span>
-              )}
-            </p>
-          ))}
+        <div style={{ width: "30%" }}>
+          <div
+            style={{
+              backgroundColor: "#8FAC51",
+              height: "20rem",
+              borderRadius: "10px",
+              padding: "20px",
+              overflow: "auto"
+            }}
+          >
+            <h3>Test Case Results: </h3>
+            {testResults.map((result, index) => (
+              <p key={index} style={{ paddingTop: "1rem" }}>
+                Test Case {result.testcase}:
+                {result.passed ? (
+                  <span style={{ color: "green", fontWeight: "bold", paddingLeft: "10px" }}>
+                    ✔ Passed
+                  </span>
+                ) : (
+                  <span style={{ color: "red", fontWeight: "bold", paddingLeft: "10px" }}>
+                    ✘ Failed
+                  </span>
+                )}
+              </p>
+            ))}
+          </div>
+          <div
+            style={{
+              backgroundColor: "#660000",
+              height: "10rem",
+              borderRadius: "10px",
+              padding: "20px",
+              overflow: "auto",
+              marginTop: "2%"
+            }}
+          >
+            <h3>Output: </h3>
+            <p>{output}</p>
+          </div>
+          <div style={{ marginTop: "1rem" }}>
+            <Button variant="outline-dark" style={{ marginRight: "1rem" }} onClick={submitHandler}>Run Code</Button>
+            <Button variant="outline-dark" onClick={testSubmitHandler}>Run Test Cases</Button>
+          </div>
         </div>
       </div>
       <div style={{ marginTop: "5%", width: "70%" }}>
@@ -310,13 +329,7 @@ function CodeEditor({ problem }) {
         />
       </div>
       <div style={{ paddingTop: "7px" }}>
-        <button onClick={submitHandler}>Run Code</button>
-        <button onClick={testSubmitHandler}>Run Test Cases</button>
         <button onClick={submitExplanationHandler}>Submit Explanation</button>
-      </div>
-      <div>
-        <h3>Output: </h3>
-        <p>{output}</p>
       </div>
       <div style={{ marginTop: "5%" }}>
         <h3>
@@ -340,7 +353,7 @@ function CodeEditor({ problem }) {
         </div>
       )}
     </div>
-  );
+  );  
 }
 
 export default CodeEditor;
