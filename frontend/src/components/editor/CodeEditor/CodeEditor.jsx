@@ -213,7 +213,7 @@ function CodeEditor({ problem }) {
           paddingBottom: "5px",
           display: "flex",
           justifyContent: "space-between",
-          maxWidth: "70%"
+          maxWidth: "65%",
         }}
       >
         <div>
@@ -241,28 +241,56 @@ function CodeEditor({ problem }) {
           </select>
         </div>
       </div>
-      <div>
-        <AceEditor
-          mode={getAceMode(selectedLanguage)}
-          theme={selectedTheme}
-          onChange={userInputHandler}
-          name="editor"
-          editorProps={{ $blockScrolling: true }}
-          value={isLoading ? "loading..." : value}
-          fontSize={14}
-          showPrintMargin={true}
-          showGutter={true}
-          highlightActiveLine={true}
-          setOptions={{
-            enableBasicAutocompletion: true,
-            enableLiveAutocompletion: true,
-            enableSnippets: true,
-            showLineNumbers: true,
-            tabSize: 2,
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <div style={{ width: "65%" }}>
+          <AceEditor
+            mode={getAceMode(selectedLanguage)}
+            theme={selectedTheme}
+            onChange={userInputHandler}
+            name="editor"
+            editorProps={{ $blockScrolling: true }}
+            value={isLoading ? "loading..." : value}
+            fontSize={14}
+            showPrintMargin={true}
+            showGutter={true}
+            highlightActiveLine={true}
+            setOptions={{
+              enableBasicAutocompletion: true,
+              enableLiveAutocompletion: true,
+              enableSnippets: true,
+              showLineNumbers: true,
+              tabSize: 2,
+            }}
+            width="100%"
+            height="600px"
+          />
+        </div>
+        <div
+          style={{
+            width: "30%",
+            backgroundColor: "#8FAC51",
+            height: "20rem",
+            borderRadius: "10px",
+            padding: "20px",
+            overflow: "auto"
           }}
-          width="70%"
-          height="600px"
-        />
+        >
+          <h3>Test Case Results: </h3>
+          {testResults.map((result, index) => (
+            <p key={index} style={{ paddingTop: "1rem" }}>
+              Test Case {result.testcase}:
+              {result.passed ? (
+                <span style={{ color: "green", fontWeight: "bold", paddingLeft: "10px" }}>
+                  ✔ Passed
+                </span>
+              ) : (
+                <span style={{ color: "red", fontWeight: "bold", paddingLeft: "10px" }}>
+                  ✘ Failed
+                </span>
+              )}
+            </p>
+          ))}
+        </div>
       </div>
       <div style={{ marginTop: "5%", width: "70%" }}>
         <textarea
@@ -296,14 +324,6 @@ function CodeEditor({ problem }) {
           better!):
         </h3>
         <p>{similarity}</p>
-      </div>
-      <div>
-        <h3>Test Case Results: </h3>
-        {testResults.map((result, index) => (
-          <p key={index}>
-            Test Case {result.testcase}: {result.passed ? "Passed" : "Failed"}
-          </p>
-        ))}
       </div>
       {isErrorVisible && (
         <div
