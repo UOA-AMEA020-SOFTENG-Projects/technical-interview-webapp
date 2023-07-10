@@ -6,10 +6,6 @@ const useSolution = (url, method, requiresAuth = false, authToken = "", initialL
   const [error, setError] = useState(null);
   const [reFetchToggle, setReFetchToggle] = useState(false);
   const [language, setLanguage] = useState(initialLanguage);
-  
-  console.log("-----------------------------");
-  console.log(language, 11);
-  console.log("-----------------------------");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,7 +30,6 @@ const useSolution = (url, method, requiresAuth = false, authToken = "", initialL
 
         const data = await response.json();
         setData(data);
-        console.log(37)
       } catch (error) {
         setError(error);
       } finally {

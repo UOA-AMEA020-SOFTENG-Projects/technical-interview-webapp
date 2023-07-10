@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import useSolution from "../../../hooks/useSolution";
+import useUpdateSolution from "../../../hooks/useUpdateSolution";
 import AceEditor from "react-ace";
 import axios from "axios";
 import styles from "./CodeEditor.module.css";
@@ -9,7 +10,6 @@ import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/theme-monokai";
 import "ace-builds/src-noconflict/ext-language_tools";
 import "ace-builds/src-noconflict/snippets/java";
-
 import "ace-builds/src-noconflict/mode-c_cpp";
 import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/mode-php";
@@ -17,7 +17,6 @@ import "ace-builds/src-noconflict/mode-php";
 function CodeEditor({ problem }) {
   const token = localStorage.getItem('authToken');
   const { data, isLoading, error, refetch, setLanguage } = useSolution(`http://localhost:3000/problem/${problem._id}/codecontent`, 'GET', true, token, problem.boilerplateCode[0].language);
-
   const [value, setValue] = useState(problem.boilerplateCode[0].boilerplate);
   const [output, setOutput] = useState("");
   const [similarity, setSimilarity] = useState("");
@@ -29,9 +28,28 @@ function CodeEditor({ problem }) {
   const [description, setDescription] = useState("");
   const [testResults, setTestResults] = useState([]);
 
+  const saveSolution = (newValue, language) => {
+    axios
+      .post(
+        `http://localhost:3000/editor/${problem._id}/saveSolution`,
+        { code: newValue },
+        {
+          params: { language_id: language },
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+  
   const userInputHandler = (newValue) => {
     setValue(newValue);
   };
+  
 
   const descriptionHandler = (event) => {
     setDescription(event.target.value);
@@ -42,7 +60,6 @@ function CodeEditor({ problem }) {
 
     // use the hook to get the latest use solution or if none exists then the boilerplate by default 
     setLanguage(event.target.value);
-    
   };
 
   useEffect(() => {
@@ -98,6 +115,9 @@ function CodeEditor({ problem }) {
     } catch (error) {
       setErrorMsg(error.message);
       setIsErrorVisible(true);
+    } finally {
+      // save the users solution for the problem 
+      saveSolution(value, selectedLanguage);
     }
   };
 
