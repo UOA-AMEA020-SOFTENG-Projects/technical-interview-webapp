@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import "../../../../config/aceConfig.js";
 import useSolution from "../../../hooks/useSolution";
 import useUpdateSolution from "../../../hooks/useUpdateSolution";
 import AceEditor from "react-ace";
@@ -15,8 +16,16 @@ import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/mode-php";
 
 function CodeEditor({ problem }) {
-  const token = localStorage.getItem('authToken');
-  const { data, isLoading, error, refetch, setLanguage } = useSolution(`http://localhost:3000/problem/${problem._id}/codecontent`, 'GET', true, token, problem.boilerplateCode[0].language);
+  const token = localStorage.getItem("authToken");
+
+  // FIX REQUIRED FOR ENDPOINT: if the code submitted is the same as the boilerplate then dont add entry to user schema
+  const { data, isLoading, error, refetch, setLanguage } = useSolution(
+    `http://localhost:3000/problem/${problem._id}/codecontent`,
+    "GET",
+    true,
+    token,
+    problem.boilerplateCode[0].language
+  );
   const [value, setValue] = useState(problem.boilerplateCode[0].boilerplate);
   const [output, setOutput] = useState("");
   const [similarity, setSimilarity] = useState("");
@@ -42,14 +51,29 @@ function CodeEditor({ problem }) {
         console.log(response.data);
       })
       .catch((error) => {
-        console.error(error);
+        setErrorMsg(error.message);
+        setIsErrorVisible(true);
       });
   };
-  
+
   const userInputHandler = (newValue) => {
     setValue(newValue);
   };
-  
+
+  // update the language mode of the editor based on the language selected
+  const getAceMode = (language) => {
+    switch (language) {
+      case "java":
+        return "java";
+      case "c":
+      case "cpp":
+        return "c_cpp";
+      case "python3":
+        return "python";
+      default:
+        return "text"; // Default mode
+    }
+  };
 
   const descriptionHandler = (event) => {
     setDescription(event.target.value);
@@ -58,7 +82,7 @@ function CodeEditor({ problem }) {
   const dropDownChangeHandler = (event) => {
     setSelectedLanguage(event.target.value);
 
-    // use the hook to get the latest use solution or if none exists then the boilerplate by default 
+    // use the hook to get the latest use solution or if none exists then the boilerplate by default
     setLanguage(event.target.value);
   };
 
@@ -116,7 +140,7 @@ function CodeEditor({ problem }) {
       setErrorMsg(error.message);
       setIsErrorVisible(true);
     } finally {
-      // save the users solution for the problem 
+      // save the users solution for the problem
       saveSolution(value, selectedLanguage);
     }
   };
@@ -186,12 +210,12 @@ function CodeEditor({ problem }) {
       </div>
       <div>
         <AceEditor
-          mode="java"
+          mode={getAceMode(selectedLanguage)}
           theme="monokai"
           onChange={userInputHandler}
           name="editor"
           editorProps={{ $blockScrolling: true }}
-          value={isLoading ? 'loading...' : value}
+          value={isLoading ? "loading..." : value}
           fontSize={14}
           showPrintMargin={true}
           showGutter={true}
