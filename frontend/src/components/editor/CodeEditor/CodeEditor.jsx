@@ -130,7 +130,7 @@ function CodeEditor({ problem }) {
 
       setOutput(response.data.output);
     } catch (error) {
-      setErrorMsg(error.message);
+      setErrorMsg("Code not compiling");
       setIsErrorVisible(true);
     }
   };
@@ -152,7 +152,7 @@ function CodeEditor({ problem }) {
 
       setTestResults(response.data.testResults);
     } catch (error) {
-      setErrorMsg(error.message);
+      setErrorMsg("Code not compiling");
       setIsErrorVisible(true);
     } finally {
       // save the users solution for the problem
@@ -202,6 +202,42 @@ function CodeEditor({ problem }) {
       return () => clearTimeout(timer);
     }
   }, [isErrorVisible]);
+
+  const resultSolutionHandler = async () => {
+    // make request to endpoint to reset the solution back to the boilerplate 
+    try {
+      const response = await fetch(
+        `http://localhost:3000/editor/${problem._id}/clearSolution?language_id=${selectedLanguage}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+          },
+        }
+      );
+  
+      if (!response.ok) {
+        
+        if (response.status === 404){
+          throw new Error("Solution has already been cleared");
+        }
+
+        throw new Error("Something went wrong");
+      }
+  
+      const responseData = await response.json();
+  
+      console.log(responseData.message);
+    } catch (error) {
+      console.error("An error occurred:", error);
+      setErrorMsg(error.message);
+      setIsErrorVisible(true);
+    } finally {
+      // then load the code for the editor again from the custom hook to update 
+      refetch();
+    }
+  }
 
   return (
     <div className={styles.editorWrapper}>
@@ -265,6 +301,7 @@ function CodeEditor({ problem }) {
             width="100%"
             height="600px"
           />
+          <Button variant="outline-dark" onClick={resultSolutionHandler} style={{ marginTop: "1rem" }}>Reset Solution</Button>
         </div>
         <div style={{ width: "30%" }}>
           <div
@@ -346,7 +383,8 @@ function CodeEditor({ problem }) {
             left: 10,
             backgroundColor: "red",
             color: "white",
-            padding: "5px",
+            padding: "10px",
+            borderRadius: "5px"
           }}
         >
           {errorMsg}

@@ -174,6 +174,8 @@ editorRouter.delete(
       }
 
     } catch (error) {
+      console.log(error)
+      
       return res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
         .send({ message: error.message });
