@@ -7,6 +7,11 @@ const problemSchema = new mongoose.Schema(
       type: String,
       unique: true, 
     },
+    topic: {
+      type: Schema.Types.ObjectId,
+      ref: "Topic",
+      required: true,
+    },
     description: String,
     modelDescription: String,
     hint: String,
