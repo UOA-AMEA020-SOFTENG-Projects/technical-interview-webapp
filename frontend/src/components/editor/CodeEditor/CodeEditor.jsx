@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import useSolution from "../../../hooks/useSolution";
 import AceEditor from "react-ace";
 import axios from "axios";
 import styles from "./CodeEditor.module.css";
@@ -14,6 +15,9 @@ import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/mode-php";
 
 function CodeEditor({ problem }) {
+  const token = localStorage.getItem('authToken');
+  const { data, isLoading, error, refetch, setLanguage } = useSolution(`http://localhost:3000/problem/${problem._id}/codecontent`, 'GET', true, token, problem.boilerplateCode[0].language);
+
   const [value, setValue] = useState(problem.boilerplateCode[0].boilerplate);
   const [output, setOutput] = useState("");
   const [similarity, setSimilarity] = useState("");
@@ -36,14 +40,14 @@ function CodeEditor({ problem }) {
   const dropDownChangeHandler = (event) => {
     setSelectedLanguage(event.target.value);
 
-    const newBoilerplate = problem.boilerplateCode.find(
-      (boilerplate) => boilerplate.language === event.target.value
-    );
-
-    console.log(newBoilerplate.boilerplate, 44);
-
-    setValue(newBoilerplate.boilerplate);
+    // use the hook to get the latest use solution or if none exists then the boilerplate by default 
+    setLanguage(event.target.value);
+    
   };
+
+  useEffect(() => {
+    setValue(data.solution);
+  }, [data]);
 
   /**
    * When an input is being supplied, the input can't come from the command line, it must be accepted as stdin
@@ -167,7 +171,7 @@ function CodeEditor({ problem }) {
           onChange={userInputHandler}
           name="editor"
           editorProps={{ $blockScrolling: true }}
-          value={value}
+          value={isLoading ? 'loading...' : value}
           fontSize={14}
           showPrintMargin={true}
           showGutter={true}
