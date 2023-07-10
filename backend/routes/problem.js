@@ -168,4 +168,44 @@ problemRouter.put("/problems/:problemId/topic/:topicId", async (req, res) => {
   }
 });
 
+/**
+ * Set/remove problem as completed
+ */
+
+problemRouter.put(
+  "/problem/:problemId/status",
+  authenticateToken,
+  async (req, res, next) => {
+    try {
+      const { problemId } = req.params;
+      const { complete } = req.body;
+
+      const user = await User.findOne({ username: req.user.username });
+      if (!user) {
+        return res.status(404).json({ message: "Cannot find user" });
+      }
+
+      const problemIndex = user.problemsCompleted.indexOf(problemId);
+      const problemExists = problemIndex !== -1;
+
+      if (complete && !problemExists) {
+        // Add problem to completed problems
+        user.problemsCompleted.push(problemId);
+      } else if (!complete && problemExists) {
+        // Remove problem from completed problems
+        user.problemsCompleted.splice(problemIndex, 1);
+      }
+
+      await user.save();
+      res
+        .status(200)
+        .json({ message: "Problem completion status updated successfully" });
+    } catch (err) {
+      res
+        .status(500)
+        .json({ message: "Error updating problem status", error: err });
+    }
+  }
+);
+
 export default problemRouter;
