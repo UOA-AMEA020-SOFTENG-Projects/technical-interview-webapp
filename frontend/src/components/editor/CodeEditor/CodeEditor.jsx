@@ -5,10 +5,19 @@ import useUpdateSolution from "../../../hooks/useUpdateSolution";
 import AceEditor from "react-ace";
 import axios from "axios";
 import styles from "./CodeEditor.module.css";
+import { themes } from "../../../../config/themes.js";
 
 import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/theme-monokai";
+import "ace-builds/src-noconflict/theme-xcode";
+import "ace-builds/src-noconflict/theme-solarized_dark";
+import "ace-builds/src-noconflict/theme-solarized_light";
+import "ace-builds/src-noconflict/theme-kuroir";
+import "ace-builds/src-noconflict/theme-terminal";
+import "ace-builds/src-noconflict/theme-github_dark";
+import "ace-builds/src-noconflict/theme-textmate";
+
 import "ace-builds/src-noconflict/ext-language_tools";
 import "ace-builds/src-noconflict/snippets/java";
 import "ace-builds/src-noconflict/mode-c_cpp";
@@ -36,6 +45,7 @@ function CodeEditor({ problem }) {
   const [isErrorVisible, setIsErrorVisible] = useState(false);
   const [description, setDescription] = useState("");
   const [testResults, setTestResults] = useState([]);
+  const [selectedTheme, setSelectedTheme] = useState("xcode");
 
   const saveSolution = (newValue, language) => {
     axios
@@ -58,6 +68,10 @@ function CodeEditor({ problem }) {
 
   const userInputHandler = (newValue) => {
     setValue(newValue);
+  };
+
+  const themeChangeHandler = (event) => {
+    setSelectedTheme(event.target.value);
   };
 
   // update the language mode of the editor based on the language selected
@@ -194,24 +208,43 @@ function CodeEditor({ problem }) {
         <h2>{problem.title}</h2>
         <p>{problem.description}</p>
       </div>
-      <div style={{ paddingBottom: "5px" }}>
-        <p>{`Selected language is ${selectedLanguage}`}</p>
-        <select
-          value={selectedLanguage}
-          default={selectedLanguage}
-          onChange={dropDownChangeHandler}
-        >
-          {problem.boilerplateCode.map((boilerplate, index) => (
-            <option key={index} value={boilerplate.language}>
-              {boilerplate.language}
-            </option>
-          ))}
-        </select>
+      <div
+        style={{
+          paddingBottom: "5px",
+          display: "flex",
+          justifyContent: "space-between",
+          maxWidth: "70%"
+        }}
+      >
+        <div>
+          <p>{`Selected language is ${selectedLanguage}`}</p>
+          <select
+            value={selectedLanguage}
+            default={selectedLanguage}
+            onChange={dropDownChangeHandler}
+          >
+            {problem.boilerplateCode.map((boilerplate, index) => (
+              <option key={index} value={boilerplate.language}>
+                {boilerplate.language}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <p>{`Selected theme is ${selectedTheme}`}</p>
+          <select value={selectedTheme} onChange={themeChangeHandler}>
+            {themes.map((theme, index) => (
+              <option key={index} value={theme}>
+                {theme}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
       <div>
         <AceEditor
           mode={getAceMode(selectedLanguage)}
-          theme="monokai"
+          theme={selectedTheme}
           onChange={userInputHandler}
           name="editor"
           editorProps={{ $blockScrolling: true }}
