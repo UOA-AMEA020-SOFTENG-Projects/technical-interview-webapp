@@ -10,7 +10,7 @@
     height: calc(15vh * 1.5); 
     width: 100%;
     z-index: 10;
-    padding-top: 2rem;
+    padding-top: 5rem;
 }
 
 .message {
