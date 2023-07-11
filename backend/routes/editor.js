@@ -175,7 +175,7 @@ editorRouter.delete(
 
     } catch (error) {
       console.log(error)
-      
+
       return res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
         .send({ message: error.message });
@@ -271,7 +271,6 @@ editorRouter.post("/editor/:problemId/testCase", async (req, res) => {
     const selectedLanguage = req.query.language_id;
     const problemId = req.params.problemId;
 
-    // Fetch problem from the database by its ID
     const problem = await Problem.findById(problemId);
     if (!problem) {
       return res
@@ -328,10 +327,6 @@ editorRouter.post("/editor/:problemId/testCase", async (req, res) => {
         }
       );
 
-      console.log("----------------------------------");
-      console.log(response.data);
-      console.log("----------------------------------");
-
       if (response.status !== 200) {
         return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -345,13 +340,25 @@ editorRouter.post("/editor/:problemId/testCase", async (req, res) => {
         });
       }
 
+      // Include testcase input and expected output along with the actual output in the results
+      let result = {
+        testcase: i + 1,
+        input: testcase.input,
+        expectedOutput: testcase.output,
+        actualOutput: response.data.stdout.trim(),
+      };
+
       // Check if the output matches the expected output
-      if (response.data.stdout.trim() === testcase.output.trim()) {
-        testResults.push({ testcase: i + 1, passed: true });
+      if (result.actualOutput === result.expectedOutput) {
+        result.passed = true;
       } else {
-        testResults.push({ testcase: i + 1, passed: false });
+        result.passed = false;
       }
+
+      testResults.push(result);
     }
+
+    console.log(testResults);
 
     return res.status(StatusCodes.OK).json({ testResults });
   } catch (error) {
@@ -360,5 +367,6 @@ editorRouter.post("/editor/:problemId/testCase", async (req, res) => {
       .send({ message: error.message });
   }
 });
+
 
 export default editorRouter;

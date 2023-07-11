@@ -3,7 +3,7 @@ import "../../../../config/aceConfig.js";
 import useSolution from "../../../hooks/useSolution";
 import useUpdateSolution from "../../../hooks/useUpdateSolution";
 import AceEditor from "react-ace";
-import Button from 'react-bootstrap/Button';
+import Button from "react-bootstrap/Button";
 import axios from "axios";
 import styles from "./CodeEditor.module.css";
 import { themes } from "../../../../config/themes.js";
@@ -204,7 +204,7 @@ function CodeEditor({ problem }) {
   }, [isErrorVisible]);
 
   const resultSolutionHandler = async () => {
-    // make request to endpoint to reset the solution back to the boilerplate 
+    // make request to endpoint to reset the solution back to the boilerplate
     try {
       const response = await fetch(
         `http://localhost:3000/editor/${problem._id}/clearSolution?language_id=${selectedLanguage}`,
@@ -212,32 +212,31 @@ function CodeEditor({ problem }) {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": "Bearer " + token
+            Authorization: "Bearer " + token,
           },
         }
       );
-  
+
       if (!response.ok) {
-        
-        if (response.status === 404){
+        if (response.status === 404) {
           throw new Error("Solution has already been cleared");
         }
 
         throw new Error("Something went wrong");
       }
-  
+
       const responseData = await response.json();
-  
+
       console.log(responseData.message);
     } catch (error) {
       console.error("An error occurred:", error);
       setErrorMsg(error.message);
       setIsErrorVisible(true);
     } finally {
-      // then load the code for the editor again from the custom hook to update 
+      // then load the code for the editor again from the custom hook to update
       refetch();
     }
-  }
+  };
 
   return (
     <div className={styles.editorWrapper}>
@@ -301,7 +300,13 @@ function CodeEditor({ problem }) {
             width="100%"
             height="600px"
           />
-          <Button variant="outline-dark" onClick={resultSolutionHandler} style={{ marginTop: "1rem" }}>Reset Solution</Button>
+          <Button
+            variant="outline-dark"
+            onClick={resultSolutionHandler}
+            style={{ marginTop: "1rem" }}
+          >
+            Reset Solution
+          </Button>
         </div>
         <div style={{ width: "30%" }}>
           <div
@@ -310,23 +315,47 @@ function CodeEditor({ problem }) {
               height: "20rem",
               borderRadius: "10px",
               padding: "20px",
-              overflow: "auto"
+              overflow: "auto",
             }}
           >
             <h3>Test Case Results: </h3>
             {testResults.map((result, index) => (
-              <p key={index} style={{ paddingTop: "1rem" }}>
-                Test Case {result.testcase}:
-                {result.passed ? (
-                  <span style={{ color: "green", fontWeight: "bold", paddingLeft: "10px" }}>
-                    ✔ Passed
-                  </span>
-                ) : (
-                  <span style={{ color: "red", fontWeight: "bold", paddingLeft: "10px" }}>
-                    ✘ Failed
-                  </span>
-                )}
-              </p>
+              <div key={index} style={{ paddingTop: "0.5rem" }}>
+                <hr></hr>
+                <p>
+                <b>Test Case</b> {result.testcase}:
+                  {result.passed ? (
+                    <span
+                      style={{
+                        color: "green",
+                        fontWeight: "bold",
+                        paddingLeft: "10px",
+                      }}
+                    >
+                      ✔ Passed
+                    </span>
+                  ) : (
+                    <span
+                      style={{
+                        color: "red",
+                        fontWeight: "bold",
+                        paddingLeft: "10px",
+                      }}
+                    >
+                      ✘ Failed
+                    </span>
+                  )}
+                </p>
+                <p>
+                  <b>Input:</b> {result.input}
+                </p>
+                <p>
+                <b>Expected Output:</b> {result.expectedOutput}
+                </p>
+                <p>
+                  <b>Actual Output:</b> {result.actualOutput}
+                </p>
+              </div>
             ))}
           </div>
           <div
@@ -336,19 +365,27 @@ function CodeEditor({ problem }) {
               borderRadius: "10px",
               padding: "20px",
               overflow: "auto",
-              marginTop: "2%"
+              marginTop: "2%",
             }}
           >
             <h3>Output: </h3>
             <p>{output}</p>
           </div>
           <div style={{ marginTop: "1rem" }}>
-            <Button variant="outline-dark" style={{ marginRight: "1rem" }} onClick={submitHandler}>Run Code</Button>
-            <Button variant="outline-dark" onClick={testSubmitHandler}>Run Test Cases</Button>
+            <Button
+              variant="outline-dark"
+              style={{ marginRight: "1rem" }}
+              onClick={submitHandler}
+            >
+              Run Code
+            </Button>
+            <Button variant="outline-dark" onClick={testSubmitHandler}>
+              Run Test Cases
+            </Button>
           </div>
         </div>
       </div>
-      <div style={{ marginTop: "5%", width: "70%" }}>
+      <div style={{ marginTop: "5%", width: "100%" }}>
         <textarea
           value={description}
           onChange={descriptionHandler}
@@ -366,7 +403,9 @@ function CodeEditor({ problem }) {
         />
       </div>
       <div style={{ paddingTop: "7px" }}>
-        <button onClick={submitExplanationHandler}>Submit Explanation</button>
+        <Button variant="outline-dark" onClick={submitExplanationHandler}>
+          Submit Explanation
+        </Button>
       </div>
       <div style={{ marginTop: "5%" }}>
         <h3>
@@ -384,14 +423,14 @@ function CodeEditor({ problem }) {
             backgroundColor: "red",
             color: "white",
             padding: "10px",
-            borderRadius: "5px"
+            borderRadius: "5px",
           }}
         >
           {errorMsg}
         </div>
       )}
     </div>
-  );  
+  );
 }
 
 export default CodeEditor;
