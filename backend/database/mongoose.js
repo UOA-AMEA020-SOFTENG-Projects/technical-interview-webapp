@@ -1,12 +1,12 @@
 import * as dotenv from "dotenv";
 dotenv.config();
 
-import mongoose, { connect } from "mongoose";
+import mongoose from "mongoose";
 
-// connect to the mongodb database
-const connectDB = async () => {
+// connect to the MongoDB database
+const connectDB = async (dbUrl = process.env.DB_URL) => {
   try {
-    await mongoose.connect(process.env.DB_URL, {
+    await mongoose.connect(dbUrl, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
