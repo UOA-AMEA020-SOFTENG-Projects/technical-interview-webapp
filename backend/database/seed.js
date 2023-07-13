@@ -1,49 +1,23 @@
-import mongoose from 'mongoose';
-import connectDB from './mongoose.js';
+import mongoose from "mongoose";
+import connectDB from "./mongoose.js";
+import { seedTopics } from "./topicsSeed.js";
+import { seedContents } from "./contentSeed.js";
 
-import User from '../models/user.js';
+async function seedDatabase() {
+  try {
+    await connectDB(
+      "mongodb+srv://root:root1234@algochamp-cluster.npdxemw.mongodb.net/test"
+    );
+    console.log("Connected to the seed Database successfully");
 
-const users = [
-    {
-      username: 'JohnDoe',
-      hashedPassword: 'hashedPassword1',
-      progress: [
-        {
-          topic: new mongoose.Types.ObjectId('610b0fe61b1b973130dbc536'),
-          percentage: 65,
-        },
-        {
-          topic: new mongoose.Types.ObjectId('610b0fe61b1b973130dbc539'),
-          percentage: 75,
-        },
-      ],
-      currentSolutions: [
-        {
-          problem: new mongoose.Types.ObjectId('610b0fe61b1b973130dbc531'),
-          language: 'JavaScript',
-          solution: 'function solve() {...}',
-        },
-      ],
-      problemsCompleted: [
-        new mongoose.Types.ObjectId('610b0fe61b1b973130dbc532'),
-      ],
-      problemsRecommended: [
-        new mongoose.Types.ObjectId('610b0fe61b1b973130dbc533'),
-      ],
-    },
-    // more users...
-  ];
+    await seedTopics();
+    await seedContents();
 
-connectDB('mongodb+srv://root:root1234@algochamp-cluster.npdxemw.mongodb.net/test')
-  .then(() => {
-    console.log('Connected to the seed Database successfully');
-    User.insertMany(users)
-      .then(() => {
-        console.log('Data seeding completed');
-        mongoose.connection.close();
-      })
-      .catch((error) => {
-        console.log('Data seeding failed: ', error);
-      });
-  })
-  .catch((err) => console.log('DB Connection Error: ', err));
+    mongoose.connection.close();
+    console.log("Data seeding completed");
+  } catch (err) {
+    console.log("Data seeding failed: ", err);
+  }
+}
+
+seedDatabase();
