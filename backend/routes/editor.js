@@ -328,12 +328,14 @@ editorRouter.post("/editor/:problemId/testCase", async (req, res) => {
       );
 
       if (response.status !== 200) {
+        console.log(error + " 331");
         return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .send({ message: "Error with Jobe server connection" });
       }
 
       if (response.data.outcome !== 15) {
+        console.log(error + " 337");
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
           error: response.data.cmpinfo,
           outcome: response.data.outcome,
@@ -362,6 +364,8 @@ editorRouter.post("/editor/:problemId/testCase", async (req, res) => {
 
     return res.status(StatusCodes.OK).json({ testResults });
   } catch (error) {
+    console.log(error.message + " 365");
+
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .send({ message: error.message });

@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import connectDB from "./mongoose.js";
 import { seedTopics } from "./topicsSeed.js";
 import { seedContents } from "./contentSeed.js";
+import { seedProblems } from "./problemSeed.js";
 
 async function seedDatabase() {
   try {
@@ -12,6 +13,7 @@ async function seedDatabase() {
 
     await seedTopics();
     await seedContents();
+    await seedProblems();
 
     mongoose.connection.close();
     console.log("Data seeding completed");
