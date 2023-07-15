@@ -1,4 +1,5 @@
 import { Problem } from "../models/problem.js";
+import { User } from "../models/user.js";
 import { Topic } from "../models/topic.js";
 import invalidId from "../util/validator.js";
 
@@ -65,4 +66,14 @@ const addBoilerplateToProblem = async (problemId, boilerplate) => {
   return problem;
 };
 
-export { createProblem, deleteProblem, registerProblemToTopic, addTestCasesToProblem, getProblem, addTestCaseToProblem, addBoilerplateToProblem };
+const getProblemCompletedStatus = async (problemId, userId) => {
+  if (invalidId(problemId) || invalidId(userId)) {
+    throw new Error('Id format invalid')
+  }
+  const user = await User.findById(userId);
+  if (!user) throw new Error('User not found');
+  const status = user.problemsCompleted.includes(problemId);
+  return { completed: status };
+};
+
+export { createProblem, deleteProblem, registerProblemToTopic, addTestCasesToProblem, getProblem, getProblemCompletedStatus, addTestCaseToProblem, addBoilerplateToProblem };

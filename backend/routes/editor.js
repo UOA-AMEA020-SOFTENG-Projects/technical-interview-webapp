@@ -328,12 +328,20 @@ editorRouter.post("/editor/:problemId/testCase", async (req, res) => {
       );
 
       if (response.status !== 200) {
+        console.log(331);
+        console.log(338)
+        console.log(response.data.cmpinfo); 
+        console.log(response.data.outcome)
         return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .send({ message: "Error with Jobe server connection" });
       }
 
       if (response.data.outcome !== 15) {
+        console.log(338)
+        console.log(response.data.cmpinfo); 
+        console.log(response.data.outcome)
+
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
           error: response.data.cmpinfo,
           outcome: response.data.outcome,
@@ -358,10 +366,11 @@ editorRouter.post("/editor/:problemId/testCase", async (req, res) => {
       testResults.push(result);
     }
 
-    console.log(testResults);
+    console.log(testResults, 363);
 
     return res.status(StatusCodes.OK).json({ testResults });
   } catch (error) {
+    console.log(367)
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .send({ message: error.message });
