@@ -11,13 +11,36 @@ const TopicsList = ({ topics }) => {
   const [currentTopic, setCurrentTopic] = useState(null);
   const [topicsProgress, setTopicsProgress] = useState({});
   const [problemStatuses, setProblemStatuses] = useState({});
+  const [recommendedStatuses, setRecommendedStatuses] = useState({});
 
   const navigate = useNavigate();
 
   const handleClose = () => setShow(false);
-  const handleShow = (topic) => {
+
+  const handleShow = async (topic) => {
     setCurrentTopic(topic);
+    const recommendedStatuses = await fetchRecommendationStatuses(
+      topic.problems
+    );
+    setRecommendedStatuses(recommendedStatuses);
     setShow(true);
+  };
+
+  const fetchRecommendationStatuses = async (problems) => {
+    const statuses = {};
+    for (let problem of problems) {
+      const response = await fetch(
+        `http://localhost:3000/problem/${problem._id}/recommended`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const data = await response.json();
+      statuses[problem._id] = data.isRecommended;
+    }
+    return statuses;
   };
 
   const navigateContentHandler = (topicId, title) => {
@@ -98,40 +121,49 @@ const TopicsList = ({ topics }) => {
       </Row>
 
       <Modal
-        show={show}
-        onHide={handleClose}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>{currentTopic?.title}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Button
-            variant="primary"
-            className="mb-3"
-            onClick={() =>
-              navigateContentHandler(currentTopic._id, currentTopic.title)
-            }
-          >
-            Content
-          </Button>
-          {currentTopic?.problems.map((problem, i) => (
-            <div key={i} className={styles["problem-container"]}>
+      show={show}
+      onHide={handleClose}
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
+      <Modal.Header closeButton>
+        <Modal.Title>{currentTopic?.title}</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Button
+          variant="primary"
+          className="mb-3"
+          onClick={() =>
+            navigateContentHandler(currentTopic._id, currentTopic.title)
+          }
+        >
+          Content
+        </Button>
+        {currentTopic?.problems.map((problem, i) => (
+          <div key={i} className={styles["problem-container"]}>
+            <div className={styles["problem-details"]}>
               <Form.Check
                 type="checkbox"
                 checked={problemStatuses[problem._id]}
                 disabled
-                style={{ marginRight: "10px" }} // Add some margin to the right of the checkbox
+                style={{ marginRight: "10px" }}
               />
               <Link to={`/home/problem/${problem._id}`}>
-                <p style={{ marginBottom: "0px", fontSize: "1.25em" }}>{problem.title}</p>{" "}
+                <p style={{ marginBottom: "0px", fontSize: "1.25em" }}>
+                  {problem.title}
+                </p>
               </Link>
             </div>
-          ))}
-        </Modal.Body>
-      </Modal>
+            {recommendedStatuses[problem._id] && (
+              <p style={{ color: "red", fontWeight: "bold",marginBottom: "0px", fontSize: "1em" }}>
+                Recommended for You
+              </p>
+            )}
+          </div>
+        ))}
+      </Modal.Body>
+    </Modal>
     </Container>
   );
 };
