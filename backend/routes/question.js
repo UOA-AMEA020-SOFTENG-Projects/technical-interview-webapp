@@ -49,6 +49,7 @@ questionRouter.get("/questions", async (req, res) => {
 
 /**
  * Submit answers
+ * req.body: array question id and answer 
  */
 
 questionRouter.post(

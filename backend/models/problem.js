@@ -17,6 +17,7 @@ const problemSchema = new mongoose.Schema(
     exampleCase: String,
     solution: String,
     hint: String,
+    solution: String,
     boilerplateCode: [
       {
         language: String,
