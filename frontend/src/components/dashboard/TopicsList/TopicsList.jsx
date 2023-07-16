@@ -3,12 +3,13 @@ import { Form } from "react-bootstrap";
 import ProgressBar from "react-bootstrap/ProgressBar";
 import { useNavigate, Link } from "react-router-dom";
 import { Container, Row, Col, Card, Modal, Button } from "react-bootstrap";
+import styles from "./TopicsList.module.css";
 
 const TopicsList = ({ topics }) => {
   const [show, setShow] = useState(false);
   const token = localStorage.getItem("authToken");
   const [currentTopic, setCurrentTopic] = useState(null);
-  const [topicsProgress, setTopicsProgress] = useState({}); // Add this state to store topic progress
+  const [topicsProgress, setTopicsProgress] = useState({});
   const [problemStatuses, setProblemStatuses] = useState({});
 
   const navigate = useNavigate();
@@ -117,13 +118,15 @@ const TopicsList = ({ topics }) => {
             Content
           </Button>
           {currentTopic?.problems.map((problem, i) => (
-            <div key={i}>
+            <div key={i} className={styles["problem-container"]}>
               <Form.Check
                 type="checkbox"
                 checked={problemStatuses[problem._id]}
+                disabled
+                style={{ marginRight: "10px" }} // Add some margin to the right of the checkbox
               />
               <Link to={`/home/problem/${problem._id}`}>
-                <p>{problem.title}</p>
+                <p style={{ marginBottom: "0px", fontSize: "1.25em" }}>{problem.title}</p>{" "}
               </Link>
             </div>
           ))}
