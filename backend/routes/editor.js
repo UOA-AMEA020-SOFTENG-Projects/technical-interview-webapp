@@ -328,6 +328,7 @@ editorRouter.post("/editor/:problemId/testCase", async (req, res) => {
       );
 
       if (response.status !== 200) {
+
         console.log(331);
         console.log(338)
         console.log(response.data.cmpinfo); 
@@ -338,6 +339,7 @@ editorRouter.post("/editor/:problemId/testCase", async (req, res) => {
       }
 
       if (response.data.outcome !== 15) {
+
         console.log(338)
         console.log(response.data.cmpinfo); 
         console.log(response.data.outcome)
@@ -370,7 +372,8 @@ editorRouter.post("/editor/:problemId/testCase", async (req, res) => {
 
     return res.status(StatusCodes.OK).json({ testResults });
   } catch (error) {
-    console.log(367)
+    console.log(error.message + " 365");
+
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .send({ message: error.message });
