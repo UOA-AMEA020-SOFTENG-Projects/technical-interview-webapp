@@ -402,11 +402,11 @@ function CodeEditor({ problem }) {
         </div>
       </div>
       {showHint && (
-          <div style={{ marginTop: "1rem" }}>
-            <p>
-              <b>Hint:</b> {problem.hint}
-            </p>
-          </div>
+        <div style={{ marginTop: "1rem" }}>
+          <p>
+            <b>Hint:</b> {problem.hint}
+          </p>
+        </div>
       )}
       <div style={{ marginTop: "5%", width: "100%", position: "relative" }}>
         <textarea
@@ -459,18 +459,22 @@ function CodeEditor({ problem }) {
         </div>
       )}
       <Modal
-          show={showSolutionModal}
-          onHide={() => setShowSolutionModal(false)}
-          dialogClassName="modal-70w"
-          aria-labelledby="solution-modal"
-        >
-          <Modal.Header closeButton>
-            <Modal.Title id="solution-modal">Solution</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <pre>{problem.solution}</pre>
-          </Modal.Body>
-        </Modal>
+        show={showSolutionModal}
+        onHide={() => setShowSolutionModal(false)}
+        dialogClassName={styles["modal-custom"]}
+        aria-labelledby="solution-modal"
+      >
+        <Modal.Header closeButton className={styles["modal-header"]}>
+          <div className={styles["modal-title-wrapper"]}>
+            <Modal.Title id="solution-modal">
+              <b>Solution</b>
+            </Modal.Title>
+          </div>
+        </Modal.Header>
+        <Modal.Body className={styles["modal-back"]}>
+          <pre>{problem.solution}</pre>
+        </Modal.Body>
+      </Modal>
       {isErrorVisible && (
         <div
           style={{
