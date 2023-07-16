@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import ProgressBar from 'react-bootstrap/ProgressBar';
 import { useNavigate, Link } from 'react-router-dom';
 import { Container, Row, Col, Card, Modal, Button } from 'react-bootstrap';
 
@@ -56,7 +57,8 @@ const TopicsList = ({ topics }) => {
               <Card.Body>
                 <Card.Title>{topic.title}</Card.Title>
                 <Card.Text>{`Length: ${topic.length}`}</Card.Text>
-                <Card.Text>{`Progress: ${topicsProgress[topic._id]}%`}</Card.Text> {/* Display the progress */}
+                <Card.Text>{`Progress: ${topicsProgress[topic._id]}%`}</Card.Text> 
+                <ProgressBar animated now={topicsProgress[topic._id]} label={topicsProgress[topic._id]} />
               </Card.Body>
             </Card>
           </Col>
