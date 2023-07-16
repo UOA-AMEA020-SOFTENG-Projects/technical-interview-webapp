@@ -3,7 +3,8 @@ import "../../../../config/aceConfig.js";
 import useSolution from "../../../hooks/useSolution";
 import useUpdateSolution from "../../../hooks/useUpdateSolution";
 import AceEditor from "react-ace";
-import Button from "react-bootstrap/Button";
+import { Modal, Button } from "react-bootstrap";
+import Spinner from "react-bootstrap/Spinner";
 import axios from "axios";
 import styles from "./CodeEditor.module.css";
 import { themes } from "../../../../config/themes.js";
@@ -39,14 +40,20 @@ function CodeEditor({ problem }) {
   const [value, setValue] = useState(problem.boilerplateCode[0].boilerplate);
   const [output, setOutput] = useState("");
   const [similarity, setSimilarity] = useState("");
+  const [feedback, setFeedback] = useState("");
+  const [showFeedback, setShowFeedback] = useState(false);
+  const [modelAnswer, setModelAnswer] = useState("");
   const [selectedLanguage, setSelectedLanguage] = useState(
     problem.boilerplateCode[0].language
   );
   const [errorMsg, setErrorMsg] = useState("");
+  const [loading, setLoading] = useState(false);
   const [isErrorVisible, setIsErrorVisible] = useState(false);
   const [description, setDescription] = useState("");
   const [testResults, setTestResults] = useState([]);
   const [selectedTheme, setSelectedTheme] = useState("xcode");
+  const [showHint, setShowHint] = useState(false);
+  const [showSolutionModal, setShowSolutionModal] = useState(false);
 
   const saveSolution = (newValue, language) => {
     axios
@@ -105,11 +112,6 @@ function CodeEditor({ problem }) {
     setValue(data.solution);
   }, [data]);
 
-  /**
-   * When an input is being supplied, the input can't come from the command line, it must be accepted as stdin
-   * e.g.) using scanner in java or input() in python
-   */
-
   // run code: req.body is the code, query param is the selected language
   // run tests: req.body -> code, query param -> language, and path param is problem id
 
@@ -161,9 +163,7 @@ function CodeEditor({ problem }) {
   };
 
   const submitExplanationHandler = async () => {
-    // call endpoint 1 here
-
-    // make fetch call to submit the text description of the answer
+    setLoading(true); // start loading
     let textDescription = {
       answer: description,
     };
@@ -181,15 +181,17 @@ function CodeEditor({ problem }) {
 
       const similarityScore = similarityResponse.data;
 
-      // update the state variables with the new values so that the component rerenders and they display at the same time
       setSimilarity(similarityScore.similarityScore);
+      setModelAnswer(similarityScore.modelAnswer);
+      setFeedback(similarityScore.feedback);
 
-      // reset
-      setDescription("");
+      setShowFeedback(true);
+      setLoading(false); // stop loading
     } catch (error) {
       console.log("Error: " + error.message);
       setErrorMsg("Something went wrong.");
       setIsErrorVisible(true);
+      setLoading(false); // stop loading
     }
   };
 
@@ -307,6 +309,20 @@ function CodeEditor({ problem }) {
           >
             Reset Solution
           </Button>
+          <Button
+            variant="outline-dark"
+            onClick={() => setShowHint(true)}
+            style={{ marginTop: "1rem", marginLeft: "1rem" }}
+          >
+            Show Hint
+          </Button>
+          <Button
+            variant="outline-dark"
+            onClick={() => setShowSolutionModal(true)}
+            style={{ marginTop: "1rem", marginLeft: "1rem" }}
+          >
+            Show Solution
+          </Button>
         </div>
         <div style={{ width: "30%" }}>
           <div
@@ -323,7 +339,7 @@ function CodeEditor({ problem }) {
               <div key={index} style={{ paddingTop: "0.5rem" }}>
                 <hr></hr>
                 <p>
-                <b>Test Case</b> {result.testcase}:
+                  <b>Test Case</b> {result.testcase}:
                   {result.passed ? (
                     <span
                       style={{
@@ -350,7 +366,7 @@ function CodeEditor({ problem }) {
                   <b>Input:</b> {result.input}
                 </p>
                 <p>
-                <b>Expected Output:</b> {result.expectedOutput}
+                  <b>Expected Output:</b> {result.expectedOutput}
                 </p>
                 <p>
                   <b>Actual Output:</b> {result.actualOutput}
@@ -385,7 +401,14 @@ function CodeEditor({ problem }) {
           </div>
         </div>
       </div>
-      <div style={{ marginTop: "5%", width: "100%" }}>
+      {showHint && (
+          <div style={{ marginTop: "1rem" }}>
+            <p>
+              <b>Hint:</b> {problem.hint}
+            </p>
+          </div>
+      )}
+      <div style={{ marginTop: "5%", width: "100%", position: "relative" }}>
         <textarea
           value={description}
           onChange={descriptionHandler}
@@ -401,19 +424,53 @@ function CodeEditor({ problem }) {
             border: "none",
           }}
         />
+        {loading && (
+          <div
+            style={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+            }}
+          >
+            <Spinner animation="grow" variant="success" />
+            <Spinner animation="grow" variant="success" />
+            <Spinner animation="grow" variant="success" />
+          </div>
+        )}
       </div>
+
       <div style={{ paddingTop: "7px" }}>
         <Button variant="outline-dark" onClick={submitExplanationHandler}>
           Submit Explanation
         </Button>
       </div>
-      <div style={{ marginTop: "5%" }}>
-        <h3>
-          Similarity with the correct model answer (the closer to 1 the
-          better!):
-        </h3>
-        <p>{similarity}</p>
-      </div>
+      {showFeedback && (
+        <div style={{ marginTop: "2%" }}>
+          <p>
+            <b>Similarity score: </b>
+            {similarity}
+          </p>
+          <p>
+            <b>Feedback: </b>
+            {feedback}
+          </p>
+          <p>"{modelAnswer}"</p>
+        </div>
+      )}
+      <Modal
+          show={showSolutionModal}
+          onHide={() => setShowSolutionModal(false)}
+          dialogClassName="modal-70w"
+          aria-labelledby="solution-modal"
+        >
+          <Modal.Header closeButton>
+            <Modal.Title id="solution-modal">Solution</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <pre>{problem.solution}</pre>
+          </Modal.Body>
+        </Modal>
       {isErrorVisible && (
         <div
           style={{

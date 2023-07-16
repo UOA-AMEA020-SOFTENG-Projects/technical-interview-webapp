@@ -5,11 +5,11 @@ import { StatusCodes } from "http-status-codes";
 import { Problem } from "../models/problem.js";
 import { authenticateToken } from "../middleware/authenticator.js";
 import User from "../models/user.js";
+import { feedbackPrompts } from "../util/prompts.js";
 import mongoose from "mongoose";
 
 const editorRouter = new express.Router();
 
-// endpoint 1: text similarity
 editorRouter.put("/editor/similarity/:problemId", async (req, res) => {
   try {
     // Fetch problem from the database by its ID
@@ -51,13 +51,20 @@ editorRouter.put("/editor/similarity/:problemId", async (req, res) => {
       });
     });
 
-    let similarityScore = await dataPromise;
+    let similarityScoreRaw = await dataPromise;
 
-    return res.status(StatusCodes.OK).json({ similarityScore });
+    const similarityScoreComparison = parseFloat(similarityScoreRaw).toFixed(1); 
+    const similarityScore = parseFloat(similarityScoreRaw).toFixed(1); 
+
+    // Find the corresponding feedback
+    let feedback = feedbackPrompts.find(prompt => similarityScoreComparison >= prompt.min && similarityScoreComparison <= prompt.max).feedback;
+
+    return res.status(StatusCodes.OK).json({ similarityScore, feedback, modelAnswer });
   } catch (error) {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(error.message);
   }
 });
+
 
 /**
  * Save solution
@@ -193,11 +200,6 @@ editorRouter.post("/editor/code", async (req, res) => {
     const sourcecode = req.body.code;
     const selectedLanguage = req.query.language_id;
 
-    console.log("-------------------------------------------");
-    console.log("code: " + sourcecode, 67);
-    console.log("selected language: " + selectedLanguage, 68);
-    console.log("-------------------------------------------");
-
     let fileName = "";
 
     switch (selectedLanguage) {
@@ -328,22 +330,12 @@ editorRouter.post("/editor/:problemId/testCase", async (req, res) => {
       );
 
       if (response.status !== 200) {
-
-        console.log(331);
-        console.log(338)
-        console.log(response.data.cmpinfo); 
-        console.log(response.data.outcome)
         return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .send({ message: "Error with Jobe server connection" });
       }
 
       if (response.data.outcome !== 15) {
-
-        console.log(338)
-        console.log(response.data.cmpinfo); 
-        console.log(response.data.outcome)
-
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
           error: response.data.cmpinfo,
           outcome: response.data.outcome,
@@ -367,8 +359,6 @@ editorRouter.post("/editor/:problemId/testCase", async (req, res) => {
 
       testResults.push(result);
     }
-
-    console.log(testResults, 363);
 
     return res.status(StatusCodes.OK).json({ testResults });
   } catch (error) {
