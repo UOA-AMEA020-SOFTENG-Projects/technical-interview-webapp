@@ -21,3 +21,29 @@
     padding-bottom: 5rem;
     min-width: 60vw;
 }
+
+
+.modal-custom {
+    max-width: 50%;
+    width: 50%;
+    max-height: 70%;
+    height: auto;
+    background-color: #8fac51;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-back {
+    background-color: #8fac51;
+}
+
+.modal-header {
+    background-color: #8fac51;
+}
+
+.modal-title-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}

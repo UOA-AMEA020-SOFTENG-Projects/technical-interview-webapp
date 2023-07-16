@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Form } from "react-bootstrap";
 import ProgressBar from "react-bootstrap/ProgressBar";
+import Badge from "react-bootstrap/Badge";
 import { useNavigate, Link } from "react-router-dom";
 import { Container, Row, Col, Card, Modal, Button } from "react-bootstrap";
 import styles from "./TopicsList.module.css";
@@ -95,7 +96,7 @@ const TopicsList = ({ topics }) => {
         {topics.map((topic, index) => (
           <Col key={index}>
             <Card
-              className="h-100 text-white"
+              className={styles[`card-bg-${(index % 4) + 1}`]}
               style={{
                 borderRadius: "5px",
                 backgroundColor: "#8FAC51",
@@ -105,7 +106,19 @@ const TopicsList = ({ topics }) => {
             >
               <Card.Body>
                 <Card.Title>{topic.title}</Card.Title>
-                <Card.Text>{`Length: ${topic.length}`}</Card.Text>
+                <Card.Text>
+                  Length:
+                  {topic.length === "short" ? (
+                    <Badge bg="success" style={{ marginLeft: "0.4rem" }}>Short</Badge>
+                  ) : topic.length === "medium" ? (
+                    <Badge bg="warning" text="dark" style={{ marginLeft: "0.4rem" }}>
+                      Medium
+                    </Badge>
+                  ) : (
+                    <Badge bg="danger" style={{ marginLeft: "0.4rem" }}>Long</Badge>
+                  )}
+                </Card.Text>
+
                 <Card.Text>{`Progress: ${
                   topicsProgress[topic._id]
                 }%`}</Card.Text>
@@ -121,49 +134,56 @@ const TopicsList = ({ topics }) => {
       </Row>
 
       <Modal
-      show={show}
-      onHide={handleClose}
-      size="lg"
-      aria-labelledby="contained-modal-title-vcenter"
-      centered
-    >
-      <Modal.Header closeButton>
-        <Modal.Title>{currentTopic?.title}</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <Button
-          variant="primary"
-          className="mb-3"
-          onClick={() =>
-            navigateContentHandler(currentTopic._id, currentTopic.title)
-          }
-        >
-          Content
-        </Button>
-        {currentTopic?.problems.map((problem, i) => (
-          <div key={i} className={styles["problem-container"]}>
-            <div className={styles["problem-details"]}>
-              <Form.Check
-                type="checkbox"
-                checked={problemStatuses[problem._id]}
-                disabled
-                style={{ marginRight: "10px" }}
-              />
-              <Link to={`/home/problem/${problem._id}`}>
-                <p style={{ marginBottom: "0px", fontSize: "1.25em" }}>
-                  {problem.title}
+        show={show}
+        onHide={handleClose}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>{currentTopic?.title}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Button
+            variant="primary"
+            className="mb-3"
+            onClick={() =>
+              navigateContentHandler(currentTopic._id, currentTopic.title)
+            }
+          >
+            Content
+          </Button>
+          {currentTopic?.problems.map((problem, i) => (
+            <div key={i} className={styles["problem-container"]}>
+              <div className={styles["problem-details"]}>
+                <Form.Check
+                  type="checkbox"
+                  checked={problemStatuses[problem._id]}
+                  disabled
+                  style={{ marginRight: "10px" }}
+                />
+                <Link to={`/home/problem/${problem._id}`}>
+                  <p style={{ marginBottom: "0px", fontSize: "1.25em" }}>
+                    {problem.title}
+                  </p>
+                </Link>
+              </div>
+              {recommendedStatuses[problem._id] && (
+                <p
+                  style={{
+                    color: "red",
+                    fontWeight: "bold",
+                    marginBottom: "0px",
+                    fontSize: "1em",
+                  }}
+                >
+                  Recommended for You
                 </p>
-              </Link>
+              )}
             </div>
-            {recommendedStatuses[problem._id] && (
-              <p style={{ color: "red", fontWeight: "bold",marginBottom: "0px", fontSize: "1em" }}>
-                Recommended for You
-              </p>
-            )}
-          </div>
-        ))}
-      </Modal.Body>
-    </Modal>
+          ))}
+        </Modal.Body>
+      </Modal>
     </Container>
   );
 };
