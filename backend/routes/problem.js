@@ -8,6 +8,7 @@ import {
   registerProblemToTopic,
   getProblem,
   addTestCaseToProblem,
+  getProblemCompletedStatus
 } from "../dao/problemDAO.js";
 import { authenticateToken } from "../middleware/authenticator.js";
 import User from "../models/user.js";
@@ -178,23 +179,27 @@ problemRouter.put(
   async (req, res, next) => {
     try {
       const { problemId } = req.params;
-      const { complete } = req.body;
+      let { complete } = req.body;
+      complete = complete === 'true' || complete === true; // Convert to boolean
 
       const user = await User.findOne({ username: req.user.username });
       if (!user) {
         return res.status(404).json({ message: "Cannot find user" });
       }
 
-      const problemIndex = user.problemsCompleted.indexOf(problemId);
-      const problemExists = problemIndex !== -1;
+      const problemExists = user.problemsCompleted.some((id) => 
+        id.toString() === problemId // Convert to string
+      );
 
       if (complete && !problemExists) {
         // Add problem to completed problems
-        user.problemsCompleted.push(problemId);
+        user.problemsCompleted.push(new mongoose.Types.ObjectId(problemId));
       } else if (!complete && problemExists) {
         // Remove problem from completed problems
-        user.problemsCompleted.splice(problemIndex, 1);
-      }
+        user.problemsCompleted = user.problemsCompleted.filter((id) => 
+          id.toString() !== problemId // Convert to string
+        );
+      } 
 
       await user.save();
       res
@@ -203,10 +208,31 @@ problemRouter.put(
     } catch (err) {
       res
         .status(500)
-        .json({ message: "Error updating problem status", error: err });
+        .json({ message: "Error updating problem status", error: err.message });
     }
   }
 );
+
+/**
+ * Check if the problem has been previously completed by the user
+ */
+problemRouter.get("/problem/:pid/status", authenticateToken, async (req, res) => {
+
+  try {
+    const user = await User.findOne({ username: req.user.username });
+    
+    if (user == null) {
+        return res.status(400).json({ message: "Cannot find user" });
+    }
+
+    const status = await getProblemCompletedStatus(req.params.pid, user.id);
+    res.status(StatusCodes.OK).json(status);
+  } catch (err) {
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: err.message });
+  }
+});
 
 /**
  * Check if problem is recommended to user

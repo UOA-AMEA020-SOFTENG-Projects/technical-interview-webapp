@@ -20,9 +20,7 @@ const getTopics = async () => {
 };
 
 const getProblemsByTopic = async (topicId) => {
-  if (!invalidId(topicId)) {
-    throw new Error('Invalid ID format');
-  }
+  
   const topic = await Topic.findById(topicId).populate('problems');
   if (!topic) {
     throw new Error('Topic not found');
