@@ -54,7 +54,7 @@ editorRouter.put("/editor/similarity/:problemId", async (req, res) => {
     let similarityScoreRaw = await dataPromise;
 
     const similarityScoreComparison = parseFloat(similarityScoreRaw).toFixed(1); 
-    const similarityScore = parseFloat(similarityScoreRaw).toFixed(1); 
+    const similarityScore = parseFloat(similarityScoreRaw).toFixed(1) * 100; 
 
     // Find the corresponding feedback
     let feedback = feedbackPrompts.find(prompt => similarityScoreComparison >= prompt.min && similarityScoreComparison <= prompt.max).feedback;

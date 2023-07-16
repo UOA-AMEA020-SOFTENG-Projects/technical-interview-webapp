@@ -449,7 +449,7 @@ function CodeEditor({ problem }) {
         <div style={{ marginTop: "2%" }}>
           <p>
             <b>Similarity score: </b>
-            {similarity}
+            {similarity}%
           </p>
           <p>
             <b>Feedback: </b>
