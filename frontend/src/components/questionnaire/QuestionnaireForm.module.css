@@ -1,5 +1,6 @@
 .container {
     max-width: 100%;
+    margin-top: 10vh; /* Reduced from 30vh to 10vh */
   }
   
   .formContainer {
@@ -11,6 +12,7 @@
     width: 70rem;
     margin-left: 15%;
     margin-right: 15%;
+    margin-top: 2rem; /* New to reduce space between the h2 element and the Card component */
   }
   
   .cardText {
@@ -46,5 +48,12 @@
     width: 100%;
     padding: 10px;
     font-size: 1.3em;
+    margin-top: 1rem; /* New to add margin between Submit and Previous buttons */
+  }
+  
+  /* New to place the Previous, Next, and Submit buttons side by side */
+  .btn {
+    width: 33%;
+    height: 100%;
   }
   
