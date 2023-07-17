@@ -5,6 +5,7 @@ import { StatusCodes } from "http-status-codes";
 import { Problem } from "../models/problem.js";
 import { authenticateToken } from "../middleware/authenticator.js";
 import User from "../models/user.js";
+import { updateProblemCompletionStatus } from "../dao/problemDAO.js";
 import { feedbackPrompts } from "../util/prompts.js";
 import mongoose from "mongoose";
 
@@ -267,11 +268,22 @@ editorRouter.post("/editor/code", async (req, res) => {
   Endpoint #3: fetches the test cases for the problem and runs them against the code and returns 
   the outcome for each test case and whether the code passed each one or not.
 */
-editorRouter.post("/editor/:problemId/testCase", async (req, res) => {
+editorRouter.post("/editor/:problemId/testCase",authenticateToken, async (req, res) => {
   try {
+    console.log(req.user.username, 273);
+    // find the user using the token
+    const user = await User.findOne({ username: req.user.username });
+
+    if (!user) {
+      return res.status(StatusCodes.NOT_FOUND).json({ message: "User not found." });
+    }
+
+
+
     const sourcecode = req.body.code;
     const selectedLanguage = req.query.language_id;
     const problemId = req.params.problemId;
+    const userId = user.id;
 
     const problem = await Problem.findById(problemId);
     if (!problem) {
@@ -281,6 +293,7 @@ editorRouter.post("/editor/:problemId/testCase", async (req, res) => {
     }
 
     let fileName = "";
+    let allTestsPassed = true;
 
     switch (selectedLanguage) {
       case "c":
@@ -350,14 +363,20 @@ editorRouter.post("/editor/:problemId/testCase", async (req, res) => {
         actualOutput: response.data.stdout.trim(),
       };
 
-      // Check if the output matches the expected output
       if (result.actualOutput === result.expectedOutput) {
         result.passed = true;
       } else {
         result.passed = false;
+        allTestsPassed = false;
       }
 
       testResults.push(result);
+    }
+
+    // if all of the test cases pass then the problem has been completed successfully
+
+    if(allTestsPassed) {
+      await updateProblemCompletionStatus(problemId, userId, true);
     }
 
     return res.status(StatusCodes.OK).json({ testResults });

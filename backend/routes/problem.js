@@ -8,7 +8,8 @@ import {
   registerProblemToTopic,
   getProblem,
   addTestCaseToProblem,
-  getProblemCompletedStatus
+  getProblemCompletedStatus, 
+  updateProblemCompletionStatus
 } from "../dao/problemDAO.js";
 import { authenticateToken } from "../middleware/authenticator.js";
 import User from "../models/user.js";
@@ -187,21 +188,8 @@ problemRouter.put(
         return res.status(404).json({ message: "Cannot find user" });
       }
 
-      const problemExists = user.problemsCompleted.some((id) => 
-        id.toString() === problemId // Convert to string
-      );
+      await updateProblemCompletionStatus(problemId, user._id, complete);
 
-      if (complete && !problemExists) {
-        // Add problem to completed problems
-        user.problemsCompleted.push(new mongoose.Types.ObjectId(problemId));
-      } else if (!complete && problemExists) {
-        // Remove problem from completed problems
-        user.problemsCompleted = user.problemsCompleted.filter((id) => 
-          id.toString() !== problemId // Convert to string
-        );
-      } 
-
-      await user.save();
       res
         .status(200)
         .json({ message: "Problem completion status updated successfully" });

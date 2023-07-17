@@ -8,7 +8,7 @@ const LandingBody = () => {
         <div className={styles.carouselContainer}>
             <Carousel>
                 {carouselContent.map((content, index) => (
-                    <Carousel.Item interval={5000} key={index}>
+                    <Carousel.Item interval={3000} key={index}>
                         <img
                             className="d-block w-100"
                             src={content.image}

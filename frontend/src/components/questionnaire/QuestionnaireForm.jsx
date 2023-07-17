@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import { Form, Button, Card, Container, Row, Col } from "react-bootstrap";
 import styles from "./QuestionnaireForm.module.css";
 
 const QuestionnaireForm = ({ questions }) => {
+  const navigate = useNavigate();
   const token = localStorage.getItem("authToken");
 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -51,11 +53,14 @@ const QuestionnaireForm = ({ questions }) => {
       }
     );
 
-    if (response.ok) {
-      console.log("success!!!");
-    } else {
+    if (!response.ok) {
       console.log("failure!!!");
-    }
+      return;
+    } 
+
+    // redirect the user to the dashboard
+    navigate("/home/dashboard");
+
   };
 
   const handleNext = () => {
