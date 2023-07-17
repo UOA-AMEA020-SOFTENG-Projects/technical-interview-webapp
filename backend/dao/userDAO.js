@@ -50,8 +50,14 @@ const getRecommendedProblems = async (username) => {
     throw new Error("User not found");
   }
 
-  return user.problemsRecommended;
+  // Exclude problems that the user has already completed
+  const recommendedButNotCompleted = user.problemsRecommended.filter(problem => {
+    return !user.problemsCompleted.includes(problem._id);
+  });
+
+  return recommendedButNotCompleted;
 };
+
 
 
 export { createUser, addRecommendedProblem, getCompletedProblemsCount, getRecommendedProblems };
