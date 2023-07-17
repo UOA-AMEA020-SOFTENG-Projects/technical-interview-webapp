@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import { Form, Button, Card, Container, Row, Col } from "react-bootstrap";
 import styles from "./QuestionnaireForm.module.css";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const QuestionnaireForm = ({ questions }) => {
   const navigate = useNavigate();
@@ -39,6 +41,17 @@ const QuestionnaireForm = ({ questions }) => {
     // if shouldSubmit is false, do nothing
     if (!shouldSubmit) return;
 
+    // Check that all questions have been answered
+    if (answers.length < questions.length) {
+
+        console.log(47)
+
+        toast.error("Please answer all questions before submitting.", {
+          position: toast.POSITION.BOTTOM_CENTER,
+        });
+        return;
+    }
+
     console.log(answers, 26);
 
     const response = await fetch(
@@ -54,9 +67,18 @@ const QuestionnaireForm = ({ questions }) => {
     );
 
     if (!response.ok) {
-      console.log("failure!!!");
-      return;
+        console.log(70)
+
+        toast.error("Error submitting your answers. Please try again.", {
+          position: toast.POSITION.BOTTOM_CENTER,
+        });
+        return;
     } 
+
+    console.log(78);
+    toast.success("Answers submitted successfully!", {
+        position: toast.POSITION.BOTTOM_CENTER,
+    });
 
     // redirect the user to the dashboard
     navigate("/home/dashboard");
