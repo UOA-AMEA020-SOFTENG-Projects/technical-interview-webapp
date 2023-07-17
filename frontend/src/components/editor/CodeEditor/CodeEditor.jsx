@@ -4,6 +4,8 @@ import useSolution from "../../../hooks/useSolution";
 import useUpdateSolution from "../../../hooks/useUpdateSolution";
 import AceEditor from "react-ace";
 import { Modal, Button } from "react-bootstrap";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Spinner from "react-bootstrap/Spinner";
 import axios from "axios";
 import styles from "./CodeEditor.module.css";
@@ -156,6 +158,15 @@ function CodeEditor({ problem }) {
       }
 
       setTestResults(response.data.testResults);
+      
+      // Check if all test cases passed
+      const allTestCasesPassed = response.data.testResults.every(result => result.passed);
+      
+      if (allTestCasesPassed) {
+        toast.success("Problem successfully Completed!", {
+          position: toast.POSITION.BOTTOM_CENTER
+        });
+      }
     } catch (error) {
       setErrorMsg("Code not compiling");
       setIsErrorVisible(true);
