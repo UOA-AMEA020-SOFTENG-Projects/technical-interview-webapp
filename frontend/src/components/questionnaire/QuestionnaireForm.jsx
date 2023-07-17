@@ -1,14 +1,47 @@
 import React from "react";
+import { Form, Button, Card, Container, Row, Col } from 'react-bootstrap';
 import styles from "./QuestionnaireForm.module.css";
 
 const QuestionnaireForm = ({ questions }) => {
-  
   console.log(questions, 6);
 
   return (
-    <div>
-        <h2>Questionnaire</h2>
-    </div>
+    <Container className={styles.container} style={{ marginTop: "30vh" }}>
+      <Row>
+        <Col className="d-flex justify-content-center">
+          <div className={styles.formContainer}>
+            <h2 className="text-center"><b>Questionnaire</b></h2>
+            <Form>
+              {questions.map((question, index) => (
+                <Card className={`mb-4 ${styles.customCard}`} key={index}>
+                  <Card.Body>
+                    <Card.Text className={styles.cardText}>
+                      {question.questionContent}
+                    </Card.Text>
+                    {question.image && 
+                      <Card.Img variant="bottom" src={question.image} alt={question.questionContent} className={styles.cardImage} />
+                    }
+                    {question.responses.map((response, i) => (
+                      <Form.Check 
+                        custom
+                        type="radio"
+                        id={`${question._id}-${i}`}
+                        label={response}
+                        name={`group-${question._id}`}
+                        key={i}
+                        className={styles.customCheck}
+                        style={{ marginBottom: "1rem"}}
+                      />
+                    ))}
+                  </Card.Body>
+                </Card>
+              ))}
+              <Button variant="primary" type="submit" className={styles.customButton}>Submit</Button>
+            </Form>
+          </div>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

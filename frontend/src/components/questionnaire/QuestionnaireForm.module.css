@@ -1,0 +1,40 @@
+.container {
+    max-width: 100%;
+  }
+  
+  .formContainer {
+    width: 70%;
+    margin-bottom: 5rem;
+  }
+  
+  .customCard {
+    width: 50rem;
+    margin-left: 20%;
+    margin-right: 20%;
+  }
+  
+  .cardText {
+    font-size: 1.3em;
+  }
+  
+  .cardImage {
+    width: 80%;
+    height: auto;
+    display: block;
+    margin: auto;
+  }
+  
+  .customCheck {
+    font-size: 1.5em;
+  }
+  
+  .customCheck input[type="radio"] {
+    border: 1px solid #000;
+  }
+  
+  .customButton {
+    width: 100%;
+    padding: 10px;
+    font-size: 1.3em;
+  }
+  

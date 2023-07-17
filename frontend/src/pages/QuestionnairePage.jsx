@@ -29,4 +29,4 @@ export const loader = async ({ request, params }) => {
   
         return data;
     }
-  }
+}
