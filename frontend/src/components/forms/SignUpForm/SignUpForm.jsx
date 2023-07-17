@@ -13,7 +13,7 @@ const SignUpForm = () => {
   return (
     <div> 
         <Form method="POST" className={styles.form}>
-            <label className={styles.label}>Sign up</label>
+            <label className={styles.label}>Create an account</label>
             <div>
                 <input
                     type="text"
@@ -42,7 +42,7 @@ const SignUpForm = () => {
                 />
             </div>
             <button type="submit" disabled={isSubmitting} className={styles.button}>{isSubmitting ? 'Submitting...' : 'Sign Up'}</button>
-            <Link id="signinLink" to={"/login"}>
+            <Link id="signinLink" to={"/login"} style={{ marginTop: "2rem"}}>
                 <p>Already have an account? Log in.</p>
             </Link>
             { data && data.errors && <label style={{ color: 'red' }}>{ data.errors }</label>}

@@ -11,7 +11,7 @@ const TopicContent = ({ content, topicName }) => {
                 <Card.Body>
                     <Card.Text>{content.primaryDescription}</Card.Text>
                     {content.secondaryDescription && <Card.Text>{content.secondaryDescription}</Card.Text>}
-                    <div className={styles.video}>
+                    <div className={styles.video} style={{ marginTop: "2.5rem", marginBottom: "3.5rem" }}>
                         <iframe className="embed-responsive-item" src={content.videoURL} title="YouTube video player" allowFullScreen></iframe>
                     </div>
                     <h5 className="mt-4">Code example:</h5>
