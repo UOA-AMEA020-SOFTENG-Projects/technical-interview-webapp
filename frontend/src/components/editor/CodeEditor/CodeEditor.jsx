@@ -4,11 +4,11 @@ import useSolution from "../../../hooks/useSolution";
 import useUpdateSolution from "../../../hooks/useUpdateSolution";
 import AceEditor from "react-ace";
 import { Modal, Button } from "react-bootstrap";
-import Form from 'react-bootstrap/Form';
+import Form from "react-bootstrap/Form";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Spinner from "react-bootstrap/Spinner";
-import Switch from "react-bootstrap-switch";
+import Badge from "react-bootstrap/Badge";
 import Countdown from "react-countdown";
 import axios from "axios";
 import styles from "./CodeEditor.module.css";
@@ -90,29 +90,34 @@ function CodeEditor({ problem }) {
   };
 
   // handler for the switch
-  const toggleSwitch = () => {
+  const toggleSwitch = async () => {
     if (!testMode) {
-      const startTime = window.prompt("Start time", "");
-      if (startTime !== null && startTime !== "") {
-        setCountdown(Date.now() + startTime * 1000);
+      try {
+        const response = await fetch(
+          `http://localhost:3000/problem/${problem._id}/duration`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to retrieve duration");
+        }
+        const data = await response.json();
+        const { duration } = data;
+        if (!duration) {
+          throw new Error("Duration not found");
+        }
+        setCountdown(Date.now() + duration * 1000);
+      } catch (error) {
+        console.log(error.message);
       }
     }
     setTestMode(!testMode);
   };
 
-  // renderer for the countdown
   const CountdownRenderer = ({ hours, minutes, seconds, completed }) => {
-    
     if (completed) {
-      toast.warning("Times Up!", {
-        position: toast.POSITION.BOTTOM_CENTER,
-      });
-      
-      return <span>Times up!</span>;
+      return <span style={{ fontWeight: "600", color: "red" }}>Times up!</span>;
     }
-
     return (
-      <span>
+      <span style={{ fontWeight: "600" }}>
         {hours}:{minutes}:{seconds}
       </span>
     );
@@ -293,8 +298,22 @@ function CodeEditor({ problem }) {
   return (
     <div className={styles.editorWrapper}>
       <div>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <h2>{problem.title}</h2>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <p><span style={{ fontSize: "2rem", fontWeight: "600"}}>{problem.title}</span>
+          {problem.difficulty === "easy" ? (
+            <Badge style={{ marginLeft: "5px", padding: "7px"}} bg="success">
+              Easy
+            </Badge>
+          ) : problem.difficulty === "medium" ? (
+            <Badge style={{ marginLeft: "5px", padding: "7px"}} bg="warning" text="dark">
+              Medium
+            </Badge>
+          ) : (
+            <Badge style={{ marginLeft: "5px", padding: "7px"}} bg="danger">
+              Hard
+            </Badge>
+          )}
+          </p>
           <div>
             <Form.Check
               type="switch"

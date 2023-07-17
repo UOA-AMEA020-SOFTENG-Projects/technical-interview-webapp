@@ -287,7 +287,7 @@ const TopicsList = ({ topics }) => {
                   <div className={styles["problem-details"]}>
                     <Form.Check
                       type="checkbox"
-                      checked={problemStatuses[problem._id]}
+                      checked={problemStatuses[problem._id] ?? false}
                       disabled
                       style={{ marginRight: "10px" }}
                     />
