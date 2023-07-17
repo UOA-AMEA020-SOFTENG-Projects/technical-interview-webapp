@@ -4,6 +4,7 @@ import ProgressBar from "react-bootstrap/ProgressBar";
 import Badge from "react-bootstrap/Badge";
 import { useNavigate, Link } from "react-router-dom";
 import { Container, Row, Col, Card, Modal, Button } from "react-bootstrap";
+import { PieChart, Pie, Cell } from 'recharts';
 import styles from "./TopicsList.module.css";
 
 const TopicsList = ({ topics }) => {
@@ -13,6 +14,7 @@ const TopicsList = ({ topics }) => {
   const [topicsProgress, setTopicsProgress] = useState({});
   const [problemStatuses, setProblemStatuses] = useState({});
   const [recommendedStatuses, setRecommendedStatuses] = useState({});
+  const [completedData, setCompletedData] = useState([]);
 
   const navigate = useNavigate();
 
@@ -26,6 +28,22 @@ const TopicsList = ({ topics }) => {
     setRecommendedStatuses(recommendedStatuses);
     setShow(true);
   };
+
+  useEffect(() => {
+    const fetchCompletedData = async () => {
+      const response = await fetch('http://localhost:3000/user/completed', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+      console.log(data,40);
+      setCompletedData(data);
+    };
+  
+    fetchCompletedData();
+  }, [token]);
+  
 
   const fetchRecommendationStatuses = async (problems) => {
     const statuses = {};
@@ -91,8 +109,8 @@ const TopicsList = ({ topics }) => {
   }, [show, token, currentTopic]);
 
   return (
-    <Container className="d-flex justify-content-center align-items-center vh-100">
-      <Row xs={1} md={2} className="g-4 w-60">
+    <Container className="d-flex justify-content-center align-items-center vh-100" style={{ minWidth: "100rem", marginLeft: "5%", marginRight: "10%" }}>
+      <Row xs={1} md={2} className="g-4 w-100">
         {topics.map((topic, index) => (
           <Col key={index}>
             <Card
@@ -131,6 +149,23 @@ const TopicsList = ({ topics }) => {
           </Col>
         ))}
       </Row>
+      <PieChart width={500} height={500}>
+        <Pie
+          dataKey="problems"
+          isAnimationActive={true}
+          data={completedData}
+          cx={300}
+          cy={300}
+          outerRadius={150}
+          fill="#8884d8"
+          labelLine={false}
+          label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+        >
+          {completedData.map((entry, index) => (
+            <Cell key={`cell-${index}`} fill={index % 2 === 0 ? "#3F51B5" : "#F44336"} />
+          ))}
+        </Pie>
+      </PieChart>
   
       <Modal
         show={show}
