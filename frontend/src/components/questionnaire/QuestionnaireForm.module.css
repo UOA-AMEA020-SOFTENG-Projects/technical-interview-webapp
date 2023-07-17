@@ -8,9 +8,9 @@
   }
   
   .customCard {
-    width: 50rem;
-    margin-left: 20%;
-    margin-right: 20%;
+    width: 70rem;
+    margin-left: 15%;
+    margin-right: 15%;
   }
   
   .cardText {
@@ -18,10 +18,20 @@
   }
   
   .cardImage {
-    width: 80%;
+    width: 30%;
     height: auto;
-    display: block;
-    margin: auto;
+  }
+  
+  .cardContent {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  
+  .responsesContainer {
+    width: 65%;
+    display: flex;
+    flex-direction: column;
   }
   
   .customCheck {
