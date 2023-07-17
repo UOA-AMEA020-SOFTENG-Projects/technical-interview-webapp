@@ -75,74 +75,78 @@ const QuestionnaireForm = ({ questions }) => {
   const question = questions[currentQuestionIndex];
 
   return (
-    <Container className={styles.container}>
-      <Row>
-        <Col className="d-flex justify-content-center">
-          <div className={styles.formContainer}>
-            <h2 className="text-center">
-              <b>Questionnaire</b>
-            </h2>
-            <Form onSubmit={handleSubmit} key={key}>
-              <Card className={`mb-4 ${styles.customCard}`}>
-                <Card.Body className={styles.cardBody}>
-                  <Card.Text className={styles.cardText}>
-                    {question.questionContent}
-                  </Card.Text>
-                  <div className={styles.cardContent}>
-                    <div className={styles.responsesContainer}>
-                      {question.responses.map((response, i) => (
-                        <Form.Check
-                          custom
-                          type="radio"
-                          id={`${question._id}-${i}`}
-                          label={response}
-                          name={`group-${question._id}`}
-                          key={i}
-                          className={styles.customCheck}
-                          style={{ marginBottom: "1rem" }}
-                          onChange={() =>
-                            handleResponseChange(question._id, response)
-                          }
+    <>
+      <Container className={styles.container}>
+        <Row>
+          <Col className="d-flex justify-content-center">
+            <div className={styles.formContainer}>
+              <Form onSubmit={handleSubmit} key={key}>
+                <h2 className={`${styles.desc}`}>
+                    <b>Questionnaire</b>
+                </h2>
+                <p style={{ marginBottom: "2rem"}} className={styles.desc}>Please answer the following questions to the best of your ability so that we can customise the learning material to your needs.</p>
+                <Card className={`mb-4 ${styles.customCard}`}>
+                  <Card.Body className={styles.cardBody}>
+                    <Card.Text className={styles.cardText}>
+                      {question.questionContent}
+                    </Card.Text>
+                    <div className={styles.cardContent}>
+                      <div className={styles.responsesContainer}>
+                        {question.responses.map((response, i) => (
+                          <Form.Check
+                            custom
+                            type="radio"
+                            id={`${question._id}-${i}`}
+                            label={response}
+                            name={`group-${question._id}`}
+                            key={i}
+                            className={styles.customCheck}
+                            style={{ marginBottom: "1rem" }}
+                            onChange={() =>
+                              handleResponseChange(question._id, response)
+                            }
+                          />
+                        ))}
+                      </div>
+                      {question.image && (
+                        <Card.Img
+                          variant="bottom"
+                          src={`http://localhost:3000/${question.image}`}
+                          alt={question.questionContent}
+                          className={styles.cardImage}
                         />
-                      ))}
+                      )}
                     </div>
-                    {question.image && (
-                      <Card.Img
-                        variant="bottom"
-                        src={`http://localhost:3000/${question.image}`}
-                        alt={question.questionContent}
-                        className={styles.cardImage}
-                      />
-                    )}
-                  </div>
-                </Card.Body>
-              </Card>
-              <Button
-                variant="secondary"
-                onClick={handlePrev}
-                disabled={currentQuestionIndex === 0}
-              >
-                Previous
-              </Button>
-              {currentQuestionIndex < questions.length - 1 ? (
-                <Button variant="primary" type="button" onClick={handleNext}>
-                  Next
-                </Button>
-              ) : (
+                  </Card.Body>
+                </Card>
                 <Button
-                  variant="primary"
-                  type="submit"
-                  onClick={handleButtonClick}
-                  className={styles.customButton}
+                  variant="secondary"
+                  onClick={handlePrev}
+                  disabled={currentQuestionIndex === 0}
+                  style={{ marginBottom: "0.5rem" }}
                 >
-                  Submit
+                  Previous
                 </Button>
-              )}
-            </Form>
-          </div>
-        </Col>
-      </Row>
-    </Container>
+                {currentQuestionIndex < questions.length - 1 ? (
+                  <Button variant="primary" type="button" onClick={handleNext}>
+                    Next
+                  </Button>
+                ) : (
+                  <Button
+                    variant="primary"
+                    type="submit"
+                    onClick={handleButtonClick}
+                    className={styles.customButton}
+                  >
+                    Submit
+                  </Button>
+                )}
+              </Form>
+            </div>
+          </Col>
+        </Row>
+      </Container>
+    </>
   );
 };
 
