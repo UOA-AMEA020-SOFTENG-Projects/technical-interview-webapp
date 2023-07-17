@@ -4,9 +4,12 @@ import useSolution from "../../../hooks/useSolution";
 import useUpdateSolution from "../../../hooks/useUpdateSolution";
 import AceEditor from "react-ace";
 import { Modal, Button } from "react-bootstrap";
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import Form from 'react-bootstrap/Form';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Spinner from "react-bootstrap/Spinner";
+import Switch from "react-bootstrap-switch";
+import Countdown from "react-countdown";
 import axios from "axios";
 import styles from "./CodeEditor.module.css";
 import { themes } from "../../../../config/themes.js";
@@ -56,6 +59,8 @@ function CodeEditor({ problem }) {
   const [selectedTheme, setSelectedTheme] = useState("xcode");
   const [showHint, setShowHint] = useState(false);
   const [showSolutionModal, setShowSolutionModal] = useState(false);
+  const [testMode, setTestMode] = useState(false);
+  const [countdown, setCountdown] = useState(null);
 
   const saveSolution = (newValue, language) => {
     axios
@@ -82,6 +87,35 @@ function CodeEditor({ problem }) {
 
   const themeChangeHandler = (event) => {
     setSelectedTheme(event.target.value);
+  };
+
+  // handler for the switch
+  const toggleSwitch = () => {
+    if (!testMode) {
+      const startTime = window.prompt("Start time", "");
+      if (startTime !== null && startTime !== "") {
+        setCountdown(Date.now() + startTime * 1000);
+      }
+    }
+    setTestMode(!testMode);
+  };
+
+  // renderer for the countdown
+  const CountdownRenderer = ({ hours, minutes, seconds, completed }) => {
+    
+    if (completed) {
+      toast.warning("Times Up!", {
+        position: toast.POSITION.BOTTOM_CENTER,
+      });
+      
+      return <span>Times up!</span>;
+    }
+
+    return (
+      <span>
+        {hours}:{minutes}:{seconds}
+      </span>
+    );
   };
 
   // update the language mode of the editor based on the language selected
@@ -145,10 +179,10 @@ function CodeEditor({ problem }) {
       const response = await axios.post(
         `http://localhost:3000/editor/${problem._id}/testCase`,
         { code: value },
-        { 
-          params: { language_id: selectedLanguage }, 
+        {
+          params: { language_id: selectedLanguage },
           headers: { Authorization: `Bearer ${token}` },
-        }, 
+        }
       );
 
       if (response.status !== 200) {
@@ -158,13 +192,15 @@ function CodeEditor({ problem }) {
       }
 
       setTestResults(response.data.testResults);
-      
+
       // Check if all test cases passed
-      const allTestCasesPassed = response.data.testResults.every(result => result.passed);
-      
+      const allTestCasesPassed = response.data.testResults.every(
+        (result) => result.passed
+      );
+
       if (allTestCasesPassed) {
         toast.success("Problem successfully Completed!", {
-          position: toast.POSITION.BOTTOM_CENTER
+          position: toast.POSITION.BOTTOM_CENTER,
         });
       }
     } catch (error) {
@@ -257,7 +293,21 @@ function CodeEditor({ problem }) {
   return (
     <div className={styles.editorWrapper}>
       <div>
-        <h2>{problem.title}</h2>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <h2>{problem.title}</h2>
+          <div>
+            <Form.Check
+              type="switch"
+              id="testModeSwitch"
+              label="Test Mode"
+              checked={testMode}
+              onChange={toggleSwitch}
+            />
+            {testMode && countdown && (
+              <Countdown date={countdown} renderer={CountdownRenderer} />
+            )}
+          </div>
+        </div>
         <p>{problem.description}</p>
       </div>
       <div

@@ -47,3 +47,19 @@
     justify-content: center;
     width: 100%;
 }
+
+.switchContainer {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+  
+.onText {
+    color: green; /* Example color for "On" text */
+    font-weight: bold; /* Example font weight for "On" text */
+  }
+  
+  .offText {
+    color: red; /* Example color for "Off" text */
+    font-weight: bold; /* Example font weight for "Off" text */
+  }
