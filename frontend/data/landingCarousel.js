@@ -11,17 +11,17 @@ export const carouselContent = [
     }, 
     {
         title: "Designed to simulate a real interview.", 
-        description: "Everything from the question prompts, initial skeleton code provided to you to explaining your thought process simulates the environment of a real technical interview.",
+        description: "Everything from the question prompts, initial skeleton code provided to you, to explaining your thought process simulates the environment of a real technical interview.",
         image: carouselTwo
     },
     {
         title: "Customise your learning journey.", 
-        description: "Through the questionnaire you create at the start of your journey with us, content and problems are recommended to you according to your learning needs. In order to make the learning process as efficient as possible.",
+        description: "Through the questionnaire you complete at the start of your journey with us. The content and problems are recommended to you according to your learning needs. In order to make the learning process as efficient as possible.",
         image: carouselThree
     },
     {
         title: "Track your progress.", 
-        description: "By creating an account and signing up, you are able to track the problems that you have already completed, how much of each topic you have to left to do. As well as seamlessly resume a problem you were working on last time, through your previous solution being automatically saved.",
+        description: "By creating an account and signing up, you are able to track the problems that you have already completed. As well as seamlessly resume a problem you were working on last time, through your previous solution being automatically saved.",
         image: carouselFour
     }
 ];

@@ -16,7 +16,9 @@ import { loader as problemLoader } from "./pages/ProblemPage.jsx";
 import { loader as contentLoader } from "./pages/ContentPage.jsx";
 import { action as signupAction } from "./pages/SignupPage.jsx";
 import { loader as usernameLoader } from "./pages/HomeRootPage.jsx";
+import { loader as questionsLoader } from "./pages/QuestionnairePage";
 import { action as loginAction } from "./pages/LoginPage.jsx";
+import QuestionnairePage from "./pages/QuestionnairePage";
 
 const router = createBrowserRouter([
   {path: "/", element: <RootPage />, errorElement: <ErrorPage />, children: [
@@ -24,6 +26,7 @@ const router = createBrowserRouter([
     { path: "login", element: <LoginPage />, action: loginAction },
     { path: "signup", element: <SignupPage />, action: signupAction },
     { path: 'home', element: <HomeRootPage />, loader: usernameLoader, children: [
+      { path: "questionnaire", element: <QuestionnairePage />, loader: questionsLoader },
       { path: "dashboard", element: <DashboardPage />, loader: topicsLoader },
       { path: "content/:topicId", element: <ContentPage />, loader: contentLoader },
       { path: "problem/:problemId", element: <ProblemPage />, loader: problemLoader },

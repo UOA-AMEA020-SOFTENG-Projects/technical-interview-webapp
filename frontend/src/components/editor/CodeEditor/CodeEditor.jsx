@@ -143,7 +143,10 @@ function CodeEditor({ problem }) {
       const response = await axios.post(
         `http://localhost:3000/editor/${problem._id}/testCase`,
         { code: value },
-        { params: { language_id: selectedLanguage } }
+        { 
+          params: { language_id: selectedLanguage }, 
+          headers: { Authorization: `Bearer ${token}` },
+        }, 
       );
 
       if (response.status !== 200) {
