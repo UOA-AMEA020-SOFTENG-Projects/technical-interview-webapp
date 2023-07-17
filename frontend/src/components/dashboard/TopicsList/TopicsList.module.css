@@ -37,6 +37,18 @@
     color: #FFF;
   }
 
+  .card-bg-5 {
+    background-color: #36127d;
+    background-image: linear-gradient(315deg, #113d08 0%, #2f0a33 74%);
+    color: #FFF;
+  }
+
+  .card-bg-6 {
+    background-color: #0c6579;
+    background-image: linear-gradient(315deg, #453a35 0%, #54491b 74%);
+    color: #FFF;
+  }
+
   .modalClass .modal-dialog {
     width: 50vw;
     max-width: none;

@@ -109,64 +109,70 @@ const TopicsList = ({ topics }) => {
   }, [show, token, currentTopic]);
 
   return (
-    <Container className="d-flex justify-content-center align-items-center vh-100" style={{ minWidth: "100rem", marginLeft: "5%", marginRight: "10%" }}>
-      <Row xs={1} md={2} className="g-4 w-100">
-        {topics.map((topic, index) => (
-          <Col key={index}>
-            <Card
-              className={styles[`card-bg-${(index % 4) + 1}`]}
-              style={{
-                borderRadius: "5px",
-                padding: "20px",
-              }}
-              onClick={() => handleShow(topic)}
+    <>
+    <h1 style={{ marginTop: "20vh" }}><b>Dashboard</b></h1>
+    <Container className="d-flex justify-content-center align-items-center min-vw-100" style={{ marginLeft: "30rem", marginBottom: "5rem"}}>
+      <Row className="g-4 w-200">
+        <Col xs={12} md={6}>
+          <Row xs={1} md={2} className="g-4 w-200">
+            {topics.map((topic, index) => (
+              <Col key={index}>
+                <Card
+                  className={styles[`card-bg-${(index % 4) + 1}`]}
+                  style={{
+                    borderRadius: "5px",
+                    padding: "30px 50px",
+                  }}
+                  onClick={() => handleShow(topic)}
+                >
+                  <Card.Body>
+                    <Card.Title>{topic.title}</Card.Title>
+                    <Card.Text>
+                      Length:
+                      {topic.length === "short" ? (
+                        <Badge bg="success" style={{ marginLeft: "0.4rem" }}>Short</Badge>
+                      ) : topic.length === "medium" ? (
+                        <Badge bg="warning" text="dark" style={{ marginLeft: "0.4rem" }}>
+                          Medium
+                        </Badge>
+                      ) : (
+                        <Badge bg="danger" style={{ marginLeft: "0.4rem" }}>Long</Badge>
+                      )}
+                    </Card.Text>
+    
+                    <Card.Text>{`Progress: ${
+                      topicsProgress[topic._id]
+                    }%`}</Card.Text>
+                    <ProgressBar
+                      animated
+                      now={topicsProgress[topic._id]}
+                      label={topicsProgress[topic._id]}
+                    />
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+        </Col>
+        <Col xs={12} md={6} className="d-flex flex-column align-items-center w-25">
+          <div><h3><b>Problems attempted by you</b></h3></div>
+          <PieChart width={500} height={500}>
+            <Pie
+              dataKey="problems"
+              isAnimationActive={true}
+              data={completedData}
+              outerRadius={200}
+              fill="#8884d8"
+              labelLine={false}
+              label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
             >
-              <Card.Body>
-                <Card.Title>{topic.title}</Card.Title>
-                <Card.Text>
-                  Length:
-                  {topic.length === "short" ? (
-                    <Badge bg="success" style={{ marginLeft: "0.4rem" }}>Short</Badge>
-                  ) : topic.length === "medium" ? (
-                    <Badge bg="warning" text="dark" style={{ marginLeft: "0.4rem" }}>
-                      Medium
-                    </Badge>
-                  ) : (
-                    <Badge bg="danger" style={{ marginLeft: "0.4rem" }}>Long</Badge>
-                  )}
-                </Card.Text>
-  
-                <Card.Text>{`Progress: ${
-                  topicsProgress[topic._id]
-                }%`}</Card.Text>
-                <ProgressBar
-                  animated
-                  now={topicsProgress[topic._id]}
-                  label={topicsProgress[topic._id]}
-                />
-              </Card.Body>
-            </Card>
-          </Col>
-        ))}
+              {completedData.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={index % 2 === 0 ? "#1d0320" : "#380e0e"} />
+              ))}
+            </Pie>
+          </PieChart>
+        </Col>
       </Row>
-      <PieChart width={500} height={500}>
-        <Pie
-          dataKey="problems"
-          isAnimationActive={true}
-          data={completedData}
-          cx={300}
-          cy={300}
-          outerRadius={150}
-          fill="#8884d8"
-          labelLine={false}
-          label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-        >
-          {completedData.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={index % 2 === 0 ? "#3F51B5" : "#F44336"} />
-          ))}
-        </Pie>
-      </PieChart>
-  
       <Modal
         show={show}
         onHide={handleClose}
@@ -224,7 +230,8 @@ const TopicsList = ({ topics }) => {
         </Modal.Body>
       </Modal>
     </Container>
-  );
+    </>
+  );  
 };
 
 export default TopicsList;
