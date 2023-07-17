@@ -1,6 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
-import { createUser, addRecommendedProblem } from "../dao/userDAO.js";
+import { createUser, addRecommendedProblem, getCompletedProblemsCount } from "../dao/userDAO.js";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
@@ -125,5 +125,17 @@ userRouter.put('/user/recommendProblem/:problemId', authenticateToken, async (re
   }
 });
 
+/**
+ * GET /user/completed
+ * Get the number of problems the user has completed and not completed
+ */
+userRouter.get('/user/completed', authenticateToken, async (req, res, next) => {
+  try {
+    const result = await getCompletedProblemsCount(req.user.username);
+    res.json(result);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+});
 
 export default userRouter;

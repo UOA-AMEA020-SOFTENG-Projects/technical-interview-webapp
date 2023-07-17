@@ -99,7 +99,6 @@ const TopicsList = ({ topics }) => {
               className={styles[`card-bg-${(index % 4) + 1}`]}
               style={{
                 borderRadius: "5px",
-                backgroundColor: "#8FAC51",
                 padding: "20px",
               }}
               onClick={() => handleShow(topic)}
@@ -118,7 +117,7 @@ const TopicsList = ({ topics }) => {
                     <Badge bg="danger" style={{ marginLeft: "0.4rem" }}>Long</Badge>
                   )}
                 </Card.Text>
-
+  
                 <Card.Text>{`Progress: ${
                   topicsProgress[topic._id]
                 }%`}</Card.Text>
@@ -132,20 +131,20 @@ const TopicsList = ({ topics }) => {
           </Col>
         ))}
       </Row>
-
+  
       <Modal
         show={show}
         onHide={handleClose}
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
+        className={styles.modalClass}
       >
-        <Modal.Header closeButton>
-          <Modal.Title>{currentTopic?.title}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
+        <Modal.Body style={{ backgroundColor: "#8FAC51", textAlign: "center" }}>
+          <Modal.Title style={{ textAlign: "center", color: "white", fontSize: "1.75em" }}><b>{currentTopic?.title}</b></Modal.Title>
           <Button
-            variant="primary"
+            variant="outline-light"
+            style={{ color: "white", marginTop: "1rem" }}
             className="mb-3"
             onClick={() =>
               navigateContentHandler(currentTopic._id, currentTopic.title)
@@ -153,35 +152,40 @@ const TopicsList = ({ topics }) => {
           >
             Content
           </Button>
-          {currentTopic?.problems.map((problem, i) => (
-            <div key={i} className={styles["problem-container"]}>
-              <div className={styles["problem-details"]}>
-                <Form.Check
-                  type="checkbox"
-                  checked={problemStatuses[problem._id]}
-                  disabled
-                  style={{ marginRight: "10px" }}
-                />
-                <Link to={`/home/problem/${problem._id}`}>
-                  <p style={{ marginBottom: "0px", fontSize: "1.25em" }}>
-                    {problem.title}
+          <p style={{ textAlign: "center", color: "white", marginTop: "2rem" }}><b>Problems</b></p>
+          {currentTopic?.problems.length > 0 ? (
+            currentTopic.problems.map((problem, i) => (
+              <div key={i} className={styles["problem-container"]}>
+                <div className={styles["problem-details"]}>
+                  <Form.Check
+                    type="checkbox"
+                    checked={problemStatuses[problem._id]}
+                    disabled
+                    style={{ marginRight: "10px" }}
+                  />
+                  <Link to={`/home/problem/${problem._id}`}>
+                    <p style={{ marginBottom: "0px", fontSize: "1.25em" }}>
+                      {problem.title}
+                    </p>
+                  </Link>
+                </div>
+                {recommendedStatuses[problem._id] && (
+                  <p
+                    style={{
+                      color: "#960000",
+                      fontWeight: "bold",
+                      marginBottom: "0px",
+                      fontSize: "1em",
+                    }}
+                  >
+                    Recommended for You
                   </p>
-                </Link>
+                )}
               </div>
-              {recommendedStatuses[problem._id] && (
-                <p
-                  style={{
-                    color: "red",
-                    fontWeight: "bold",
-                    marginBottom: "0px",
-                    fontSize: "1em",
-                  }}
-                >
-                  Recommended for You
-                </p>
-              )}
-            </div>
-          ))}
+            ))
+          ) : (
+            <p style={{ color: "white" }}>No problems available for this topic.</p>
+          )}
         </Modal.Body>
       </Modal>
     </Container>

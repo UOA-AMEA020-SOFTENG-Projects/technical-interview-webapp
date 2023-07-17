@@ -1,4 +1,5 @@
 import { User } from "../models/user.js";
+import { Problem } from "../models/problem.js";
 
 const createUser = async (userData) => {
   const newUser = new User(userData);
@@ -23,4 +24,21 @@ const addRecommendedProblem = async (username, problemId) => {
   return user;
 };
 
-export { createUser, addRecommendedProblem };
+const getCompletedProblemsCount = async (username) => {
+  const user = await User.findOne({ username: username });
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  const totalProblems = await Problem.countDocuments();
+  const completedProblems = user.problemsCompleted.length;
+  const notCompletedProblems = totalProblems - completedProblems;
+
+  return [
+    { name: "Completed", problems: completedProblems }, 
+    { name: "Not Completed", problems: notCompletedProblems },
+  ];
+};
+
+export { createUser, addRecommendedProblem, getCompletedProblemsCount };
