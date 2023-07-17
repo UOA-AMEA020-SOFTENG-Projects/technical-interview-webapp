@@ -111,7 +111,7 @@ const TopicsList = ({ topics }) => {
   return (
     <>
     <h1 style={{ marginTop: "20vh" }}><b>Dashboard</b></h1>
-    <Container className="d-flex justify-content-center align-items-center min-vw-100" style={{ marginLeft: "30rem", marginBottom: "5rem"}}>
+    <Container className="d-flex align-items-center min-vw-100" style={{ marginLeft: "30rem", marginBottom: "5rem"}}>
       <Row className="g-4 w-200">
         <Col xs={12} md={6}>
           <Row xs={1} md={2} className="g-4 w-200">
@@ -156,12 +156,12 @@ const TopicsList = ({ topics }) => {
         </Col>
         <Col xs={12} md={6} className="d-flex flex-column align-items-center w-25">
           <div><h3><b>Problems attempted by you</b></h3></div>
-          <PieChart width={500} height={500}>
+          <PieChart width={700} height={500} style={{ marginLeft: "7rem"}}>
             <Pie
               dataKey="problems"
               isAnimationActive={true}
               data={completedData}
-              outerRadius={200}
+              outerRadius={150}
               fill="#8884d8"
               labelLine={false}
               label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}

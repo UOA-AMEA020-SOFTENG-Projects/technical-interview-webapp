@@ -41,4 +41,18 @@ const getCompletedProblemsCount = async (username) => {
   ];
 };
 
-export { createUser, addRecommendedProblem, getCompletedProblemsCount };
+const getRecommendedProblems = async (username) => {
+  const user = await User.findOne({ username: username })
+    .populate("problemsRecommended")
+    .exec();
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  return user.problemsRecommended;
+};
+
+
+export { createUser, addRecommendedProblem, getCompletedProblemsCount, getRecommendedProblems };
+

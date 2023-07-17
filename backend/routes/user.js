@@ -1,6 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
-import { createUser, addRecommendedProblem, getCompletedProblemsCount } from "../dao/userDAO.js";
+import { createUser, addRecommendedProblem, getCompletedProblemsCount, getRecommendedProblems } from "../dao/userDAO.js";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
@@ -137,5 +137,23 @@ userRouter.get('/user/completed', authenticateToken, async (req, res, next) => {
     return res.status(500).json({ message: error.message });
   }
 });
+
+/**
+ * GET /user/recommended-list
+ * Get the recommended problems for a specific user
+ */
+userRouter.get('/user/recommended-list', authenticateToken, async (req, res, next) => {
+  try {
+    const recommendedProblems = await getRecommendedProblems(req.user.username);
+    return res.status(200).json(recommendedProblems);
+  } catch (error) {
+    if (error.message === "User not found") {
+      return res.status(400).json({ message: error.message });
+    } else {
+      return res.status(500).json({ message: error.message });
+    }
+  }
+});
+
 
 export default userRouter;
