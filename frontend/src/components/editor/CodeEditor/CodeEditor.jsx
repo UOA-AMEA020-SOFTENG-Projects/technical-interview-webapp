@@ -48,6 +48,7 @@ function CodeEditor({ problem }) {
   const [feedback, setFeedback] = useState("");
   const [showFeedback, setShowFeedback] = useState(false);
   const [modelAnswer, setModelAnswer] = useState("");
+  const [testCaseLoading, setTestCaseLoading] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState(
     problem.boilerplateCode[0].language
   );
@@ -114,6 +115,10 @@ function CodeEditor({ problem }) {
 
   const CountdownRenderer = ({ hours, minutes, seconds, completed }) => {
     if (completed) {
+      toast.warning("Times up! Did you manage to finish the problem?", {
+        position: toast.POSITION.BOTTOM_CENTER,
+      });
+
       return <span style={{ fontWeight: "600", color: "red" }}>Times up!</span>;
     }
     return (
@@ -179,6 +184,7 @@ function CodeEditor({ problem }) {
   };
 
   const testSubmitHandler = async () => {
+    setTestCaseLoading(true);
     try {
       // call endpoint 3 here
       const response = await axios.post(
@@ -211,9 +217,11 @@ function CodeEditor({ problem }) {
     } catch (error) {
       setErrorMsg("Code not compiling");
       setIsErrorVisible(true);
+      setTestCaseLoading(false);
     } finally {
       // save the users solution for the problem
       saveSolution(value, selectedLanguage);
+      setTestCaseLoading(false);
     }
   };
 
@@ -298,21 +306,34 @@ function CodeEditor({ problem }) {
   return (
     <div className={styles.editorWrapper}>
       <div>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <p><span style={{ fontSize: "2rem", fontWeight: "600"}}>{problem.title}</span>
-          {problem.difficulty === "easy" ? (
-            <Badge style={{ marginLeft: "5px", padding: "7px"}} bg="success">
-              Easy
-            </Badge>
-          ) : problem.difficulty === "medium" ? (
-            <Badge style={{ marginLeft: "5px", padding: "7px"}} bg="warning" text="dark">
-              Medium
-            </Badge>
-          ) : (
-            <Badge style={{ marginLeft: "5px", padding: "7px"}} bg="danger">
-              Hard
-            </Badge>
-          )}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <p>
+            <span style={{ fontSize: "2rem", fontWeight: "600" }}>
+              {problem.title}
+            </span>
+            {problem.difficulty === "easy" ? (
+              <Badge style={{ marginLeft: "5px", padding: "7px" }} bg="success">
+                Easy
+              </Badge>
+            ) : problem.difficulty === "medium" ? (
+              <Badge
+                style={{ marginLeft: "5px", padding: "7px" }}
+                bg="warning"
+                text="dark"
+              >
+                Medium
+              </Badge>
+            ) : (
+              <Badge style={{ marginLeft: "5px", padding: "7px" }} bg="danger">
+                Hard
+              </Badge>
+            )}
           </p>
           <div>
             <Form.Check
@@ -417,6 +438,18 @@ function CodeEditor({ problem }) {
               overflow: "auto",
             }}
           >
+            {testCaseLoading && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: "50%",
+                      left: "50%",
+                      transform: "translate(-50%, -50%)",
+                    }}
+                  >
+                    <Spinner animation="border" />
+                  </div>
+                )}
             <h3>Test Case Results: </h3>
             {testResults.map((result, index) => (
               <div key={index} style={{ paddingTop: "0.5rem" }}>

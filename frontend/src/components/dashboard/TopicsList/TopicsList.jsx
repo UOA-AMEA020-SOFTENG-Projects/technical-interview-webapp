@@ -225,7 +225,7 @@ const TopicsList = ({ topics }) => {
                 border: "1px solid", 
                 borderRadius: "5px", 
                 backgroundColor: "darkgray", 
-                marginLeft: "5rem"
+                marginLeft: "5rem", 
               }}
             >
               <h3 style={{ textAlign: "center", marginBottom: "20px" }}>

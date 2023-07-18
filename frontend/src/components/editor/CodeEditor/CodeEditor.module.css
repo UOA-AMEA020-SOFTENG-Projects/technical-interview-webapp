@@ -55,11 +55,11 @@
 }
   
 .onText {
-    color: green; /* Example color for "On" text */
-    font-weight: bold; /* Example font weight for "On" text */
+    color: green; 
+    font-weight: bold; 
   }
   
   .offText {
-    color: red; /* Example color for "Off" text */
-    font-weight: bold; /* Example font weight for "Off" text */
+    color: red; 
+    font-weight: bold; 
   }
