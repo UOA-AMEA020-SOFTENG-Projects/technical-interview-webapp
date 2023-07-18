@@ -9,7 +9,7 @@ body {
   background-color: #D3D3D3;
   color: black;
   font-family: Arial, sans-serif;
-  overflow: auto;
+  overflow-y: auto;
 }
 
 h1 {

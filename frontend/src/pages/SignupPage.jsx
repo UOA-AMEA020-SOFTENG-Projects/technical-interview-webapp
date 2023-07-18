@@ -57,5 +57,6 @@ export const action = async ({ request, params }) => {
 
   localStorage.setItem("authToken", token);
   
-  return redirect("/home/dashboard");
+  // when the user creates a new account it is their first time logging in so redirect to the questionnaire page
+  return redirect("/home/questionnaire");
 };

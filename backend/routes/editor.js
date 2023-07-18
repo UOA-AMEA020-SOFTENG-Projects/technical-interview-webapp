@@ -5,11 +5,12 @@ import { StatusCodes } from "http-status-codes";
 import { Problem } from "../models/problem.js";
 import { authenticateToken } from "../middleware/authenticator.js";
 import User from "../models/user.js";
+import { updateProblemCompletionStatus } from "../dao/problemDAO.js";
+import { feedbackPrompts } from "../util/prompts.js";
 import mongoose from "mongoose";
 
 const editorRouter = new express.Router();
 
-// endpoint 1: text similarity
 editorRouter.put("/editor/similarity/:problemId", async (req, res) => {
   try {
     // Fetch problem from the database by its ID
@@ -51,13 +52,20 @@ editorRouter.put("/editor/similarity/:problemId", async (req, res) => {
       });
     });
 
-    let similarityScore = await dataPromise;
+    let similarityScoreRaw = await dataPromise;
 
-    return res.status(StatusCodes.OK).json({ similarityScore });
+    const similarityScoreComparison = parseFloat(similarityScoreRaw).toFixed(1); 
+    const similarityScore = parseFloat(similarityScoreRaw).toFixed(1) * 100; 
+
+    // Find the corresponding feedback
+    let feedback = feedbackPrompts.find(prompt => similarityScoreComparison >= prompt.min && similarityScoreComparison <= prompt.max).feedback;
+
+    return res.status(StatusCodes.OK).json({ similarityScore, feedback, modelAnswer });
   } catch (error) {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(error.message);
   }
 });
+
 
 /**
  * Save solution
@@ -194,11 +202,6 @@ editorRouter.post("/editor/code", async (req, res) => {
     const sourcecode = req.body.code;
     const selectedLanguage = req.query.language_id;
 
-    console.log("-------------------------------------------");
-    console.log("code: " + sourcecode, 67);
-    console.log("selected language: " + selectedLanguage, 68);
-    console.log("-------------------------------------------");
-
     let fileName = "";
 
     switch (selectedLanguage) {
@@ -266,11 +269,22 @@ editorRouter.post("/editor/code", async (req, res) => {
   Endpoint #3: fetches the test cases for the problem and runs them against the code and returns 
   the outcome for each test case and whether the code passed each one or not.
 */
-editorRouter.post("/editor/:problemId/testCase", async (req, res) => {
+editorRouter.post("/editor/:problemId/testCase",authenticateToken, async (req, res) => {
   try {
+    console.log(req.user.username, 273);
+    // find the user using the token
+    const user = await User.findOne({ username: req.user.username });
+
+    if (!user) {
+      return res.status(StatusCodes.NOT_FOUND).json({ message: "User not found." });
+    }
+
+
+
     const sourcecode = req.body.code;
     const selectedLanguage = req.query.language_id;
     const problemId = req.params.problemId;
+    const userId = user.id;
 
     const problem = await Problem.findById(problemId);
     if (!problem) {
@@ -280,6 +294,7 @@ editorRouter.post("/editor/:problemId/testCase", async (req, res) => {
     }
 
     let fileName = "";
+    let allTestsPassed = true;
 
     switch (selectedLanguage) {
       case "c":
@@ -329,10 +344,12 @@ editorRouter.post("/editor/:problemId/testCase", async (req, res) => {
       );
 
       if (response.status !== 200) {
+
         console.log(331);
         console.log(338);
         console.log(response.data.cmpinfo);
         console.log(response.data.outcome);
+
         return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .send({ message: "Error with Jobe server connection" });
@@ -357,17 +374,21 @@ editorRouter.post("/editor/:problemId/testCase", async (req, res) => {
         actualOutput: response.data.stdout.trim(),
       };
 
-      // Check if the output matches the expected output
       if (result.actualOutput === result.expectedOutput) {
         result.passed = true;
       } else {
         result.passed = false;
+        allTestsPassed = false;
       }
 
       testResults.push(result);
     }
 
-    console.log(testResults, 363);
+    // if all of the test cases pass then the problem has been completed successfully
+
+    if(allTestsPassed) {
+      await updateProblemCompletionStatus(problemId, userId, true);
+    }
 
     return res.status(StatusCodes.OK).json({ testResults });
   } catch (error) {
