@@ -14,7 +14,7 @@ export const topics = [
       _id: "64b0a79c4808f5b754ca2b19",
       title: "Stack",
       content: "64af69fde7b8e3839c5db07d", // ID of a Content
-      problems: [],
+      problems: ["64b39ed613688bcd23cede06", "64b4bcf4d7055950382648ea"],
       length: "short",
       difficulty: "easy",
     },
