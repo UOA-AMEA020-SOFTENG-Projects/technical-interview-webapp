@@ -136,7 +136,7 @@ editorRouter.post(
  * Clear solution
  */
 editorRouter.delete(
-  '/editor/:problemId/clearSolution',
+  "/editor/:problemId/clearSolution",
   authenticateToken,
   async (req, res, next) => {
     try {
@@ -166,15 +166,16 @@ editorRouter.delete(
       if (solutionIndex !== -1) {
         user.currentSolutions.splice(solutionIndex, 1);
         await user.save();
-        return res.status(StatusCodes.OK).send({ message: "Solution cleared successfully" });
+        return res
+          .status(StatusCodes.OK)
+          .send({ message: "Solution cleared successfully" });
       } else {
         return res
           .status(StatusCodes.NOT_FOUND)
           .json({ message: "Solution not found" });
       }
-
     } catch (error) {
-      console.log(error)
+      console.log(error);
 
       return res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -328,21 +329,19 @@ editorRouter.post("/editor/:problemId/testCase", async (req, res) => {
       );
 
       if (response.status !== 200) {
-
         console.log(331);
-        console.log(338)
-        console.log(response.data.cmpinfo); 
-        console.log(response.data.outcome)
+        console.log(338);
+        console.log(response.data.cmpinfo);
+        console.log(response.data.outcome);
         return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .send({ message: "Error with Jobe server connection" });
       }
 
       if (response.data.outcome !== 15) {
-
-        console.log(338)
-        console.log(response.data.cmpinfo); 
-        console.log(response.data.outcome)
+        console.log(338);
+        console.log(response.data.cmpinfo);
+        console.log(response.data.outcome);
 
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
           error: response.data.cmpinfo,
@@ -372,13 +371,12 @@ editorRouter.post("/editor/:problemId/testCase", async (req, res) => {
 
     return res.status(StatusCodes.OK).json({ testResults });
   } catch (error) {
-    console.log(error.message + " 365");
-
+    console.log(367);
+    console.log(error);
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .send({ message: error.message });
   }
 });
-
 
 export default editorRouter;

@@ -125,6 +125,86 @@ export const problems = [
     ],
     difficulty: "hard",
   },
+    {
+    _id: "64b39ed613688bcd23cede06",
+    title: "Valid Parentheses",
+    topic: "64b0a79c4808f5b754ca2b19",
+    description: "Given a string s containing just the characters \'(\', \')\', \'{\', \'}\', \'[\' and \']\', determine if the input string is valid.\
+    An input string is valid if:\
+    Open brackets must be closed by the same type of brackets.\
+    Open brackets must be closed in the correct order.\
+    Every close bracket has a corresponding open bracket of the same type.",
+    modelDescription: "This solution validates parentheses matching in a string by using a stack to track and match opening parentheses with their corresponding closing parentheses.",
+    exampleCase: "Input: s = \"()\"\
+    Output: true",
+	  solution: "\n// method to check if the string of parentheses is valid\npublic boolean isValid(String s) {\n    // create a stack to store opening parentheses\n    Stack<Character> stack = new Stack<>();\n    \n    // iterate over each character in the string\n    for (char c : s.toCharArray()) {\n        // if the character is an opening parenthesis, push it onto the stack\n        if (c == '(' || c == '{' || c == '[') {\n            stack.push(c);\n        } else {\n            // if the stack is empty, then there's no opening parenthesis for the closing one; return false\n            if (stack.empty()) {\n                return false;\n            }\n            // if the character is a closing parenthesis and it matches the top of the stack (opening one), pop it from the stack\n            if (c == ')' && stack.peek() == '(') {\n                stack.pop();\n            } else if (c == '}' && stack.peek() == '{') {\n                stack.pop();\n            } else if (c == ']' && stack.peek() == '[') {\n                stack.pop();\n            } else {\n                // if the character is a closing parenthesis but it doesn't match the top of the stack, return false\n                return false;\n            }\n        }\n    }\n    // if the stack is empty after the loop, all opening parentheses had their matching closing ones; return true\n    return stack.empty();\n}",
+    hint: "Parentheses must be mathced in the correct order - each closing parentheses must match the most recently opened opening parantheses.",
+    boilerplateCode: [
+      {
+        language: "java",
+        boilerplate: "\nimport java.util.*;\n\npublic class Output {\n    public boolean isValid(String s) {\n        // Complete the code here\n        return true; // placeholder return statement\n    }\n    \n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n\n        String input = scanner.nextLine();\n\n        Output checker = new Output();\n        boolean isValid = checker.isValid(input);\n\n        System.out.println(isValid);\n    }\n}",
+      },
+      {
+        language: "python3",
+        boilerplate: "\nclass Output:\n    def isValid(self, s: str) -> bool:\n        # Complete this code\n        return True\n\nif __name__ == '__main__':\n    input_string = input()\n\n    checker = Output()\n    is_valid = checker.isValid(input_string)\n\n    print(str(is_valid).lower())"
+      },
+      {
+        language: "cpp",
+        boilerplate: "\n#include <iostream>\n#include <string>\n#include <stack>\n\nusing namespace std;\n\nclass Output {\npublic:\n    bool isValid(string s) {\n        // Complete this code\n        return true;\n    }\n};\n\nint main() {\n    string input_string;\n    getline(cin, input_string);\n\n    Output checker;\n    bool is_valid = checker.isValid(input_string);\n\n    cout << boolalpha << is_valid << endl;\n\n    return 0;\n}"
+      }
+    ],
+    testCases: [
+      {
+        input: "()",
+        output: "true",
+      },
+      {
+        input: "()[]{}",
+        output: "true",
+      },
+      {
+        input: "(]",
+        output: "false",
+      },
+    ],
+    difficulty: "easy",
+  },
+  {
+    _id: "64b4bcf4d7055950382648ea",
+    title: "Generate Parentheses",
+    topic: "64b0a79c4808f5b754ca2b19",
+    description: "Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses.",
+    modelDescription: "The solution generates all well-formed parentheses combinations by initiating a recursive function that tracks and matches opening and closing brackets, until the required length is reached.",
+    exampleCase: "Input: n = 1\
+    Output: [\"()\"]",
+    solution: "import java.util.List;\nimport java.util.ArrayList;\n\npublic class GenerateParentheses {\n\n    public List<String> generateParenthesis(int n) {\n        List<String> result = new ArrayList<>();\n        generateParentheses(result, \"\", 0, 0, n);\n        return result;\n    }\n\n    private void generateParentheses(List<String> result, String current, int open, int close, int n) {\n        if (current.length() == 2 * n) {\n            result.add(current);\n            return;\n        }\n        if (open < n) {\n            generateParentheses(result, current + '(', open + 1, close, n);\n        }\n        if (close < open) {\n            generateParentheses(result, current + ')', open, close + 1, n);\n        }\n    }\n}\n",
+    hint: "Consider the problem in terms of recursion, where you make progress by solving smaller versions of the original problem.",
+    boilerplateCode: [
+      {
+        language: "java",
+        boilerplate: "import java.util.*;\n\npublic class Output {\n\n    public List<String> generateParenthesis(int n) {\n      // complete this code\n    }\n\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        int input = scanner.nextInt();\n        \n        Output generator = new Output();\n        List<String> result = generator.generateParenthesis(input);\n\n        System.out.println(result);\n    }\n}\n",
+      },
+      {
+        language: "python3",
+        boilerplate: "\nimport ast\nfrom typing import List\n\nclass Output:\n    def generateParenthesis(self, n):\n        # Complete this code\n        pass\n\nif __name__ == \"__main__\":\n    n = int(input())\n    output = Output()\n    result = output.generateParenthesis(n)\n    result = [ast.literal_eval(\"'{}'\".format(i)) for i in result]\n    print(str(result).replace(\"'\", \"\"))\n"
+      },
+      {
+        language: "cpp",
+        boilerplate: "#include <iostream>\n#include <vector>\n#include <string>\n\nclass Output {\npublic:\n    std::vector<std::string> generateParenthesis(int n) {\n        // complete the code\n    }\n};\n\nint main() {\n    int n;\n    std::cin >> n;\n    Output output;\n    std::vector<std::string> result = output.generateParenthesis(n);\n\n    std::cout << \"[\";\n    for (size_t i = 0; i < result.size(); ++i) {\n        std::cout << result[i];\n        if (i < result.size() - 1) {\n            std::cout << \", \";\n        }\n    }\n    std::cout << \"]\" << std::endl;\n\n    return 0;\n}"
+      }
+    ],
+    testCases: [
+      {
+        input: "3",
+        output: "[((())), (()()), (())(), ()(()), ()()()]",
+      },
+      {
+        input: "1",
+        output: "[()]",
+      },
+    ],
+    difficulty: "medium",
+  },
 ];
 
 export async function seedProblems() {
