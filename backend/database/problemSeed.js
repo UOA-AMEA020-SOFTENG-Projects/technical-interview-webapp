@@ -245,6 +245,44 @@ export const problems = [
     ],
     difficulty: "hard",
   },
+  {
+    _id: "64b7424aa9e904c794e46798",
+    title: "Basic Binary Search",
+    topic: "64b0a7a1664e6698b9720575",
+    description: "Given an array of integers nums which is sorted in ascending order, and an integer target, write a function to search target in nums. If target exists, then return its index. Otherwise, return -1.\
+    You must write an algorithm with O(log n) runtime complexity.",
+    modelDescription: "This code uses a binary search algorithm to find a target value in a sorted integer array, returning the index of the target if found or -1 otherwise.",
+    exampleCase: "Input: nums = [-1,0,3,5,9,12], target = 9\
+    Output: 4\
+    Explanation: 9 exists in nums and its index is 4",
+    solution: "public class Solution {\n\n    public int search(int[] nums, int target) {\n        int left = 0; // initialize left pointer to 0\n        int right = nums.length - 1; // initialize right pointer to the last index of the array\n\n        while (left <= right) { // continue the loop till left pointer is less than or equal to right pointer\n            int mid = left + (right - left) / 2; // calculate the middle index of the array\n\n            if (nums[mid] == target) { // check if the middle element is equal to target\n                return mid; // return the middle index\n            } else if (nums[mid] < target) { // check if the middle element is less than target\n                left = mid + 1; // move the left pointer to the right of middle element\n            } else { // if the middle element is greater than target\n                right = mid - 1; // move the right pointer to the left of middle element\n            }\n        }\n\n        return -1; // target not found in the array\n    }\n\n}\n",
+    hint: "Remember that there are no tricks here. Just a basic binary search implementaion.",
+    boilerplateCode: [
+      {
+        language: "java",
+        boilerplate: "import java.util.*;\n\npublic class Output {\n    public int search(int[] nums, int target) {\n        // To do: complete this function\n        return 1; // place holder return statement\n    }\n    \n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        String input = scanner.nextLine();\n\n        String[] parts = input.split(\", target = \");\n        String numsPart = parts[0].replace(\"nums = [\", \"\").replace(\"]\", \"\");\n        int[] nums = Arrays.stream(numsPart.split(\",\"))\n                           .map(String::trim)\n                           .mapToInt(Integer::parseInt)\n                           .toArray();\n\n        int target = Integer.parseInt(parts[1]);\n\n        Output output = new Output();\n        int result = output.search(nums, target);\n        \n        System.out.println(result);\n    }\n}",
+      },
+      {
+        language: "python3",
+        boilerplate: "class Output:\n    def search(self, nums, target):\n        # To do: complete this code\n        pass\n\nif __name__ == \"__main__\":\n    input_string = input()\n\n    parts = input_string.split(\", target = \")\n    nums_part = parts[0].replace(\"nums = [\", \"\").replace(\"]\", \"\")\n    nums = list(map(int, nums_part.split(\",\")))\n\n    target = int(parts[1])\n\n    output = Output()\n    result = output.search(nums, target)\n    \n    print(result)"
+      },
+      {
+        language: "cpp",
+        boilerplate: "#include <iostream>\n#include <vector>\n#include <sstream>\n#include <algorithm>\n\nclass Output {\npublic:\n    int search(std::vector<int>& nums, int target) {\n      // to do: complete this function \n      \n      return 1; // temp placeholder return statement\n    }\n};\n\nint main() {\n    std::string input;\n    std::getline(std::cin, input);\n    \n    std::size_t pos = input.find(\", target = \");\n    std::string numsPart = input.substr(0, pos); // \"nums = [-1,0,3,5,9,12]\"\n    std::string targetPart = input.substr(pos + 11); // \"9\"\n    \n    numsPart = numsPart.substr(8, numsPart.size() - 8); // remove \"nums = [\"\n    numsPart.pop_back(); // remove \"]\"\n    \n    std::vector<int> nums;\n    std::stringstream ss(numsPart);\n    for (int i; ss >> i;) {\n        nums.push_back(i);    \n        if (ss.peek() == ',')\n            ss.ignore();\n    }\n    \n    int target = std::stoi(targetPart); // directly convert targetPart to integer\n    \n    Output output;\n    int result = output.search(nums, target);\n    \n    std::cout << result << std::endl;\n    \n    return 0;\n}\n"
+      }
+    ],
+    testCases: [
+      {
+        input: "nums = [-1,0,3,5,9,12], target = 9",
+        output: "4",
+      },
+      {
+        input: "nums = [-1,0,3,5,9,12], target = 2",
+        output: "-1",
+      },
+    ],
+    difficulty: "easy",
+  },
 ];
 
 export async function seedProblems() {
