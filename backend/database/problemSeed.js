@@ -205,6 +205,46 @@ export const problems = [
     ],
     difficulty: "medium",
   },
+  {
+    _id: "64b71662c5b9fafab1d170fe",
+    title: "Daily Temperatures",
+    topic: "64b0a79c4808f5b754ca2b19",
+    description: "Given an array of integers temperatures represents the daily temperatures, return an array answer such that answer[i] is the number of days you have to wait after the ith day to get a warmer temperature. If there is no future day for which this is possible, keep answer[i] == 0 instead.",
+    solution: "public int[] dailyTemperatures(int[] temperatures) {\n    // Initialize a stack to keep track of indices of temperatures\n    Stack<Integer> stack = new Stack<>();\n    // Initialize an array to store the result (number of days until a warmer temperature)\n    int[] ret = new int[temperatures.length];\n\n    // Iterate through the given temperatures\n    for(int i = 0; i < temperatures.length; i++) {\n        // While the stack is not empty and the current temperature is greater than the\n        // temperature at the index present at the top of the stack\n        while(!stack.isEmpty() && temperatures[i] > temperatures[stack.peek()]) {\n            // Pop the index from the stack as we've found a day with higher temperature\n            int idx = stack.pop();\n            // The number of days to wait for a warmer temperature is the difference \n            // between the current day and the day from the stack\n            ret[idx] = i - idx;\n        }\n        // Push the current day's index onto the stack\n        stack.push(i);\n    }\n    // The remaining indices in the stack represent days for which there is no warmer temperature in the future,\n    // so they are not popped out of the stack. Their corresponding positions in the result array will remain 0.\n\n    return ret;  // Return the result array\n}",
+    exampleCase: "Input: temperatures = [30,60,90]\
+    Output: [1,1,0]",
+    modelDescription: "The solution uses a stack to track the indices of descending temperatures, popping an index when a higher temperature is found, and setting the corresponding result to the difference in indices, which represents the number of days until a warmer temperature.",
+    hint: "Use a stack to keep track of the indices of the days.",
+    boilerplateCode: [
+      {
+        language: "java",
+        boilerplate: "",
+      },
+      {
+        language: "python3",
+        boilerplate: ""
+      },
+      {
+        language: "cpp",
+        boilerplate: ""
+      }
+    ],
+    testCases: [
+      {
+        input: "[73,74,75,71,69,72,76,73]",
+        output: "1 1 4 2 1 1 0 0",
+      },
+      {
+        input: "[30,40,50,60]",
+        output: "1 1 1 0",
+      },
+      {
+        input: "[30,60,90]",
+        output: "1 1 0",
+      },
+    ],
+    difficulty: "hard",
+  },
 ];
 
 export async function seedProblems() {
