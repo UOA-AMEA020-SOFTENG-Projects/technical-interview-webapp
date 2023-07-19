@@ -218,15 +218,15 @@ export const problems = [
     boilerplateCode: [
       {
         language: "java",
-        boilerplate: "",
+        boilerplate: "import java.util.*;\n\npublic class Output {\n\tpublic int[] dailyTemperatures(int[] temperatures) {\n\t\t// to do: complete code\n\t}\n\n\tpublic static void main(String[] args) {\n\t\tScanner scanner = new Scanner(System.in);\n\n\t\tString input = scanner.nextLine();\n\t\tString[] numbers = input.substring(1, input.length()-1).split(\",\");\n\t\tint[] temperatures = new int[numbers.length];\n\n\t\tfor (int i = 0; i < numbers.length; i++) {\n\t\t\ttemperatures[i] = Integer.parseInt(numbers[i].trim());\n\t\t}\n\n\t\tOutput solution = new Output();\n\t\tint[] output = solution.dailyTemperatures(temperatures);\n\n\t\t// Print the output\n\t\tfor (int i = 0; i < output.length; i++) {\n\t\t\tSystem.out.print(output[i] + \" \");\n\t\t}\n\t}\n}",
       },
       {
         language: "python3",
-        boilerplate: ""
+        boilerplate: "class Output:\n    def dailyTemperatures(self, temperatures):\n        # Complete this code \n        pass\n\nif __name__ == \"__main__\":\n    input_string = input().strip()[1:-1]  # remove the square brackets\n    temperatures = list(map(int, input_string.split(',')))\n\n    solution = Output()\n    output = solution.dailyTemperatures(temperatures)\n\n    # Print the output\n    print(' '.join(map(str, output)))\n"
       },
       {
         language: "cpp",
-        boilerplate: ""
+        boilerplate: "#include <iostream>\n#include <vector>\n#include <stack>\n#include <sstream>\n\nclass Output {\npublic:\n    std::vector<int> dailyTemperatures(std::vector<int>& temperatures) {\n        // to do: complete this function\n    }\n};\n\nint main() {\n    std::string input;\n    std::getline(std::cin, input);\n    input = input.substr(1, input.size()-2);  // remove the square brackets\n\n    std::vector<int> temperatures;\n    std::stringstream ss(input);\n    for (int i; ss >> i;) {\n        temperatures.push_back(i);    \n        if (ss.peek() == ',')\n            ss.ignore();\n    }\n\n    Output solution;\n    std::vector<int> output = solution.dailyTemperatures(temperatures);\n\n    // Print the output\n    for(size_t i = 0; i < output.size(); i++) {\n        std::cout << output[i] << \" \";\n    }\n    \n    return 0;\n}\n"
       }
     ],
     testCases: [
