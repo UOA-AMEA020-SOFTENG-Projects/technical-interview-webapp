@@ -363,6 +363,232 @@ export const problems = [
     ],
     difficulty: "hard",
   },
+  {
+    _id: "64be0052b47d0358a9311402",
+    title: "Reverse Linked List",
+    topic: "64b0a7a4b5130ea9e3664ef0",
+    description: "Given the head of a singly linked list, reverse the list, and return the reversed list.",
+    modelDescription: "This solution reverses a linked list by iteratively detaching nodes from the original list and attaching them at the head of the new list, thus reversing the original order.",
+    exampleCase: "Input: head = [1,2,3,4,5]\
+    Output: [5,4,3,2,1]",
+    solution: "public class ReverseList {\n\n    class ListNode {\n        int val;\n        ListNode next;\n        ListNode() {}\n        ListNode(int val) { this.val = val; }\n        ListNode(int val, ListNode next) { this.val = val; this.next = next; }\n    }\n\n    public ListNode reverseList(ListNode head) {\n        /* iterative solution */\n\n        // newHead is the head of the new reversed linked list, initialized as null\n        ListNode newHead = null;\n        \n        // Loop until we've covered all nodes in the original list\n        while (head != null) {\n\n            // Store the next node in the original list before we change the 'next' pointer of current node\n            ListNode next = head.next;\n\n            // Change the 'next' pointer of the current node to the previous node in the new list\n            head.next = newHead;\n\n            // Move the head of the new list to the current node\n            newHead = head;\n\n            // Proceed to the next node in the original list\n            head = next;\n        }\n\n        // Return the head of the reversed list\n        return newHead;\n    }\n}",
+    hint: "A linked list can be reversed iteratively or recursively.",
+    boilerplateCode: [
+      {
+        language: "java",
+        boilerplate: "\nimport java.util.*;\n\npublic class Output {\n\n    public static class ListNode {\n        int val;\n        ListNode next;\n        ListNode() {}\n        ListNode(int val) { this.val = val; }\n        ListNode(int val, ListNode next) { this.val = val; this.next = next; }\n    }\n\n    public ListNode reverseList(ListNode head) {\n        // to do: complete this\n    }\n\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        String input = scanner.nextLine();\n\n        input = input.substring(1, input.length() - 1);\n\n        String[] nodeValues = input.split(\",\");\n        Output outer = new Output();\n\n        ListNode dummy = new ListNode(-1);\n        ListNode ptr = dummy;\n        for(String val : nodeValues) {\n            ptr.next = new ListNode(Integer.parseInt(val));\n            ptr = ptr.next;\n        }\n\n        ListNode head = dummy.next;\n        ListNode reversedList = outer.reverseList(head);\n\n        ptr = reversedList;\n        while(ptr != null) {\n            System.out.print(ptr.val + \" \");\n            ptr = ptr.next;\n        }\n\n        scanner.close();\n    }\n}\n",
+      },
+      {
+        language: "python3",
+        boilerplate: "\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\nclass Output:\n    def reverseList(self, head):\n        # to do: complete this \n        pass\n\ndef main():\n    input_str = input()\n\n    input_str = input_str[1:-1]\n\n    nodeValues = input_str.split(\",\")\n    outer = Output()\n\n    dummy = ListNode(-1)\n    ptr = dummy\n    for val in nodeValues:\n        ptr.next = ListNode(int(val))\n        ptr = ptr.next\n\n    head = dummy.next\n    reversedList = outer.reverseList(head)\n\n    ptr = reversedList\n    while ptr is not None:\n        print(ptr.val, end=' ')\n        ptr = ptr.next\n\nif __name__ == \"__main__\":\n    main()\n"
+      },
+      {
+        language: "cpp",
+        boilerplate: "#include <iostream>\n#include <sstream>\n#include <string>\n#include <vector>\n\nusing namespace std;\n\nclass ListNode {\npublic:\n    int val;\n    ListNode *next;\n    ListNode() : val(0), next(nullptr) {}\n    ListNode(int val) : val(val), next(nullptr) {}\n    ListNode(int val, ListNode *next) : val(val), next(next) {}\n};\n\nclass Output {\npublic:\n    ListNode* reverseList(ListNode* head) {\n        // to do: complete this code\n    }\n};\n\nint main() {\n    string input;\n    getline(cin, input);\n\n    input = input.substr(1, input.length() - 2);\n\n    stringstream ss(input);\n    string item;\n\n    Output outer;\n    ListNode dummy(-1);\n    ListNode* ptr = &dummy;\n    while (getline(ss, item, ',')) {\n        ptr->next = new ListNode(stoi(item));\n        ptr = ptr->next;\n    }\n\n    ListNode* head = dummy.next;\n    ListNode* reversedList = outer.reverseList(head);\n\n    ptr = reversedList;\n    while(ptr != nullptr) {\n        cout << ptr->val << \" \";\n        ptr = ptr->next;\n    }\n\n    return 0;\n}"
+      }
+    ],
+    testCases: [
+      {
+        input: "[1,2,3,4,5]",
+        output: "5 4 3 2 1",
+      },
+      {
+        input: "[1,2]",
+        output: "2 1",
+      },
+    ],
+    difficulty: "easy",
+  },
+  {
+    _id: "64bee93bfb7de1c114f9f9a7",
+    title: "Reorder List",
+    topic: "64b0a7a4b5130ea9e3664ef0",
+    description: "You are given the head of a singly linked-list. The list can be represented as:\
+    L0 → L1 → … → Ln - 1 → Ln\
+    Reorder the list to be on the following form:\
+    L0 → Ln → L1 → Ln - 1 → L2 → Ln - 2 → …\
+    You may not modify the values in the list\'s nodes. Only nodes themselves may be changed.",
+    modelDescription: "We first find the middle of the list, then reverse half after middle, then start reordering one by one.",
+    exampleCase: "Input: head = [1,2,3,4]\
+    Output: [1,4,2,3]",
+    solution: "public void reorderList(ListNode head) {\n    if(head==null||head.next==null) return;\n\n    //Find the middle of the list\n    ListNode p1=head;\n    ListNode p2=head;\n    while(p2.next!=null&&p2.next.next!=null){ \n        p1=p1.next;\n        p2=p2.next.next;\n    }\n\n    //Reverse the half after middle  1->2->3->4->5->6 to 1->2->3->6->5->4\n    ListNode preMiddle=p1;\n    ListNode preCurrent=p1.next;\n    while(preCurrent.next!=null){\n        ListNode current=preCurrent.next;\n        preCurrent.next=current.next;\n        current.next=preMiddle.next;\n        preMiddle.next=current;\n    }\n\n    //Start reorder one by one  1->2->3->6->5->4 to 1->6->2->5->3->4\n    p1=head;\n    p2=preMiddle.next;\n    while(p1!=preMiddle){\n        preMiddle.next=p2.next;\n        p2.next=p1.next;\n        p1.next=p2;\n        p1=p2.next;\n        p2=preMiddle.next;\n    }\n}",
+    hint: "Start by finding the middle of the list.",
+    boilerplateCode: [
+      {
+        language: "java",
+        boilerplate: "import java.util.*;\n\npublic class Output {\n\n  public static class ListNode {\n    int val;\n    ListNode next;\n    ListNode() {}\n    ListNode(int val) {\n      this.val = val;\n    }\n    ListNode(int val, ListNode next) {\n      this.val = val;\n      this.next = next;\n    }\n  }\n\n  public void reorderList(ListNode head) {\n    // to do: complete this code:\n    \n  }\n\n  public static void main(String[] args) {\n    Scanner scanner = new Scanner(System.in);\n    String input = scanner.nextLine();\n    input = input.substring(1, input.length() - 1); // remove brackets\n    String[] numbers = input.split(\",\");\n    ListNode dummy = new ListNode();\n    ListNode current = dummy;\n    for (String number: numbers) {\n      current.next = new ListNode(Integer.parseInt(number.trim()));\n      current = current.next;\n    }\n    Output output = new Output();\n    output.reorderList(dummy.next);\n\n    current = dummy.next;\n    while (current != null) {\n      System.out.print(current.val + \" \");\n      current = current.next;\n    }\n    scanner.close();\n  }\n}",
+      },
+      {
+        language: "python3",
+        boilerplate: "class ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\nclass Output:\n    @staticmethod\n    def reorderList(head):\n        # to do: complete this code \n        pass\n\nif __name__ == \"__main__\":\n    input_data = input()[1:-1]  # remove brackets\n    numbers = list(map(int, input_data.split(',')))\n    dummy = ListNode()\n    current = dummy\n    for number in numbers:\n        current.next = ListNode(number)\n        current = current.next\n    output = Output()\n    output.reorderList(dummy.next)\n\n    current = dummy.next\n    while current:\n        print(current.val, end=\" \")\n        current = current.next"
+      },
+      {
+        language: "cpp",
+        boilerplate: "#include <iostream>\n#include <vector>\n#include <sstream>\n#include <iterator>\n#include <stack>\n\nstruct ListNode {\n    int val;\n    ListNode* next;\n    ListNode(int x) : val(x), next(nullptr) {}\n};\n\nclass Output {\npublic:\n    static void reorderList(ListNode* head) {\n        // to do: complete code\n    }\n};\n\nint main() {\n    std::string line;\n    getline(std::cin, line);\n    line = line.substr(1, line.size() - 2); // remove brackets\n\n    std::istringstream iss(line);\n    std::vector<int> numbers((std::istream_iterator<int>(iss)), std::istream_iterator<int>());\n\n    ListNode* dummy = new ListNode(0);\n    ListNode* current = dummy;\n    for (int number : numbers) {\n        current->next = new ListNode(number);\n        current = current->next;\n    }\n\n    Output::reorderList(dummy->next);\n\n    current = dummy->next;\n    while (current) {\n        std::cout << current->val << \" \";\n        current = current->next;\n    }\n\n    return 0;\n}\n"
+      }
+    ],
+    testCases: [
+      {
+        input: "[1,2,3,4]",
+        output: "1 4 2 3",
+      },
+      {
+        input: "[1,2,3,4,5]",
+        output: "1 5 2 4 3",
+      },
+    ],
+    difficulty: "medium",
+  },
+  {
+    _id: "64beecf1bbd0e386babc1347",
+    title: "Find the Duplicate Number",
+    topic: "64b0a7a4b5130ea9e3664ef0",
+    description: "Given an array of integers nums containing n + 1 integers where each integer is in the range [1, n] inclusive.\
+    There is only one repeated number in nums, return this repeated number.\
+    You must solve the problem without modifying the array nums and using only constant extra space.",
+    modelDescription: "This solution uses Floyd\'s Tortoise and Hare algorithm for cycle detection in a linked list to find the duplicate number in an array, where the indices and their corresponding values are treated as nodes and their next pointers, respectively.",
+    exampleCase: "Input: nums = [1,3,4,2,2]\
+    Output: 2",
+    solution: "public class FindDuplicate {\n\n    public int findDuplicate(int[] nums) {\n        // If the size of the input array is more than 1, then only proceed\n        if (nums.length > 1)\n        {\n            // Initializing slow and fast pointers to the start of the array\n            int slow = nums[0];\n            int fast = nums[nums[0]];\n            \n            // Loop to find the intersection point in the cycle\n            while (slow != fast)\n            {\n                // Move the slow pointer by one step\n                slow = nums[slow];\n                // Move the fast pointer by two steps\n                fast = nums[nums[fast]];\n            }\n\n            // After the first phase, start the fast pointer from the beginning\n            fast = 0;\n            \n            // Second phase to find the starting point of the cycle\n            while (fast != slow)\n            {\n                // Both the pointers move one step at a time\n                fast = nums[fast];\n                slow = nums[slow];\n            }\n            // The point where both pointers meet is the duplicate element\n            return slow;\n        }\n        // If the size of the input array is not more than 1, return -1\n        return -1;\n    }\n}\n",
+    hint: "Use two pointers the fast and the slow. The fast one goes forward two steps each time, while the slow one goes only step each time.",
+    boilerplateCode: [
+      {
+        language: "java",
+        boilerplate: "\nimport java.util.Scanner;\n\npublic class Output {\n    public int findDuplicate(int[] nums) {\n        // to do: complete this code \n    }\n\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        String input = scanner.nextLine();\n        input = input.substring(1, input.length() - 1);\n        String[] strNums = input.split(\",\");\n        int[] nums = new int[strNums.length];\n\n        for (int i = 0; i < strNums.length; i++) {\n            nums[i] = Integer.parseInt(strNums[i].trim());\n        }\n\n        Output output = new Output();\n        int duplicate = output.findDuplicate(nums);\n        System.out.println(duplicate);\n    }\n}",
+      },
+      {
+        language: "python3",
+        boilerplate: "class Output:\n    def find_duplicate(self, nums):\n        pass\n\nif __name__ == '__main__':\n    input_string = input()\n    input_string = input_string[1:-1]\n    nums = list(map(int, input_string.split(',')))\n    output = Output()\n    duplicate = output.find_duplicate(nums)\n    print(duplicate)"
+      },
+      {
+        language: "cpp",
+        boilerplate: "\n#include <iostream>\n#include <vector>\n#include <sstream>\n\nclass Output {\npublic:\n    int findDuplicate(std::vector<int>& nums) {\n        // to do: complete this code\n    }\n};\n\nint main() {\n    std::string input;\n    getline(std::cin, input);\n    input = input.substr(1, input.size() - 2); // remove brackets\n\n    std::istringstream iss(input);\n    std::vector<int> nums;\n    for(std::string s; iss >> s; ) {\n        nums.push_back(stoi(s));\n    }\n\n    Output output;\n    int duplicate = output.findDuplicate(nums);\n    std::cout << duplicate << std::endl;\n\n    return 0;\n}"
+      }
+    ],
+    testCases: [
+      {
+        input: "[1,3,4,2,2]",
+        output: "2",
+      },
+      {
+        input: "[3,1,3,4,2]",
+        output: "3",
+      },
+    ],
+    difficulty: "hard",
+  },
+  {
+    _id: "64bef00eb9e9d60dca9e3559",
+    title: "Invert Binary Tree",
+    topic: "64b0a7a84e2fbc9509c28d64",
+    description: "Given the root of a binary tree, invert the tree, and return its root.",
+    modelDescription: "Using either a recursive or iterative approach, we can invert the binary tree.",
+    exampleCase: "Input: root = [4,2,7,1,3,6,9]\
+    Output: [4,7,2,9,6,3,1]",
+    solution: "public TreeNode invertTree(TreeNode root) {\n    if(root == null){\n        return root;\n    }\n    invertTree(root.left);\n    invertTree(root.right);\n    TreeNode curr = root.left;\n    root.left = root.right;\n    root.right = curr;\n    return root;\n}",
+    hint: "You can use a recursive or iterative approach.",
+    boilerplateCode: [
+      {
+        language: "java",
+        boilerplate: "import java.util.*;\n\npublic class Output {\n\n    public static class TreeNode {\n        int val;\n        TreeNode left;\n        TreeNode right;\n\n        TreeNode() {}\n\n        TreeNode(int val) {\n            this.val = val;\n        }\n\n        TreeNode(int val, TreeNode left, TreeNode right) {\n            this.val = val;\n            this.left = left;\n            this.right = right;\n        }\n    }\n\n    public TreeNode invertTree(TreeNode root) {\n        // to do: complete this code \n    }\n\n    public void printTree(TreeNode root) {\n        Queue<TreeNode> queue = new LinkedList<>();\n        queue.add(root);\n        while (!queue.isEmpty()) {\n            TreeNode node = queue.poll();\n            System.out.print(node.val + \" \");\n            if (node.left != null) {\n                queue.add(node.left);\n            }\n            if (node.right != null) {\n                queue.add(node.right);\n            }\n        }\n    }\n\n    public static TreeNode constructTree(Integer[] nums) {\n        if (nums.length == 0) return null;\n        TreeNode root = new TreeNode(nums[0]);\n        Queue<TreeNode> nodeQueue = new LinkedList<>();\n        nodeQueue.add(root);\n\n        int i = 1;\n        while (!nodeQueue.isEmpty() && i < nums.length) {\n            TreeNode currentNode = nodeQueue.poll();\n\n            if (nums[i] != null) {\n                TreeNode leftChild = new TreeNode(nums[i]);\n                currentNode.left = leftChild;\n                nodeQueue.add(leftChild);\n            }\n            i++;\n\n            if (i < nums.length && nums[i] != null) {\n                TreeNode rightChild = new TreeNode(nums[i]);\n                currentNode.right = rightChild;\n                nodeQueue.add(rightChild);\n            }\n            i++;\n        }\n        return root;\n    }\n\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        String input = scanner.nextLine();\n        input = input.substring(1, input.length() - 1);\n        Integer[] nums = Arrays.stream(input.split(\",\")).map(Integer::parseInt).toArray(Integer[]::new);\n\n        Output output = new Output();\n        TreeNode root = constructTree(nums);\n        TreeNode invertedRoot = output.invertTree(root);\n        output.printTree(invertedRoot);\n    }\n}\n",
+      },
+      {
+        language: "python3",
+        boilerplate: "import sys\nfrom queue import Queue\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\ndef invert_tree(root):\n    # to do: complete this code \n    pass\n\ndef print_tree(root):\n    queue = Queue()\n    queue.put(root)\n    while not queue.empty():\n        node = queue.get()\n        print(node.val, end=\" \")\n        if node.left is not None:\n            queue.put(node.left)\n        if node.right is not None:\n            queue.put(node.right)\n\ndef construct_tree(nums):\n    if len(nums) == 0:\n        return None\n    root = TreeNode(nums[0])\n    node_queue = Queue()\n    node_queue.put(root)\n    i = 1\n    while not node_queue.empty() and i < len(nums):\n        current_node = node_queue.get()\n        if nums[i] is not None:\n            left_child = TreeNode(nums[i])\n            current_node.left = left_child\n            node_queue.put(left_child)\n        i += 1\n        if i < len(nums) and nums[i] is not None:\n            right_child = TreeNode(nums[i])\n            current_node.right = right_child\n            node_queue.put(right_child)\n        i += 1\n    return root\n\ndef main():\n    input_string = sys.stdin.readline().strip()[1:-1]\n    nums = list(map(int, input_string.split(',')))\n    root = construct_tree(nums)\n    inverted_root = invert_tree(root)\n    print_tree(inverted_root)\n\nif __name__ == \"__main__\":\n    main()\n"
+      },
+      {
+        language: "cpp",
+        boilerplate: "#include <iostream>\n#include <queue>\n#include <sstream>\n#include <string>\n#include <vector>\n\nstruct TreeNode {\n    int val;\n    TreeNode* left;\n    TreeNode* right;\n\n    TreeNode() : val(0), left(nullptr), right(nullptr) {}\n\n    TreeNode(int val) : val(val), left(nullptr), right(nullptr) {}\n\n    TreeNode(int val, TreeNode* left, TreeNode* right) : val(val), left(left), right(right) {}\n};\n\nTreeNode* invertTree(TreeNode* root) {\n    // to do: complete this code \n}\n\nvoid printTree(TreeNode* root) {\n    std::queue<TreeNode*> node_queue;\n    node_queue.push(root);\n    while (!node_queue.empty()) {\n        TreeNode* node = node_queue.front();\n        node_queue.pop();\n        std::cout << node->val << \" \";\n        if (node->left != nullptr) {\n            node_queue.push(node->left);\n        }\n        if (node->right != nullptr) {\n            node_queue.push(node->right);\n        }\n    }\n}\n\nTreeNode* constructTree(const std::vector<int>& nums) {\n    if (nums.empty()) return nullptr;\n    TreeNode* root = new TreeNode(nums[0]);\n    std::queue<TreeNode*> node_queue;\n    node_queue.push(root);\n\n    std::size_t i = 1;\n    while (!node_queue.empty() && i < nums.size()) {\n        TreeNode* current_node = node_queue.front();\n        node_queue.pop();\n\n        if (nums[i] != -1) {\n            TreeNode* left_child = new TreeNode(nums[i]);\n            current_node->left = left_child;\n            node_queue.push(left_child);\n        }\n        i++;\n\n        if (i < nums.size() && nums[i] != -1) {\n            TreeNode* right_child = new TreeNode(nums[i]);\n            current_node->right = right_child;\n            node_queue.push(right_child);\n        }\n        i++;\n    }\n    return root;\n}\n\nint main() {\n    std::string input;\n    getline(std::cin, input);\n    input = input.substr(1, input.size() - 2);\n    std::istringstream iss(input);\n    std::vector<int> nums;\n    for(std::string s; iss >> s; ) {\n        if (s[s.size()-1] == ',') s = s.substr(0, s.size()-1);\n        nums.push_back(std::stoi(s));\n    }\n    \n    TreeNode* root = constructTree(nums);\n    TreeNode* inverted_root = invertTree(root);\n    printTree(inverted_root);\n    return 0;\n}\n"
+      }
+    ],
+    testCases: [
+      {
+        input: "[4,2,7,1,3,6,9]",
+        output: "4 7 2 9 6 3 1",
+      },
+      {
+        input: "[2,1,3]",
+        output: "2 3 1",
+      },
+    ],
+    difficulty: "easy",
+  },
+  {
+    _id: "64bef448be0f5e5dfcfa2dbb",
+    title: "Same Tree",
+    topic: "64b0a7a84e2fbc9509c28d64",
+    description: "Given the roots of two binary trees p and q, write a function to check if they are the same or not.\
+    Two binary trees are considered the same if they are structurally identical, and the nodes have the same value.",
+    modelDescription: "The function uses a recursive approach to check if two binary trees are identical. It first checks the root nodes and then recursively checks all the children nodes from left to right.",
+    exampleCase: "Input: p = [1,2,3], q = [1,2,3]\
+    Output: true",
+    solution: "public boolean isSameTree(TreeNode p, TreeNode q) {\n    // If both trees are empty, they are the same.\n    if(p == null && q == null) return true;\n\n    // If one tree is empty and the other is not, they are not the same.\n    if(p == null || q == null) return false;\n\n    // If the values of the current nodes are the same, \n    // continue to check the left and right subtrees.\n    if(p.val == q.val)\n        return isSameTree(p.left, q.left) && isSameTree(p.right, q.right);\n\n    // If the values of the current nodes are not the same, the trees are not the same.\n    return false;\n}",
+    hint: "To solve this problem, think about how you can use recursion to traverse and compare the nodes in the binary trees. In the base case, you should consider what it means for two trees to be the same, especially when a tree is empty. In the recursive step, think about how to check the current node and how to proceed to its children.",
+    boilerplateCode: [
+      {
+        language: "java",
+        boilerplate: "import java.util.*;\n\npublic class Output {\n    public static class TreeNode {\n        int val;\n        TreeNode left;\n        TreeNode right;\n        TreeNode() {}\n        TreeNode(int val) { this.val = val; }\n        TreeNode(int val, TreeNode left, TreeNode right) {\n            this.val = val;\n            this.left = left;\n            this.right = right;\n        }\n    }\n\n    public boolean isSameTree(TreeNode p, TreeNode q) {\n        // to do: complete this code \n    }\n\n    public static TreeNode constructTree(Integer[] nums) {\n        if (nums.length == 0) return null;\n        TreeNode root = new TreeNode(nums[0]);\n        Queue<TreeNode> nodeQueue = new LinkedList<>();\n        nodeQueue.add(root);\n\n        int i = 1;\n        while (!nodeQueue.isEmpty() && i < nums.length) {\n            TreeNode currentNode = nodeQueue.poll();\n\n            if (nums[i] != null) {\n                TreeNode leftChild = new TreeNode(nums[i]);\n                currentNode.left = leftChild;\n                nodeQueue.add(leftChild);\n            }\n            i++;\n\n            if (i < nums.length && nums[i] != null) {\n                TreeNode rightChild = new TreeNode(nums[i]);\n                currentNode.right = rightChild;\n                nodeQueue.add(rightChild);\n            }\n            i++;\n        }\n        return root;\n    }\n\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        String input = scanner.nextLine();\n        String[] parts = input.split(\", q = \");\n        \n        String pStr = parts[0].replace(\"p = [\", \"\").replace(\"]\", \"\");\n        String qStr = parts[1].replace(\"[\", \"\").replace(\"]\", \"\");\n\n        Integer[] pNums = Arrays.stream(pStr.split(\",\")).map(String::trim).map(s -> s.equals(\"null\") ? null : Integer.parseInt(s)).toArray(Integer[]::new);\n        Integer[] qNums = Arrays.stream(qStr.split(\",\")).map(String::trim).map(s -> s.equals(\"null\") ? null : Integer.parseInt(s)).toArray(Integer[]::new);\n\n        TreeNode p = constructTree(pNums);\n        TreeNode q = constructTree(qNums);\n\n        Output output = new Output();\n        System.out.println(output.isSameTree(p, q));\n    }\n}",
+      },
+      {
+        language: "python3",
+        boilerplate: "from collections import deque\nimport re\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\nclass Output:\n    def is_same_tree(self, p, q):\n        # complete this code \n        pass\n\ndef construct_tree(nums):\n    if len(nums) == 0:\n        return None\n    root = TreeNode(nums[0])\n    node_queue = deque()\n    node_queue.append(root)\n    i = 1\n    while node_queue and i < len(nums):\n        current_node = node_queue.popleft()\n        if nums[i] is not None:\n            left_child = TreeNode(nums[i])\n            current_node.left = left_child\n            node_queue.append(left_child)\n        i += 1\n        if i < len(nums) and nums[i] is not None:\n            right_child = TreeNode(nums[i])\n            current_node.right = right_child\n            node_queue.append(right_child)\n        i += 1\n    return root\n\ndef main():\n    input_string = input()\n    parts = re.split(', q = ', input_string)\n    p_str = parts[0].replace('p = [', '').replace(']', '')\n    q_str = parts[1].replace('[', '').replace(']', '')\n    p_nums = [None if num.strip() == 'null' else int(num.strip()) for num in p_str.split(',')]\n    q_nums = [None if num.strip() == 'null' else int(num.strip()) for num in q_str.split(',')]\n    p = construct_tree(p_nums)\n    q = construct_tree(q_nums)\n    output = Output()\n    print(str(output.is_same_tree(p, q)).lower())\n\nif __name__ == '__main__':\n    main()\n"
+      },
+      {
+        language: "cpp",
+        boilerplate: "#include <iostream>\n#include <string>\n#include <sstream>\n#include <queue>\n#include <vector>\n#include <algorithm>\n\nstruct TreeNode {\n    int val;\n    TreeNode* left;\n    TreeNode* right;\n    TreeNode() : val(0), left(nullptr), right(nullptr) {}\n    TreeNode(int val) : val(val), left(nullptr), right(nullptr) {}\n    TreeNode(int val, TreeNode* left, TreeNode* right) : val(val), left(left), right(right) {}\n};\n\nclass Output {\npublic:\n    bool isSameTree(TreeNode* p, TreeNode* q) {\n        // complete this code \n    }\n\n    static TreeNode* constructTree(std::vector<int> nums) {\n        if (nums.empty()) return nullptr;\n        TreeNode* root = new TreeNode(nums[0]);\n        std::queue<TreeNode*> node_queue;\n        node_queue.push(root);\n\n        size_t i = 1;\n        while (!node_queue.empty() && i < nums.size()) {\n            TreeNode* current_node = node_queue.front();\n            node_queue.pop();\n\n            if (nums[i] != -1) {\n                TreeNode* left_child = new TreeNode(nums[i]);\n                current_node->left = left_child;\n                node_queue.push(left_child);\n            }\n            i++;\n\n            if (i < nums.size() && nums[i] != -1) {\n                TreeNode* right_child = new TreeNode(nums[i]);\n                current_node->right = right_child;\n                node_queue.push(right_child);\n            }\n            i++;\n        }\n        return root;\n    }\n};\n\nint main() {\n    std::string input;\n    getline(std::cin, input);\n    std::replace(input.begin(), input.end(), ',', ' ');\n    std::stringstream ss(input);\n    std::string buf;\n    std::vector<int> pNums, qNums;\n    while(ss >> buf) {\n        if (buf == \"q\") break;\n        if (isdigit(buf[0]) || buf[0] == '-') {\n            pNums.push_back(stoi(buf));\n        }\n    }\n    while(ss >> buf) {\n        if (isdigit(buf[0]) || buf[0] == '-') {\n            qNums.push_back(stoi(buf));\n        }\n    }\n\n    TreeNode* p = Output::constructTree(pNums);\n    TreeNode* q = Output::constructTree(qNums);\n\n    Output output;\n    std::cout << (output.isSameTree(p, q) ? \"true\" : \"false\") << std::endl;\n\n    return 0;\n}"
+      }
+    ],
+    testCases: [
+      {
+        input: "p = [1,2,3], q = [1,2,3]",
+        output: "true",
+      },
+      {
+        input: "p = [1,2], q = [1,null,2]",
+        output: "false",
+      },
+      {
+        input: "p = [1,2,1], q = [1,1,2]",
+        output: "false",
+      },
+    ],
+    difficulty: "medium",
+  },
+  {
+    _id: "64be40b82be5025c53df612a",
+    title: "Coin Change",
+    topic: "64b0a7b6a28359d1e6367bff",
+    description: "You are given coins of different denominations and a total amount of money amount. Write a function to compute the fewest number of coins that you need to make up that amount. If that amount of money cannot be made up by any combination of the coins, return -1.",
+    modelDescription: "The problem can be solved using dynamic programming. We will maintain an array dp where dp[i] will be storing the minimum number of coins required for amount i. The state dp[i] can be computed as dp[i] = min{ dp[i-coins[j]] } + 1, for each coins[j] <= i.",
+    exampleCase: "Input: coins = [1, 2, 5], amount = 11\nOutput: 3\nExplanation: 11 = 5 + 5 + 1",
+    solution: "// Java Solution\npublic int coinChange(int[] coins, int amount) {\n    int max = amount + 1;\n    int[] dp = new int[amount + 1];\n    Arrays.fill(dp, max);\n    dp[0] = 0;\n    for (int i = 1; i <= amount; i++) {\n        for (int j = 0; j < coins.length; j++) {\n            if (coins[j] <= i) {\n                dp[i] = Math.min(dp[i], dp[i - coins[j]] + 1);\n            }\n        }\n    }\n    return dp[amount] > amount ? -1 : dp[amount];\n}",
+    hint: "Solve smaller sub-problems first and use the solutions to construct solution to larger sub-problems. This property is known as optimal substructure.",
+    boilerplateCode: [
+      {
+        "language": "java",
+        "boilerplate": "import java.util.*;\n\npublic class Output {\n    public int coinChange(int[] coins, int amount) {\n        // Complete the code here\n        return -1; // placeholder return statement\n    }\n    \n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        int amount = scanner.nextInt();\n        int n = scanner.nextInt();\n        int[] coins = new int[n];\n        for(int i=0; i<n; i++) {\n            coins[i] = scanner.nextInt();\n        }\n        Output output = new Output();\n        int minCoins = output.coinChange(coins, amount);\n        System.out.println(minCoins);\n    }\n}"
+      },
+      {
+        "language": "python3",
+        "boilerplate": "\nfrom typing import List\n\nclass Output:\n    def coinChange(self, coins: List[int], amount: int) -> int:\n        pass\n\nif __name__ == '__main__':\n    amount = int(input())\n    n = int(input()) # size of the coin array\n    coins = list(map(int, input().split()))\n    output = Output()\n    min_coins = output.coinChange(coins, amount)\n    print(min_coins)\n"
+      },
+      {
+        "language": "cpp",
+        "boilerplate": "\n#include <iostream>\n#include <vector>\n#include <algorithm>\n#include <climits>\n\nusing namespace std;\n\nclass Output {\npublic:\n    int coinChange(vector<int>& coins, int amount) {\n        // Complete this code\n        return -1;\n    }\n};\n\nint main() {\n    int amount, n;\n    cin >> amount >> n;\n    vector<int> coins(n);\n    for(int i=0; i<n; i++) {\n        cin >> coins[i];\n    }\n    Output output;\n    int minCoins = output.coinChange(coins, amount);\n    cout << minCoins << endl;\n    return 0;\n}"
+      }
+    ],
+    testCases: [
+      {
+        "input": "11\n4\n3 1 2 5\n",
+        "output": "3",
+      },
+      {
+        "input": "23\n3\n1 5 10\n",
+        "output": "5",
+      },
+    ],
+    difficulty: "medium",
+  }
 ];
 
 export async function seedProblems() {

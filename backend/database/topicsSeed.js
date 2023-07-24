@@ -30,7 +30,7 @@ export const topics = [
       _id: "64b0a7a4b5130ea9e3664ef0",
       title: "Linked List",
       content: "64af740f8cb835b6e53616d0", // ID of a Content
-      problems: [],
+      problems: ["64be0052b47d0358a9311402", "64bee93bfb7de1c114f9f9a7", "64beecf1bbd0e386babc1347"],
       length: "short",
       difficulty: "medium",
     },
@@ -38,7 +38,7 @@ export const topics = [
       _id: "64b0a7a84e2fbc9509c28d64",
       title: "Trees",
       content: "64b06ad156a41ebc96130c62", // ID of a Content
-      problems: [],
+      problems: ["64bef00eb9e9d60dca9e3559", "64bef448be0f5e5dfcfa2dbb"],
       length: "medium",
       difficulty: "medium",
     },
@@ -62,7 +62,7 @@ export const topics = [
       _id: "64b0a7b6a28359d1e6367bff",
       title: "Dynamic Programming",
       content: "64b070dc699bd986d145a182", // ID of a Content
-      problems: [],
+      problems: ["64be40b82be5025c53df612a"],
       length: "long",
       difficulty: "hard",
     },

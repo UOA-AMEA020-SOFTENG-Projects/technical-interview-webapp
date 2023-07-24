@@ -276,6 +276,7 @@ editorRouter.post("/editor/:problemId/testCase",authenticateToken, async (req, r
     const user = await User.findOne({ username: req.user.username });
 
     if (!user) {
+      console.log(279);
       return res.status(StatusCodes.NOT_FOUND).json({ message: "User not found." });
     }
 
@@ -288,6 +289,7 @@ editorRouter.post("/editor/:problemId/testCase",authenticateToken, async (req, r
 
     const problem = await Problem.findById(problemId);
     if (!problem) {
+      console.log(291);
       return res
         .status(StatusCodes.NOT_FOUND)
         .json({ message: "Problem not found" });
@@ -346,9 +348,9 @@ editorRouter.post("/editor/:problemId/testCase",authenticateToken, async (req, r
       if (response.status !== 200) {
 
         console.log(331);
-        console.log(338);
         console.log(response.data.cmpinfo);
         console.log(response.data.outcome);
+        console.log(response.data.stderr);
 
         return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -359,6 +361,7 @@ editorRouter.post("/editor/:problemId/testCase",authenticateToken, async (req, r
         console.log(338);
         console.log(response.data.cmpinfo);
         console.log(response.data.outcome);
+        console.log(response.data.stderr);
 
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
           error: response.data.cmpinfo,
