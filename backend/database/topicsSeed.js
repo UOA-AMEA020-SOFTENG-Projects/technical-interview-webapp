@@ -22,7 +22,7 @@ export const topics = [
       _id: "64b0a7a1664e6698b9720575",
       title: "Binary Search",
       content: "64af6b3a1dbd1835d54ade22", // ID of a Content
-      problems: ["64b7424aa9e904c794e46798"],
+      problems: ["64b7424aa9e904c794e46798", "64b7513e56a4d24f7eea88b8", "64bcf69e2f1ff54481e545ee"],
       length: "short",
       difficulty: "medium",
     },

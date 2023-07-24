@@ -283,6 +283,86 @@ export const problems = [
     ],
     difficulty: "easy",
   },
+  {
+    _id: "64b7513e56a4d24f7eea88b8",
+    title: "Koko Eating Bananas",
+    topic: "64b0a7a1664e6698b9720575",
+    description: "Koko loves to eat bananas. There are n piles of bananas, the ith pile has piles[i] bananas. The guards have gone and will come back in h hours.\
+    Koko can decide her bananas-per-hour eating speed of k. Each hour, she chooses some pile of bananas and eats k bananas from that pile. If the pile has less than k bananas, she eats all of them instead and will not eat any more bananas during this hour.\
+    Koko likes to eat slowly but still wants to finish eating all the bananas before the guards return.\
+    Return the minimum integer k such that she can eat all the bananas within h hours.",
+    modelDescription: "",
+    exampleCase: "Input: piles = [3,6,7,11], h = 8\
+    Output: 4",
+    solution: "public class MinEatingSpeed {\n\n    public int minEatingSpeed(int[] piles, int H) {\n        // Initialize left boundary (l) and right boundary (r)\n        int l = 1, r = 1000000000;\n\n        // Perform binary search\n        while (l < r) {\n            // Compute the middle point to divide the search space\n            int m = (l + r) / 2, total = 0;\n\n            // Count the total hours to eat all bananas with speed m\n            for (int p : piles) {\n                total += (p + m - 1) / m; // This is equivalent to Math.ceil((double) p / m);\n            }\n\n            // If total hours is greater than H, we need a larger eating speed,\n            // hence we move the left boundary of the search space\n            if (total > H)\n                l = m + 1;\n            // If total hours is less or equal to H, we try to find a smaller valid eating speed\n            // hence we move the right boundary of the search space\n            else\n                r = m;\n        }\n\n        // After the binary search, l is the minimum eating speed required to eat all bananas within H hours\n        return l;\n    }\n}\n",
+    hint: "Use binary search for this problem.",
+    boilerplateCode: [
+      {
+        language: "java",
+        boilerplate: "\nimport java.util.Arrays;\nimport java.util.Scanner;\n\npublic class Output {\n    public int minEatingSpeed(int[] piles, int H) {\n        // to do: complete this code\n    }\n\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n\n        String input = scanner.nextLine();\n        String[] parts = input.split(\", h = \");\n\n        String pilesPart = parts[0].replace(\"piles = [\", \"\").replace(\"]\", \"\");\n        int[] piles = Arrays.stream(pilesPart.split(\",\"))\n                .map(String::trim)\n                .mapToInt(Integer::parseInt)\n                .toArray();\n\n        int H = Integer.parseInt(parts[1]);\n\n        Output output = new Output();\n        int result = output.minEatingSpeed(piles, H);\n\n        System.out.println(result);\n    }\n}\n",
+      },
+      {
+        language: "python3",
+        boilerplate: "\nclass Output:\n    def minEatingSpeed(self, piles, H):\n        # to do: complete this code\n        pass\n\n\ndef main():\n    input_data = input()\n\n    parts = input_data.split(\", h = \")\n\n    piles_part = parts[0].replace(\"piles = [\", \"\").replace(\"]\", \"\")\n    piles = list(map(int, piles_part.split(\",\")))\n\n    H = int(parts[1])\n\n    output = Output()\n    result = output.minEatingSpeed(piles, H)\n\n    print(result)\n\n\nif __name__ == \"__main__\":\n    main()\n"
+      },
+      {
+        language: "cpp",
+        boilerplate: "\n#include <iostream>\n#include <sstream>\n#include <vector>\n#include <algorithm>\n\nint minEatingSpeed(std::vector<int>& piles, int H) {\n    // to do: complete this code\n    \n    // placeholder return statement\n    return 1;\n}\n\nint main() {\n    std::string input;\n    std::getline(std::cin, input);\n\n    size_t start = input.find('[') + 1;\n    size_t end = input.find(']');\n    std::string pilesPart = input.substr(start, end - start);\n\n    size_t found = input.find(\", h = \");\n    std::string HPart = input.substr(found + 6);\n\n    std::stringstream ss(pilesPart);\n    std::vector<int> piles;\n    for (int i; ss >> i;) {\n        piles.push_back(i);    \n        if (ss.peek() == ',')\n            ss.ignore();\n    }\n\n    int H = std::stoi(HPart);\n\n    int result = minEatingSpeed(piles, H);\n\n    std::cout << result << std::endl;\n\n    return 0;\n}\n"
+      }
+    ],
+    testCases: [
+      {
+        input: "piles = [3,6,7,11], h = 8",
+        output: "4",
+      },
+      {
+        input: "piles = [30,11,23,4,20], h = 5",
+        output: "30",
+      },
+      {
+        input: "piles = [30,11,23,4,20], h = 6",
+        output: "23",
+      },
+    ],
+    difficulty: "medium",
+  },
+  {
+    _id: "64bcf69e2f1ff54481e545ee",
+    title: "Median of Two Sorted Arrays",
+    topic: "64b0a7a1664e6698b9720575",
+    description: "Given two sorted arrays nums1 and nums2 of size m and n respectively, return the median of the two sorted arrays.",
+    modelDescription: "This code calculates the median of two sorted arrays by using a binary search method.",
+    exampleCase: "Input: nums1 = [1,3], nums2 = [2]\
+    Output: 2.00000\
+    Explanation: merged array = [1,2,3] and median is 2.",
+    solution: "public double findMedianSortedArrays(int[] A, int[] B) {\n    int m = A.length, n = B.length;\n    int l = (m + n + 1) / 2;\n    int r = (m + n + 2) / 2;\n    return (getkth(A, 0, B, 0, l) + getkth(A, 0, B, 0, r)) / 2.0;\n}\n\npublic double getkth(int[] A, int aStart, int[] B, int bStart, int k) {\n    if (aStart > A.length - 1) return B[bStart + k - 1];\n    if (bStart > B.length - 1) return A[aStart + k - 1];\n    if (k == 1) return Math.min(A[aStart], B[bStart]);\n    int aMid = Integer.MAX_VALUE, bMid = Integer.MAX_VALUE;\n    if (aStart + k/2 - 1 < A.length) aMid = A[aStart + k/2 - 1];\n    if (bStart + k/2 - 1 < B.length) bMid = B[bStart + k/2 - 1];\n    if (aMid < bMid) return getkth(A, aStart + k/2, B, bStart, k - k/2);\n    else return getkth(A, aStart, B, bStart + k/2, k - k/2);\n}",
+    hint: "Ignore half part of A and B each step recursively by comparing the median of remaining A and B",
+    boilerplateCode: [
+      {
+        language: "java",
+        boilerplate: "import java.util.Scanner;\nimport java.util.Arrays;\n\npublic class Output {\n\n    public double findMedianSortedArrays(int[] A, int[] B) {\n        // complete this function\n\n        // placeholder return\n        return 1.0;\n    }\n\n\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        String input = scanner.nextLine();\n\n        String[] parts = input.split(\", \");\n\n        String[] nums1Parts = parts[0].split(\" = \");\n        String[] nums2Parts = parts[1].split(\" = \");\n\n        int[] nums1 = stringToArray(nums1Parts[1]);\n        int[] nums2 = stringToArray(nums2Parts[1]);\n\n        Output output = new Output();\n        double median = output.findMedianSortedArrays(nums1, nums2);\n        System.out.println(median);\n    }\n\n    private static int[] stringToArray(String str) {\n        str = str.replaceAll(\"\\\\[\", \"\").replaceAll(\"\\\\]\", \"\").replaceAll(\"\\\\s\", \"\");\n        String[] numsAsStr = str.split(\",\");\n        int[] nums = new int[numsAsStr.length];\n        for(int i = 0; i < numsAsStr.length; i++) {\n            nums[i] = Integer.parseInt(numsAsStr[i]);\n        }\n        return nums;\n    }\n}",
+      },
+      {
+        language: "python3",
+        boilerplate: "class Output:\n    def findMedianSortedArrays(self, A, B):\n        # complete this function \n        pass\n\n\ndef string_to_array(str):\n    str = str.replace('[', '').replace(']', '').replace(' ', '')\n    nums_as_str = str.split(',')\n    nums = [int(num) for num in nums_as_str]\n    return nums\n\n\nif __name__ == '__main__':\n    input_str = input()\n    parts = input_str.split(\", \")\n\n    nums1Parts = parts[0].split(\" = \")\n    nums2Parts = parts[1].split(\" = \")\n\n    nums1 = string_to_array(nums1Parts[1])\n    nums2 = string_to_array(nums2Parts[1])\n\n    output = Output()\n    median = output.findMedianSortedArrays(nums1, nums2)\n    print(median)\n"
+      },
+      {
+        language: "cpp",
+        boilerplate: "#include <iostream>\n#include <vector>\n#include <string>\n#include <sstream>\n#include <algorithm>\n#include <iterator>\n#include <climits>\n\nclass Output {\npublic:\n    double findMedianSortedArrays(std::vector<int>& A, std::vector<int>& B) {\n        // complete this code \n    }\n\n};\n\nstd::vector<int> string_to_array(std::string str) {\n    str.erase(std::remove(str.begin(), str.end(), '['), str.end());\n    str.erase(std::remove(str.begin(), str.end(), ']'), str.end());\n    str.erase(std::remove(str.begin(), str.end(), ' '), str.end());\n    \n    std::istringstream iss(str);\n    std::vector<int> nums;\n    int num;\n    while(iss >> num) {\n        nums.push_back(num);\n        if(iss.peek() == ',')\n            iss.ignore();\n    }\n    return nums;\n}\n\nint main() {\n    std::string input_str;\n    getline(std::cin, input_str);\n\n    std::size_t pos1 = input_str.find('=');\n    std::size_t pos2 = input_str.find('=', pos1 + 1);\n    std::string str1 = input_str.substr(pos1+2, pos2-pos1-3);\n    std::string str2 = input_str.substr(pos2+2);\n\n    std::vector<int> nums1 = string_to_array(str1);\n    std::vector<int> nums2 = string_to_array(str2);\n    \n    Output output;\n    double median = output.findMedianSortedArrays(nums1, nums2);\n    std::cout << median << std::endl;\n    \n    return 0;\n}\n"
+      }
+    ],
+    testCases: [
+      {
+        input: "nums1 = [1,3], nums2 = [2]",
+        output: "2.0",
+      },
+      {
+        input: "nums1 = [1,2], nums2 = [3,4]",
+        output: "2.5",
+      },
+    ],
+    difficulty: "hard",
+  },
 ];
 
 export async function seedProblems() {
