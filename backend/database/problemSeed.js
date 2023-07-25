@@ -555,6 +555,43 @@ export const problems = [
     difficulty: "medium",
   },
   {
+    _id: "64bf7dbcf8bb4fe94d307a89",
+    title: "Subtree of Another Tree",
+    topic: "64b0a7a84e2fbc9509c28d64",
+    description: "Given the roots of two binary trees root and subRoot, return true if there is a subtree of root with the same structure and node values of subRoot and false otherwise.\
+    A subtree of a binary tree tree is a tree that consists of a node in tree and all of this node\'s descendants. The tree tree could also be considered as a subtree of itself.",
+    modelDescription: "The provided solution checks if a binary tree (t) is a subtree of another binary tree (s) by recursively comparing the nodes of s and t.",
+    exampleCase: "Input: root = [3,4,5,1,2], subRoot = [4,1,2]\
+    Output: true",
+    solution: "public boolean isSubtree(TreeNode s, TreeNode t) {\n    if (s == null) return false; // If the tree s is null, t cannot be a subtree of s.\n    if (isSame(s, t)) return true; // If the trees s and t are identical, t is a subtree of s.\n    // If t is not a subtree starting at the root of s, we check if t is a subtree starting at the children of s.\n    return isSubtree(s.left, t) || isSubtree(s.right, t);\n}\n\nprivate boolean isSame(TreeNode s, TreeNode t) {\n    if (s == null && t == null) return true; // Both trees are null, they are identical.\n    if (s == null || t == null) return false; // One tree is null while the other is not, they are not identical.\n    \n    if (s.val != t.val) return false; // If the values of the current nodes are different, the trees are not identical.\n    \n    // Recursively check the left and right children of the current nodes in s and t.\n    return isSame(s.left, t.left) && isSame(s.right, t.right);\n}",
+    hint: "Think about how you can use recursion to break down the problem of checking if a tree is a subtree of another. At each node, you will need to decide if the subtree starting at that node is the same as the second tree.",
+    boilerplateCode: [
+      {
+        language: "java",
+        boilerplate: "import java.util.*;\n\npublic class Output {\n    public static class TreeNode {\n        int val;\n        TreeNode left;\n        TreeNode right;\n        TreeNode() {}\n        TreeNode(int val) { this.val = val; }\n        TreeNode(int val, TreeNode left, TreeNode right) {\n            this.val = val;\n            this.left = left;\n            this.right = right;\n        }\n    }\n\n    public boolean isSubtree(TreeNode s, TreeNode t) {\n        // complete this code\n    }\n\n    public static TreeNode constructTree(List<Integer> list) {\n        if (list.size() == 0 || list.get(0) == null) return null;\n        TreeNode root = new TreeNode(list.get(0));\n        Queue<TreeNode> queue = new LinkedList<>();\n        queue.offer(root);\n        int i = 1;\n        while (!queue.isEmpty() && i < list.size()) {\n            TreeNode node = queue.poll();\n            if (list.get(i) != null) {\n                node.left = new TreeNode(list.get(i));\n                queue.offer(node.left);\n            }\n            if (++i >= list.size()) break;\n            if (list.get(i) != null) {\n                node.right = new TreeNode(list.get(i));\n                queue.offer(node.right);\n            }\n            i++;\n        }\n        return root;\n    }\n\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        String input = scanner.nextLine();\n\n        String rootStr = input.split(\", subRoot = \")[0].replace(\"root = [\", \"\").replace(\"]\", \"\");\n        String subRootStr = input.split(\", subRoot = \")[1].replace(\"[\", \"\").replace(\"]\", \"\");\n\n        List<Integer> rootList = new ArrayList<>();\n        for (String s : rootStr.split(\",\")) {\n            rootList.add(s.equals(\"null\") ? null : Integer.parseInt(s.trim()));\n        }\n\n        List<Integer> subRootList = new ArrayList<>();\n        for (String s : subRootStr.split(\",\")) {\n            subRootList.add(s.equals(\"null\") ? null : Integer.parseInt(s.trim()));\n        }\n\n        TreeNode root = constructTree(rootList);\n        TreeNode subRoot = constructTree(subRootList);\n\n        Output output = new Output();\n        System.out.println(output.isSubtree(root, subRoot));\n    }\n}",
+      },
+      {
+        language: "python3",
+        boilerplate: "import queue\nimport sys\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\nclass Solution:\n    def isSubtree(self, s, t):\n        pass \n\ndef constructTree(lst):\n    if not lst or lst[0] is None:\n        return None\n    root = TreeNode(lst[0])\n    q = queue.Queue()\n    q.put(root)\n    i = 1\n    while not q.empty() and i < len(lst):\n        node = q.get()\n        if lst[i] is not None:\n            node.left = TreeNode(lst[i])\n            q.put(node.left)\n        i += 1\n        if i >= len(lst):\n            break\n        if lst[i] is not None:\n            node.right = TreeNode(lst[i])\n            q.put(node.right)\n        i += 1\n    return root\n\ndef main():\n    input_string = sys.stdin.readline().strip()\n\n    root_str = input_string.split(', subRoot = ')[0].replace('root = [', '').replace(']', '')\n    subroot_str = input_string.split(', subRoot = ')[1].replace('[', '').replace(']', '')\n\n    root_list = [None if s == 'null' else int(s) for s in root_str.split(',')]\n    subroot_list = [None if s == 'null' else int(s) for s in subroot_str.split(',')]\n\n    root = constructTree(root_list)\n    subroot = constructTree(subroot_list)\n\n    sol = Solution()\n    result = sol.isSubtree(root, subroot)\n    print(str(result).lower())\n\nif __name__ == '__main__':\n    main()\n"
+      },
+      {
+        language: "cpp",
+        boilerplate: "#include <iostream>\n#include <sstream>\n#include <vector>\n#include <queue>\n\nusing namespace std;\n\nstruct TreeNode {\n    int val;\n    TreeNode* left;\n    TreeNode* right;\n    TreeNode(int x) : val(x), left(NULL), right(NULL) {}\n};\n\nclass Output {\npublic:\n    bool isSubtree(TreeNode* s, TreeNode* t) {\n        // to do: complete this code\n    }\n\n  static TreeNode* constructTree(vector<int> list) {\n      if (list.empty() || list[0] == -1) return NULL;\n      TreeNode* root = new TreeNode(list[0]);\n      queue<TreeNode*> nodeQueue;\n      nodeQueue.push(root);\n      size_t i = 1;\n      while (!nodeQueue.empty() && i < list.size()) {\n          TreeNode* node = nodeQueue.front();\n          nodeQueue.pop();\n          if (list[i] != -1) {\n              node->left = new TreeNode(list[i]);\n              nodeQueue.push(node->left);\n          }\n          i++;\n          if (i >= list.size()) break;\n          if (list[i] != -1) {\n              node->right = new TreeNode(list[i]);\n              nodeQueue.push(node.right);\n          }\n          i++;\n      }\n      return root;\n  }\n\n};\n\nint main() {\n    string input;\n    getline(cin, input);\n\n    stringstream ss(input);\n    string buf;\n    vector<int> sVec, tVec;\n    bool isSubRoot = false;\n    while (ss >> buf) {\n        if (buf == \"subRoot\") {\n            isSubRoot = true;\n            continue;\n        }\n        if (isdigit(buf[0]) || buf[0] == '-') {\n            if (isSubRoot) {\n                tVec.push_back(stoi(buf));\n            } else {\n                sVec.push_back(stoi(buf));\n            }\n        }\n    }\n\n    TreeNode* s = Output::constructTree(sVec);\n    TreeNode* t = Output::constructTree(tVec);\n\n    Output output;\n    cout << (output.isSubtree(s, t) ? \"true\" : \"false\") << endl;\n\n    return 0;\n}"
+      }
+    ],
+    testCases: [
+      {
+        input: "root = [3,4,5,1,2], subRoot = [4,1,2]",
+        output: "true",
+      },
+      {
+        input: "root = [3,4,5,1,2,null,null,null,null,0], subRoot = [4,1,2]",
+        output: "false",
+      },
+    ],
+    difficulty: "hard",
+  },
+  {
     _id: "64be40b82be5025c53df612a",
     title: "Coin Change",
     topic: "64b0a7b6a28359d1e6367bff",

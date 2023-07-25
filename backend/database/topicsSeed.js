@@ -38,7 +38,7 @@ export const topics = [
       _id: "64b0a7a84e2fbc9509c28d64",
       title: "Trees",
       content: "64b06ad156a41ebc96130c62", // ID of a Content
-      problems: ["64bef00eb9e9d60dca9e3559", "64bef448be0f5e5dfcfa2dbb"],
+      problems: ["64bef00eb9e9d60dca9e3559", "64bef448be0f5e5dfcfa2dbb", "64bf7dbcf8bb4fe94d307a89"],
       length: "medium",
       difficulty: "medium",
     },
