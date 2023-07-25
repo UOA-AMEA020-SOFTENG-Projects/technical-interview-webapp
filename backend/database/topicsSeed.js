@@ -46,7 +46,7 @@ export const topics = [
       _id: "64b0a7aea5c3fe2ade14f9c4",
       title: "Heap",
       content: "64b06c391035f07b0f5f65f8", // ID of a Content
-      problems: [],
+      problems: ["64c0572caf3a4882de1a2a38", "64c05a31b83cb33cb4baa733"],
       length: "medium",
       difficulty: "medium",
     },

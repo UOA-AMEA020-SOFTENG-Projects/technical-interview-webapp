@@ -592,6 +592,84 @@ export const problems = [
     difficulty: "hard",
   },
   {
+    _id: "64c0572caf3a4882de1a2a38",
+    title: "Last Stone Weight",
+    topic: "64b0a7aea5c3fe2ade14f9c4",
+    description: "You are given an array of integers stones where stones[i] is the weight of the ith stone.\
+    We are playing a game with the stones. On each turn, we choose the heaviest two stones and smash them together. Suppose the heaviest two stones have weights x and y with x <= y. The result of this smash is:\
+    If x == y, both stones are destroyed, and\
+    If x != y, the stone of weight x is destroyed, and the stone of weight y has new weight y - x.\
+    At the end of the game, there is at most one stone left.\
+    Return the weight of the last remaining stone. If there are no stones left, return 0.",
+    modelDescription: "This solution implements a priority queue to keep track of the largest stones.",
+    exampleCase: "Input: stones = [2,7,4,1,8,1]\
+    Output: 1",
+    solution: "\nimport java.util.PriorityQueue;\n\npublic class LastStoneWeight {\n\n    public int lastStoneWeight(int[] A) {\n        // Create a priority queue where the largest number has the highest priority.\n        PriorityQueue<Integer> pq = new PriorityQueue<>((a, b)-> b - a);\n\n        // Offer all the elements of the array to the priority queue.\n        for (int a : A)\n            pq.offer(a);\n\n        // Keep smashing the two largest stones until there is one or no stone left.\n        while (pq.size() > 1)\n            pq.offer(pq.poll() - pq.poll());\n\n        // Return the weight of the last stone, or zero if there are no stones left.\n        return pq.poll();\n    }\n\n}",
+    hint: "Consider what data structure allows you to efficiently find (and remove) the maximum element.",
+    boilerplateCode: [
+      {
+        language: "java",
+        boilerplate: "\nimport java.util.*;\n\npublic class Output {\n\n    public int lastStoneWeight(int[] A) {\n        // to do: complete this code \n    }\n\n\tpublic static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        String input = scanner.nextLine();\n        \n        input = input.replace(\"[\", \"\").replace(\"]\", \"\");\n        String[] stringArray = input.split(\",\");\n        \n        int[] A = new int[stringArray.length];\n        for(int i = 0; i < stringArray.length; i++) {\n            A[i] = Integer.parseInt(stringArray[i].trim());\n        }\n        \n        Output output = new Output();\n        System.out.println(output.lastStoneWeight(A));\n\t}\n}\n",
+      },
+      {
+        language: "python3",
+        boilerplate: "\nimport heapq\n\nclass Output:\n    def lastStoneWeight(self, A):\n        # complete this code \n        pass\n\nif __name__ == \"__main__\":\n    input_string = input().strip() \n    input_string = input_string[1:-1]\n    A = [int(num_str) for num_str in input_string.split(',')]\n    output = Output()\n    print(output.lastStoneWeight(A))\n"
+      },
+      {
+        language: "cpp",
+        boilerplate: "\n#include <iostream>\n#include <vector>\n#include <queue>\n#include <sstream>\n\nusing namespace std;\n\nclass Output {\npublic:\n    int lastStoneWeight(vector<int>& A) {\n        // to do : complete this code \n    }\n};\n\nint main() {\n    string input;\n    getline(cin, input);\n\n    input = input.substr(1, input.size() - 2);\n    stringstream ss(input);\n    string token;\n    vector<int> A;\n\n    while (getline(ss, token, ',')) {\n        A.push_back(stoi(token));\n    }\n\n    Output output;\n    cout << output.lastStoneWeight(A) << endl;\n\n    return 0;\n}\n"
+      }
+    ],
+    testCases: [
+      {
+        input: "[2,7,4,1,8,1]",
+        output: "1",
+      },
+      {
+        input: "[1]",
+        output: "1",
+      },
+    ],
+    difficulty: "easy",
+  },
+  {
+    _id: "64c05a31b83cb33cb4baa733",
+    title: "Kth Largest Element in an Array",
+    topic: "64b0a7aea5c3fe2ade14f9c4",
+    description: "Given an integer array nums and an integer k, return the kth largest element in the array.\
+    Note that it is the kth largest element in the sorted order, not the kth distinct element.",
+    modelDescription: "This function finds the kth largest element in an array by maintaining a priority queue (min-heap) of k elements and iterating through the array.",
+    exampleCase: "Input: nums = [3,2,1,5,6,4], k = 2\
+    Output: 5",
+    solution: "import java.util.PriorityQueue;\n\npublic int findKthLargest(int[] nums, int k) {\n\n    // Initialize a priority queue (min-heap).\n    final PriorityQueue<Integer> pq = new PriorityQueue<>();\n\n    // For each value in the input array...\n    for(int val : nums) {\n        // ...offer (add) the value to the priority queue.\n        pq.offer(val);\n\n        // If the size of the priority queue exceeds k...\n        if(pq.size() > k) {\n            // ...remove the smallest (head) element.\n            pq.poll();\n        }\n    }\n    // The head of the priority queue is now the kth largest element.\n    return pq.peek();\n}",
+    hint: "You can use a priority queue (min-heap) to keep track of the largest k elements seen so far as you iterate through the array. The head of the priority queue will always be the kth largest element.",
+    boilerplateCode: [
+      {
+        language: "java",
+        boilerplate: "import java.util.*;\n\npublic class Output {\n\n    public int findKthLargest(int[] nums, int k) {\n        // to do: complete this code \n    }\n\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        String input = scanner.nextLine();\n\n        String[] parts = input.split(\", k = \");\n\n        int k = Integer.parseInt(parts[1]);\n\n        String numsString = parts[0].replace(\"nums = [\", \"\").replace(\"]\", \"\");\n        String[] numsStringArray = numsString.split(\",\");\n        int[] nums = new int[numsStringArray.length];\n\n        for(int i = 0; i < numsStringArray.length; i++) {\n            nums[i] = Integer.parseInt(numsStringArray[i].trim());\n        }\n\n        Output output = new Output();\n        System.out.println(output.findKthLargest(nums, k));\n    }\n}",
+      },
+      {
+        language: "python3",
+        boilerplate: "import heapq\n\nclass Output:\n    def findKthLargest(self, nums, k):\n        # to do: complete this code \n        pass\n\nif __name__ == \"__main__\":\n    input_string = input().strip()\n    nums_string, k_string = input_string.split(\", k = \")\n\n    nums = list(map(int, nums_string.strip()[nums_string.index('[')+1:-1].split(',')))\n    k = int(k_string)\n\n    output = Output()\n    print(output.findKthLargest(nums, k))"
+      },
+      {
+        language: "cpp",
+        boilerplate: "#include <iostream>\n#include <queue>\n#include <vector>\n#include <sstream>\n\nusing namespace std;\n\nclass Output {\npublic:\n    int findKthLargest(vector<int>& nums, int k) {\n        // to do: complete this code \n    }\n};\n\nint main() {\n    string input;\n    getline(cin, input);\n\n    string numsString = input.substr(input.find('[') + 1, input.find(']') - input.find('[') - 1);\n    int k = stoi(input.substr(input.rfind('=') + 2)); // using rfind instead\n    \n    stringstream ss(numsString);\n    vector<int> nums;\n    string temp;\n    while(getline(ss, temp, ',')) {\n        nums.push_back(stoi(temp));\n    }\n    \n    Output output;\n    cout << output.findKthLargest(nums, k) << endl;\n}"
+      }
+    ],
+    testCases: [
+      {
+        input: "nums = [3,2,1,5,6,4], k = 2",
+        output: "5",
+      },
+      {
+        input: "nums = [3,2,3,1,2,4,5,5,6], k = 4",
+        output: "4",
+      },
+    ],
+    difficulty: "medium",
+  },
+  {
     _id: "64be40b82be5025c53df612a",
     title: "Coin Change",
     topic: "64b0a7b6a28359d1e6367bff",
