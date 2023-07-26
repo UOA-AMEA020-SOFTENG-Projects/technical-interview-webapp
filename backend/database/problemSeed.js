@@ -555,6 +555,333 @@ export const problems = [
     difficulty: "medium",
   },
   {
+    _id: "64bf7dbcf8bb4fe94d307a89",
+    title: "Subtree of Another Tree",
+    topic: "64b0a7a84e2fbc9509c28d64",
+    description: "Given the roots of two binary trees root and subRoot, return true if there is a subtree of root with the same structure and node values of subRoot and false otherwise.\
+    A subtree of a binary tree tree is a tree that consists of a node in tree and all of this node\'s descendants. The tree tree could also be considered as a subtree of itself.",
+    modelDescription: "The provided solution checks if a binary tree (t) is a subtree of another binary tree (s) by recursively comparing the nodes of s and t.",
+    exampleCase: "Input: root = [3,4,5,1,2], subRoot = [4,1,2]\
+    Output: true",
+    solution: "public boolean isSubtree(TreeNode s, TreeNode t) {\n    if (s == null) return false; // If the tree s is null, t cannot be a subtree of s.\n    if (isSame(s, t)) return true; // If the trees s and t are identical, t is a subtree of s.\n    // If t is not a subtree starting at the root of s, we check if t is a subtree starting at the children of s.\n    return isSubtree(s.left, t) || isSubtree(s.right, t);\n}\n\nprivate boolean isSame(TreeNode s, TreeNode t) {\n    if (s == null && t == null) return true; // Both trees are null, they are identical.\n    if (s == null || t == null) return false; // One tree is null while the other is not, they are not identical.\n    \n    if (s.val != t.val) return false; // If the values of the current nodes are different, the trees are not identical.\n    \n    // Recursively check the left and right children of the current nodes in s and t.\n    return isSame(s.left, t.left) && isSame(s.right, t.right);\n}",
+    hint: "Think about how you can use recursion to break down the problem of checking if a tree is a subtree of another. At each node, you will need to decide if the subtree starting at that node is the same as the second tree.",
+    boilerplateCode: [
+      {
+        language: "java",
+        boilerplate: "import java.util.*;\n\npublic class Output {\n    public static class TreeNode {\n        int val;\n        TreeNode left;\n        TreeNode right;\n        TreeNode() {}\n        TreeNode(int val) { this.val = val; }\n        TreeNode(int val, TreeNode left, TreeNode right) {\n            this.val = val;\n            this.left = left;\n            this.right = right;\n        }\n    }\n\n    public boolean isSubtree(TreeNode s, TreeNode t) {\n        // complete this code\n    }\n\n    public static TreeNode constructTree(List<Integer> list) {\n        if (list.size() == 0 || list.get(0) == null) return null;\n        TreeNode root = new TreeNode(list.get(0));\n        Queue<TreeNode> queue = new LinkedList<>();\n        queue.offer(root);\n        int i = 1;\n        while (!queue.isEmpty() && i < list.size()) {\n            TreeNode node = queue.poll();\n            if (list.get(i) != null) {\n                node.left = new TreeNode(list.get(i));\n                queue.offer(node.left);\n            }\n            if (++i >= list.size()) break;\n            if (list.get(i) != null) {\n                node.right = new TreeNode(list.get(i));\n                queue.offer(node.right);\n            }\n            i++;\n        }\n        return root;\n    }\n\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        String input = scanner.nextLine();\n\n        String rootStr = input.split(\", subRoot = \")[0].replace(\"root = [\", \"\").replace(\"]\", \"\");\n        String subRootStr = input.split(\", subRoot = \")[1].replace(\"[\", \"\").replace(\"]\", \"\");\n\n        List<Integer> rootList = new ArrayList<>();\n        for (String s : rootStr.split(\",\")) {\n            rootList.add(s.equals(\"null\") ? null : Integer.parseInt(s.trim()));\n        }\n\n        List<Integer> subRootList = new ArrayList<>();\n        for (String s : subRootStr.split(\",\")) {\n            subRootList.add(s.equals(\"null\") ? null : Integer.parseInt(s.trim()));\n        }\n\n        TreeNode root = constructTree(rootList);\n        TreeNode subRoot = constructTree(subRootList);\n\n        Output output = new Output();\n        System.out.println(output.isSubtree(root, subRoot));\n    }\n}",
+      },
+      {
+        language: "python3",
+        boilerplate: "import queue\nimport sys\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\nclass Solution:\n    def isSubtree(self, s, t):\n        pass \n\ndef constructTree(lst):\n    if not lst or lst[0] is None:\n        return None\n    root = TreeNode(lst[0])\n    q = queue.Queue()\n    q.put(root)\n    i = 1\n    while not q.empty() and i < len(lst):\n        node = q.get()\n        if lst[i] is not None:\n            node.left = TreeNode(lst[i])\n            q.put(node.left)\n        i += 1\n        if i >= len(lst):\n            break\n        if lst[i] is not None:\n            node.right = TreeNode(lst[i])\n            q.put(node.right)\n        i += 1\n    return root\n\ndef main():\n    input_string = sys.stdin.readline().strip()\n\n    root_str = input_string.split(', subRoot = ')[0].replace('root = [', '').replace(']', '')\n    subroot_str = input_string.split(', subRoot = ')[1].replace('[', '').replace(']', '')\n\n    root_list = [None if s == 'null' else int(s) for s in root_str.split(',')]\n    subroot_list = [None if s == 'null' else int(s) for s in subroot_str.split(',')]\n\n    root = constructTree(root_list)\n    subroot = constructTree(subroot_list)\n\n    sol = Solution()\n    result = sol.isSubtree(root, subroot)\n    print(str(result).lower())\n\nif __name__ == '__main__':\n    main()\n"
+      },
+      {
+        language: "cpp",
+        boilerplate: "#include <iostream>\n#include <sstream>\n#include <vector>\n#include <queue>\n\nusing namespace std;\n\nstruct TreeNode {\n    int val;\n    TreeNode* left;\n    TreeNode* right;\n    TreeNode(int x) : val(x), left(NULL), right(NULL) {}\n};\n\nclass Output {\npublic:\n    bool isSubtree(TreeNode* s, TreeNode* t) {\n        // to do: complete this code\n    }\n\n  static TreeNode* constructTree(vector<int> list) {\n      if (list.empty() || list[0] == -1) return NULL;\n      TreeNode* root = new TreeNode(list[0]);\n      queue<TreeNode*> nodeQueue;\n      nodeQueue.push(root);\n      size_t i = 1;\n      while (!nodeQueue.empty() && i < list.size()) {\n          TreeNode* node = nodeQueue.front();\n          nodeQueue.pop();\n          if (list[i] != -1) {\n              node->left = new TreeNode(list[i]);\n              nodeQueue.push(node->left);\n          }\n          i++;\n          if (i >= list.size()) break;\n          if (list[i] != -1) {\n              node->right = new TreeNode(list[i]);\n              nodeQueue.push(node.right);\n          }\n          i++;\n      }\n      return root;\n  }\n\n};\n\nint main() {\n    string input;\n    getline(cin, input);\n\n    stringstream ss(input);\n    string buf;\n    vector<int> sVec, tVec;\n    bool isSubRoot = false;\n    while (ss >> buf) {\n        if (buf == \"subRoot\") {\n            isSubRoot = true;\n            continue;\n        }\n        if (isdigit(buf[0]) || buf[0] == '-') {\n            if (isSubRoot) {\n                tVec.push_back(stoi(buf));\n            } else {\n                sVec.push_back(stoi(buf));\n            }\n        }\n    }\n\n    TreeNode* s = Output::constructTree(sVec);\n    TreeNode* t = Output::constructTree(tVec);\n\n    Output output;\n    cout << (output.isSubtree(s, t) ? \"true\" : \"false\") << endl;\n\n    return 0;\n}"
+      }
+    ],
+    testCases: [
+      {
+        input: "root = [3,4,5,1,2], subRoot = [4,1,2]",
+        output: "true",
+      },
+      {
+        input: "root = [3,4,5,1,2,null,null,null,null,0], subRoot = [4,1,2]",
+        output: "false",
+      },
+    ],
+    difficulty: "hard",
+  },
+  {
+    _id: "64c0572caf3a4882de1a2a38",
+    title: "Last Stone Weight",
+    topic: "64b0a7aea5c3fe2ade14f9c4",
+    description: "You are given an array of integers stones where stones[i] is the weight of the ith stone.\
+    We are playing a game with the stones. On each turn, we choose the heaviest two stones and smash them together. Suppose the heaviest two stones have weights x and y with x <= y. The result of this smash is:\
+    If x == y, both stones are destroyed, and\
+    If x != y, the stone of weight x is destroyed, and the stone of weight y has new weight y - x.\
+    At the end of the game, there is at most one stone left.\
+    Return the weight of the last remaining stone. If there are no stones left, return 0.",
+    modelDescription: "This solution implements a priority queue to keep track of the largest stones.",
+    exampleCase: "Input: stones = [2,7,4,1,8,1]\
+    Output: 1",
+    solution: "\nimport java.util.PriorityQueue;\n\npublic class LastStoneWeight {\n\n    public int lastStoneWeight(int[] A) {\n        // Create a priority queue where the largest number has the highest priority.\n        PriorityQueue<Integer> pq = new PriorityQueue<>((a, b)-> b - a);\n\n        // Offer all the elements of the array to the priority queue.\n        for (int a : A)\n            pq.offer(a);\n\n        // Keep smashing the two largest stones until there is one or no stone left.\n        while (pq.size() > 1)\n            pq.offer(pq.poll() - pq.poll());\n\n        // Return the weight of the last stone, or zero if there are no stones left.\n        return pq.poll();\n    }\n\n}",
+    hint: "Consider what data structure allows you to efficiently find (and remove) the maximum element.",
+    boilerplateCode: [
+      {
+        language: "java",
+        boilerplate: "\nimport java.util.*;\n\npublic class Output {\n\n    public int lastStoneWeight(int[] A) {\n        // to do: complete this code \n    }\n\n\tpublic static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        String input = scanner.nextLine();\n        \n        input = input.replace(\"[\", \"\").replace(\"]\", \"\");\n        String[] stringArray = input.split(\",\");\n        \n        int[] A = new int[stringArray.length];\n        for(int i = 0; i < stringArray.length; i++) {\n            A[i] = Integer.parseInt(stringArray[i].trim());\n        }\n        \n        Output output = new Output();\n        System.out.println(output.lastStoneWeight(A));\n\t}\n}\n",
+      },
+      {
+        language: "python3",
+        boilerplate: "\nimport heapq\n\nclass Output:\n    def lastStoneWeight(self, A):\n        # complete this code \n        pass\n\nif __name__ == \"__main__\":\n    input_string = input().strip() \n    input_string = input_string[1:-1]\n    A = [int(num_str) for num_str in input_string.split(',')]\n    output = Output()\n    print(output.lastStoneWeight(A))\n"
+      },
+      {
+        language: "cpp",
+        boilerplate: "\n#include <iostream>\n#include <vector>\n#include <queue>\n#include <sstream>\n\nusing namespace std;\n\nclass Output {\npublic:\n    int lastStoneWeight(vector<int>& A) {\n        // to do : complete this code \n    }\n};\n\nint main() {\n    string input;\n    getline(cin, input);\n\n    input = input.substr(1, input.size() - 2);\n    stringstream ss(input);\n    string token;\n    vector<int> A;\n\n    while (getline(ss, token, ',')) {\n        A.push_back(stoi(token));\n    }\n\n    Output output;\n    cout << output.lastStoneWeight(A) << endl;\n\n    return 0;\n}\n"
+      }
+    ],
+    testCases: [
+      {
+        input: "[2,7,4,1,8,1]",
+        output: "1",
+      },
+      {
+        input: "[1]",
+        output: "1",
+      },
+    ],
+    difficulty: "easy",
+  },
+  {
+    _id: "64c05a31b83cb33cb4baa733",
+    title: "Kth Largest Element in an Array",
+    topic: "64b0a7aea5c3fe2ade14f9c4",
+    description: "Given an integer array nums and an integer k, return the kth largest element in the array.\
+    Note that it is the kth largest element in the sorted order, not the kth distinct element.",
+    modelDescription: "This function finds the kth largest element in an array by maintaining a priority queue (min-heap) of k elements and iterating through the array.",
+    exampleCase: "Input: nums = [3,2,1,5,6,4], k = 2\
+    Output: 5",
+    solution: "import java.util.PriorityQueue;\n\npublic int findKthLargest(int[] nums, int k) {\n\n    // Initialize a priority queue (min-heap).\n    final PriorityQueue<Integer> pq = new PriorityQueue<>();\n\n    // For each value in the input array...\n    for(int val : nums) {\n        // ...offer (add) the value to the priority queue.\n        pq.offer(val);\n\n        // If the size of the priority queue exceeds k...\n        if(pq.size() > k) {\n            // ...remove the smallest (head) element.\n            pq.poll();\n        }\n    }\n    // The head of the priority queue is now the kth largest element.\n    return pq.peek();\n}",
+    hint: "You can use a priority queue (min-heap) to keep track of the largest k elements seen so far as you iterate through the array. The head of the priority queue will always be the kth largest element.",
+    boilerplateCode: [
+      {
+        language: "java",
+        boilerplate: "import java.util.*;\n\npublic class Output {\n\n    public int findKthLargest(int[] nums, int k) {\n        // to do: complete this code \n    }\n\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        String input = scanner.nextLine();\n\n        String[] parts = input.split(\", k = \");\n\n        int k = Integer.parseInt(parts[1]);\n\n        String numsString = parts[0].replace(\"nums = [\", \"\").replace(\"]\", \"\");\n        String[] numsStringArray = numsString.split(\",\");\n        int[] nums = new int[numsStringArray.length];\n\n        for(int i = 0; i < numsStringArray.length; i++) {\n            nums[i] = Integer.parseInt(numsStringArray[i].trim());\n        }\n\n        Output output = new Output();\n        System.out.println(output.findKthLargest(nums, k));\n    }\n}",
+      },
+      {
+        language: "python3",
+        boilerplate: "import heapq\n\nclass Output:\n    def findKthLargest(self, nums, k):\n        # to do: complete this code \n        pass\n\nif __name__ == \"__main__\":\n    input_string = input().strip()\n    nums_string, k_string = input_string.split(\", k = \")\n\n    nums = list(map(int, nums_string.strip()[nums_string.index('[')+1:-1].split(',')))\n    k = int(k_string)\n\n    output = Output()\n    print(output.findKthLargest(nums, k))"
+      },
+      {
+        language: "cpp",
+        boilerplate: "#include <iostream>\n#include <queue>\n#include <vector>\n#include <sstream>\n\nusing namespace std;\n\nclass Output {\npublic:\n    int findKthLargest(vector<int>& nums, int k) {\n        // to do: complete this code \n    }\n};\n\nint main() {\n    string input;\n    getline(cin, input);\n\n    string numsString = input.substr(input.find('[') + 1, input.find(']') - input.find('[') - 1);\n    int k = stoi(input.substr(input.rfind('=') + 2)); // using rfind instead\n    \n    stringstream ss(numsString);\n    vector<int> nums;\n    string temp;\n    while(getline(ss, temp, ',')) {\n        nums.push_back(stoi(temp));\n    }\n    \n    Output output;\n    cout << output.findKthLargest(nums, k) << endl;\n}"
+      }
+    ],
+    testCases: [
+      {
+        input: "nums = [3,2,1,5,6,4], k = 2",
+        output: "5",
+      },
+      {
+        input: "nums = [3,2,3,1,2,4,5,5,6], k = 4",
+        output: "4",
+      },
+    ],
+    difficulty: "medium",
+  },
+  {
+    _id: "64c05c88e4b6ce76a9a5d87a",
+    title: "Task Scheduler",
+    topic: "64b0a7aea5c3fe2ade14f9c4",
+    description: "Given a characters array tasks, representing the tasks a CPU needs to do, where each letter represents a different task. Tasks could be done in any order. Each task is done in one unit of time. For each unit of time, the CPU could complete either one task or just be idle.\
+    However, there is a non-negative integer n that represents the cooldown period between two same tasks (the same letter in the array), that is that there must be at least n units of time between any two same tasks.\
+    Return the least number of units of times that the CPU will take to finish all the given tasks.",
+    modelDescription: "This solution calculates the least number of intervals that the CPU will take to finish all the given tasks while obeying the constraints of a cooldown period n between tasks of the same type, using a frequency-based priority queue and maintaining a task execution count.",
+    exampleCase: "Input: tasks = [\"A\",\"A\",\"A\",\"B\",\"B\",\"B\"], n = 2\
+    Output: 8",
+    solution: "import java.util.*;\n\npublic class Output {\n\n    public int leastInterval(char[] tasks, int n) {\n        Map<Character, Integer> map = new HashMap<>();\n        for (int i = 0; i < tasks.length; i++) {\n            map.put(tasks[i], map.getOrDefault(tasks[i], 0) + 1);\n        }\n        PriorityQueue<Map.Entry<Character, Integer>> q = new PriorityQueue<>(\n                (a,b) -> a.getValue() != b.getValue() ? b.getValue() - a.getValue() : a.getKey() - b.getKey());\n\n        q.addAll(map.entrySet());\n\n        int count = 0;\n        while (!q.isEmpty()) {\n            int k = n + 1;\n            List<Map.Entry> tempList = new ArrayList<>();\n            while (k > 0 && !q.isEmpty()) {\n                Map.Entry<Character, Integer> top = q.poll();\n                top.setValue(top.getValue() - 1);\n                tempList.add(top);\n                k--;\n                count++;\n            }\n\n            for (Map.Entry<Character, Integer> e : tempList) {\n                if (e.getValue() > 0) q.add(e);\n            }\n\n            if (q.isEmpty()) break;\n            count = count + k;\n        }\n        return count;\n    }\n}",
+    hint: "Arrange the characters in string such that each same character is K distance apart, where distance in this problems is time b/w two similar task execution.\
+    Add them to a priority Q and sort based on the highest frequency.",
+    boilerplateCode: [
+      {
+        language: "java",
+        boilerplate: "import java.util.*;\n\npublic class Output {\n\n    public int leastInterval(char[] tasks, int n) {\n        // to do: complete this code \n    }\n\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        String input = scanner.nextLine();\n\n        String[] parts = input.split(\", n = \");\n        int n = Integer.parseInt(parts[1]);\n\n        String tasksString = parts[0].replace(\"tasks = [\\\"\", \"\").replace(\"\\\"]\", \"\");\n        String[] tasksStringArray = tasksString.split(\"\\\",\\\"\");\n\n        char[] tasks = new char[tasksStringArray.length];\n        for (int i = 0; i < tasksStringArray.length; i++) {\n            tasks[i] = tasksStringArray[i].charAt(0);\n        }\n\n        Output output = new Output();\n        System.out.println(output.leastInterval(tasks, n));\n    }\n}",
+      },
+      {
+        language: "python3",
+        boilerplate: "import heapq\n\nclass Output:\n    def leastInterval(self, tasks, n):\n        # to do: complete code \n        pass\n\nif __name__ == \"__main__\":\n    input_string = input().strip()\n    tasks_string, n_string = input_string.split(\", n = \")\n    tasks = [x for x in tasks_string.replace(\"tasks = [\\\"\", \"\").replace(\"\\\"]\", \"\").split(\"\\\",\\\"\")]\n    n = int(n_string)\n    output = Output()\n    print(output.leastInterval(tasks, n))"
+      },
+      {
+        language: "cpp",
+        boilerplate: "#include <iostream>\n#include <queue>\n#include <unordered_map>\n#include <vector>\n#include <string>\n#include <sstream>\n\nclass Output {\npublic:\n    int leastInterval(std::vector<char>& tasks, int n) {\n        // to do: complete this code \n    }\n};\n\nint main() {\n    std::string input;\n    getline(std::cin, input);\n\n    std::string tasksString = input.substr(input.find('[') + 2, input.find(']') - input.find('[') - 3);\n    std::stringstream ss(tasksString);\n    std::vector<char> tasks;\n    std::string temp;\n    while (getline(ss, temp, ',')) {\n        tasks.push_back(temp[2]);\n    }\n\n    int n = std::stoi(input.substr(input.rfind('=') + 2));\n\n    Output output;\n    std::cout << output.leastInterval(tasks, n) << std::endl;\n\n    return 0;\n}"
+      }
+    ],
+    testCases: [
+      {
+        input: "tasks = [\"A\",\"A\",\"A\",\"B\",\"B\",\"B\"], n = 2",
+        output: "8",
+      },
+      {
+        input: "tasks = [\"A\",\"A\",\"A\",\"B\",\"B\",\"B\"], n = 0",
+        output: "6",
+      },
+      {
+        input: "tasks = [\"A\",\"A\",\"A\",\"A\",\"A\",\"A\",\"B\",\"C\",\"D\",\"E\",\"F\",\"G\"], n = 2",
+        output: "16",
+      },
+    ],
+    difficulty: "hard",
+  },
+  {
+    _id: "64c06d1f9e46bec553c953e9",
+    title: "Number of Islands",
+    topic: "64b0a7b20fe2987f17160099",
+    description: "Given an m x n 2D binary grid grid which represents a map of \'1\'s (land) and \'0\'s (water), return the number of islands.\
+    An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.",
+    modelDescription: "The solution counts the number of islands in a 2D grid by iterating through each cell, incrementing a counter when a land cell (\'1\') is found, and then clearing all connected land cells to avoid double counting.",
+    exampleCase: "Input: grid = [\
+      [\"1\",\"1\",\"1\",\"1\",\"0\"],\
+      [\"1\",\"1\",\"0\",\"1\",\"0\"],\
+      [\"1\",\"1\",\"0\",\"0\",\"0\"],\
+      [\"0\",\"0\",\"0\",\"0\",\"0\"]\
+    ]\
+    Output: 1",
+    solution: "",
+    hint: "Consider the grid as a graph, where each cell is a node that can be connected to up to four other cells (up, down, left, and right). You can use Depth-First Search (DFS) to explore all connected cells.",
+    boilerplateCode: [
+      {
+        language: "java",
+        boilerplate: "import java.util.*;\n\npublic class Output {\n\n    public int numIslands(char[][] grid) {\n        // to do: complete this code \n    }\n\n\n\tpublic static void main(String[] args) {\n\t    Scanner scanner = new Scanner(System.in);\n\n\t    String input = scanner.nextLine();\n\t    input = input.replace(\"grid = \", \"\").replace(\"\\\\\", \"\").replace(\"[[\", \"\").replace(\"]]\", \"\").replace(\"\\n\", \"\").replace(\" \", \"\");\n\t    String[] rowStrings = input.split(\"\\\\],\\\\[\");\n\n\t    char[][] grid = new char[rowStrings.length][];\n\n\t    for (int i = 0; i < rowStrings.length; i++) {\n\t        String[] colStrings = rowStrings[i].split(\",\");\n\t        grid[i] = new char[colStrings.length];\n\n\t        for (int j = 0; j < colStrings.length; j++) {\n\t            grid[i][j] = colStrings[j].replace(\"\\\"\", \"\").charAt(0);\n\t        }\n\t    }\n\n\t    Output output = new Output();\n\t    System.out.println(output.numIslands(grid));\n\t}\n}",
+      },
+      {
+        language: "python3",
+        boilerplate: "class Output:\n\n    def numIslands(self, grid):\n        # to do: complete this function \n        pass\n\nif __name__ == \"__main__\":\n    input_str = input().replace(\"grid = \", \"\").replace(\"\\\\\", \"\").replace(\"[[\", \"\").replace(\"]]\", \"\").replace(\"\\n\", \"\").replace(\" \", \"\")\n    row_strings = input_str.split(\"]],[\")\n    grid = []\n    for row_str in row_strings:\n        col_strings = row_str.split(\",\")\n        row = []\n        for col_str in col_strings:\n            row.append(col_str.replace(\"\\\"\", \"\"))\n        grid.append(row)\n    output = Output()\n    print(output.numIslands(grid))"
+      },
+      {
+        language: "cpp",
+        boilerplate: "#include <iostream>\n#include <vector>\n#include <string>\n#include <sstream>\n\nusing namespace std;\n\nclass Output {\npublic:\n    int numIslands(vector<vector<char>>& grid) {\n        // to do: complete this function \n    }\n};\n\nint main() {\n    string input;\n    getline(cin, input);\n\n    input = input.substr(input.find(\"[[\") + 2, input.find(\"]]\") - 2);\n    istringstream iss(input);\n    string line;\n\n    vector<vector<char>> grid;\n\n    while (getline(iss, line, ']')) {\n        line = line.substr(1, line.size() - 2);\n        istringstream iss2(line);\n        string cell;\n        vector<char> row;\n\n        while (getline(iss2, cell, ',')) {\n            cell = cell.substr(2, 1);\n            row.push_back(cell[0]);\n        }\n\n        grid.push_back(row);\n    }\n\n    Output output;\n    cout << output.numIslands(grid) << endl;\n\n    return 0;\n}\n"
+      }
+    ],
+    testCases: [
+      {
+        input: "grid = [\
+          [\"1\",\"1\",\"1\",\"1\",\"0\"],\
+          [\"1\",\"1\",\"0\",\"1\",\"0\"],\
+          [\"1\",\"1\",\"0\",\"0\",\"0\"],\
+          [\"0\",\"0\",\"0\",\"0\",\"0\"]\
+        ]",
+        output: "1",
+      },
+      {
+        input: "grid = [\
+          [\"1\",\"1\",\"0\",\"0\",\"0\"],\
+          [\"1\",\"1\",\"0\",\"0\",\"0\"],\
+          [\"0\",\"0\",\"1\",\"0\",\"0\"],\
+          [\"0\",\"0\",\"0\",\"1\",\"1\"]\
+        ]",
+        output: "3",
+      },
+    ],
+    difficulty: "easy",
+  },
+  {
+    _id: "64c08fa0f64ef52dd745e5fb",
+    title: "Max Area of Island",
+    topic: "64b0a7b20fe2987f17160099",
+    description: "You are given an m x n binary matrix grid. An island is a group of 1\'s (representing land) connected 4-directionally (horizontal or vertical.) You may assume all four edges of the grid are surrounded by water.\
+    The area of an island is the number of cells with a value 1 in the island.\
+    Return the maximum area of an island in grid. If there is no island, return 0.",
+    modelDescription: "This solution calculates the maximum area of an island in a 2D grid. It treats each cell of the grid as a potential starting point of an island and uses depth-first search to calculate the area of the island.",
+    exampleCase: "Input: grid = [[0,0,1,0,0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,1,1,1,0,0,0],[0,1,1,0,1,0,0,0,0,0,0,0,0],[0,1,0,0,1,1,0,0,1,0,1,0,0],[0,1,0,0,1,1,0,0,1,1,1,0,0],[0,0,0,0,0,0,0,0,0,0,1,0,0],[0,0,0,0,0,0,0,1,1,1,0,0,0],[0,0,0,0,0,0,0,1,1,0,0,0,0]]\
+    Output: 6\
+    Explanation: The answer is not 11, because the island must be connected 4-directionally.",
+    solution: "public int maxAreaOfIsland(int[][] grid) {\n    int max_area = 0; // Initialize the maximum area to be 0\n    // Iterate through each cell in the grid\n    for(int i = 0; i < grid.length; i++) {\n        for(int j = 0; j < grid[0].length; j++) {\n            // If the cell value is 1 (representing land), calculate the area of island starting from this cell\n            if(grid[i][j] == 1) {\n                // Compare and update the maximum area of island found so far\n                max_area = Math.max(max_area, AreaOfIsland(grid, i, j));\n            }\n        }\n    }\n    // Return the maximum area of island found in the entire grid\n    return max_area;\n}\n\npublic int AreaOfIsland(int[][] grid, int i, int j) {\n    // Check if the current cell is within the grid and is a land (value is 1)\n    if( i >= 0 && i < grid.length && j >= 0 && j < grid[0].length && grid[i][j] == 1) {\n        // Set the cell value to 0, marking it as visited\n        grid[i][j] = 0;\n        // Recursively calculate the area of island by visiting top, down, left, and right cells\n        return 1 + AreaOfIsland(grid, i+1, j) + AreaOfIsland(grid, i-1, j) + AreaOfIsland(grid, i, j-1) + AreaOfIsland(grid, i, j+1);\n    }\n    // If the cell is out of grid boundaries or it's a water (value is 0), it does not contribute to the island area\n    return 0;\n}\n",
+    hint: "Think of the grid as a graph, where each cell with 1 is a node. Now consider how you would explore this graph if you were to find the largest connected component (island). You might find depth-first search (DFS) or breadth-first search (BFS) approaches useful here.",
+    boilerplateCode: [
+      {
+        language: "java",
+        boilerplate: "import java.util.*;\n\npublic class Output {\n\n    public int maxAreaOfIsland(int[][] grid) {\n        // to do: complete code \n    }\n\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        String input = scanner.nextLine();\n\n        input = input.replace(\"[[\", \"\").replace(\"]]\", \"\");\n        String[] rowStrings = input.split(\"\\\\],\\\\[\");\n\n        int[][] grid = new int[rowStrings.length][];\n\n        for (int i = 0; i < rowStrings.length; i++) {\n            String[] colStrings = rowStrings[i].split(\",\");\n            grid[i] = new int[colStrings.length];\n\n            for (int j = 0; j < colStrings.length; j++) {\n                grid[i][j] = Integer.parseInt(colStrings[j]);\n            }\n        }\n\n        Output output = new Output();\n        System.out.println(output.maxAreaOfIsland(grid));\n    }\n}\n",
+      },
+      {
+        language: "python3",
+        boilerplate: "class Output:\n    def maxAreaOfIsland(self, grid):\n        # complete code \n        pass\n\n\ndef main():\n    input_str = input()\n    input_str = input_str.replace(\"[[\", \"\").replace(\"]]\", \"\")\n    row_strings = input_str.split(\",[\")\n    \n    grid = []\n    for row_str in row_strings:\n        grid_row = list(map(int, row_str.split(',')))\n        grid.append(grid_row)\n\n    output = Output()\n    print(output.maxAreaOfIsland(grid))\n\nif __name__ == \"__main__\":\n    main()\n"
+      },
+      {
+        language: "cpp",
+        boilerplate: "#include <iostream>\n#include <vector>\n#include <sstream>\n#include <string>\n\nclass Output {\npublic:\n    int maxAreaOfIsland(std::vector<std::vector<int>>& grid) {\n        // to do: complete code\n    }\n};\n\nint main() {\n    std::string input;\n    getline(std::cin, input);\n    input = input.substr(2, input.size() - 4);\n    \n    std::stringstream ss(input);\n    std::string row;\n    std::vector<std::vector<int>> grid;\n    \n    while (getline(ss, row, ']')) {\n        row = row.substr(2, row.size() - 1);\n        std::stringstream ssRow(row);\n        std::string cell;\n        std::vector<int> gridRow;\n        while (getline(ssRow, cell, ',')) {\n            gridRow.push_back(std::stoi(cell));\n        }\n        grid.push_back(gridRow);\n    }\n    \n    Output output;\n    std::cout << output.maxAreaOfIsland(grid);\n}\n"
+      }
+    ],
+    testCases: [
+      {
+        input: "[[0,0,1,0,0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,1,1,1,0,0,0],[0,1,1,0,1,0,0,0,0,0,0,0,0],[0,1,0,0,1,1,0,0,1,0,1,0,0],[0,1,0,0,1,1,0,0,1,1,1,0,0],[0,0,0,0,0,0,0,0,0,0,1,0,0],[0,0,0,0,0,0,0,1,1,1,0,0,0],[0,0,0,0,0,0,0,1,1,0,0,0,0]]",
+        output: "6",
+      },
+      {
+        input: "[[0,0,0,0,0,0,0,0]]",
+        output: "0",
+      },
+    ],
+    difficulty: "medium",
+  },
+  {
+    _id: "64c092c118bf1ff73b6f589c",
+    title: "Course Schedule",
+    topic: "64b0a7b20fe2987f17160099",
+    description: "There are a total of numCourses courses you have to take, labeled from 0 to numCourses - 1. You are given an array prerequisites where prerequisites[i] = [ai, bi] indicates that you must take course bi first if you want to take course ai.\
+    For example, the pair [0, 1], indicates that to take course 0 you have to first take course 1.\
+    Return true if you can finish all courses. Otherwise, return false.",
+    modelDescription: "This solution is using the approach of topological sorting to determine if it\'s possible to take all courses with the given prerequisites.",
+    exampleCase: "Input: numCourses = 2, prerequisites = [[1,0]]\
+    Output: true\
+    Explanation: There are a total of 2 courses to take. \
+    To take course 1 you should have finished course 0. So it is possible.",
+    solution: "\npublic boolean canFinish(int numCourses, int[][] prerequisites) {\n    // Create adjacency matrix to represent directed graph where an edge i->j means j is prerequisite for i\n    int[][] matrix = new int[numCourses][numCourses];\n\n    // This array will hold the in-degree (number of incoming edges) for each course\n    int[] indegree = new int[numCourses];\n\n    // Loop through prerequisites, update the adjacency matrix and in-degree array\n    for (int i=0; i<prerequisites.length; i++) {\n        int ready = prerequisites[i][0]; // course that needs a prerequisite\n        int pre = prerequisites[i][1]; // prerequisite course\n        if (matrix[pre][ready] == 0)\n            indegree[ready]++; // increase in-degree if it's not a duplicate case\n        matrix[pre][ready] = 1; // set matrix value to 1 indicating an edge from pre to ready\n    }\n\n    // Count of courses that we can take\n    int count = 0;\n\n    // Queue to perform BFS\n    Queue<Integer> queue = new LinkedList<Integer>();\n\n    // Add courses with in-degree 0 (no prerequisites) to the queue\n    for (int i=0; i<indegree.length; i++) {\n        if (indegree[i] == 0) queue.offer(i);\n    }\n\n    // BFS: remove courses from queue and decrease in-degree of its dependent courses\n    while (!queue.isEmpty()) {\n        int course = queue.poll(); // take the course\n        count++; // increase count since we have now taken this course\n        for (int i=0; i<numCourses; i++) {\n            // if course is a prerequisite for i\n            if (matrix[course][i] != 0) {\n                if (--indegree[i] == 0) // if no more prerequisites for i\n                    queue.offer(i); // add it to the queue\n            }\n        }\n    }\n    \n    // If count is same as numCourses, it means we can take all courses\n    return count == numCourses;\n}\n",
+    hint: "Think about how you can represent the problem as a directed graph, where an edge represents a course that is prerequisite of another.",
+    boilerplateCode: [
+      {
+        language: "java",
+        boilerplate: "import java.util.Arrays;\nimport java.util.LinkedList;\nimport java.util.Queue;\nimport java.util.Scanner;\n\npublic class Output {\n\n    public boolean canFinish(int numCourses, int[][] prerequisites) {\n        // to do: complete this code\n    }\n\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n\n        String input = scanner.nextLine();\n\n        String[] parts = input.split(\", \");\n        int numCourses = Integer.parseInt(parts[0].split(\" = \")[1]);\n\n        String prerequisitesPart = parts[1].split(\" = \")[1];\n        prerequisitesPart = prerequisitesPart.replace(\"[[\", \"\").replace(\"]]\", \"\");\n        String[] pairs = prerequisitesPart.split(\"\\\\],\\\\[\");\n\n        int[][] prerequisites = new int[pairs.length][2];\n        for (int i = 0; i < pairs.length; i++) {\n            String[] pair = pairs[i].split(\",\");\n            prerequisites[i][0] = Integer.parseInt(pair[0]);\n            prerequisites[i][1] = Integer.parseInt(pair[1]);\n        }\n\n        Output output = new Output();\n        boolean canFinish = output.canFinish(numCourses, prerequisites);\n        System.out.println(canFinish);\n    }\n}",
+      },
+      {
+        language: "python3",
+        boilerplate: "from collections import deque\n\ndef can_finish(numCourses, prerequisites):\n    # to do: complete this code\n    pass\n\n\nif __name__ == \"__main__\":\n    # Read the input string\n    input_string = input()\n\n    # Extract numCourses and prerequisites from the input string\n    parts = input_string.split(\", \")\n    numCourses = int(parts[0].split(\" = \")[1])\n\n    prerequisitesPart = parts[1].split(\" = \")[1]\n    prerequisitesPart = prerequisitesPart.replace(\"[[\", \"\").replace(\"]]\", \"\")\n    pairs = prerequisitesPart.split(\"],[\")\n\n    prerequisites = [(int(pair.split(\",\")[0]), int(pair.split(\",\")[1])) for pair in pairs]\n\n    # Call the canFinish function and print the result\n    result = can_finish(numCourses, prerequisites)\n    print(str(result).lower())\n"
+      },
+      {
+        language: "cpp",
+        boilerplate: "#include <vector>\n#include <deque>\n#include <sstream>\n#include <iostream>\n\nbool canFinish(int numCourses, std::vector<std::pair<int, int>>& prerequisites) {\n    // to do: complete this function\n}\n\nint main() {\n    std::string input_string;\n    std::getline(std::cin, input_string);\n\n    std::stringstream ss(input_string);\n    std::string temp;\n    std::getline(ss, temp, '=');\n    int numCourses;\n    ss >> numCourses;\n\n    std::getline(ss, temp, '[');\n    std::vector<std::pair<int, int>> prerequisites;\n    while (std::getline(ss, temp, ']')) {\n        std::stringstream pairStream(temp.substr(temp.find('[') + 1));\n        int first, second;\n        char comma;\n        pairStream >> first >> comma >> second;\n        prerequisites.push_back({first, second});\n        if (ss.peek() == ',') ss.ignore();\n    }\n\n    std::cout << (canFinish(numCourses, prerequisites) ? \"true\" : \"false\") << std::endl;\n\n    return 0;\n}\n"
+      }
+    ],
+    testCases: [
+      {
+        input: "numCourses = 2, prerequisites = [[1,0]]",
+        output: "true",
+      },
+      {
+        input: "numCourses = 2, prerequisites = [[1,0],[0,1]]",
+        output: "false",
+      },
+    ],
+    difficulty: "hard",
+  },
+  {
+    _id: "64c0bb5a1fc75b176268a7bb",
+    title: "Climbing Stairs",
+    topic: "64b0a7b6a28359d1e6367bff",
+    description: "You are climbing a staircase. It takes n steps to reach the top.\
+    Each time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top?",
+    modelDescription: "This solution is a space-optimized implementation of the Fibonacci sequence to solve the problem.",
+    exampleCase: "Input: n = 3\
+    Output: 3\
+    Explanation: There are three ways to climb to the top.",
+    solution: "public int climbStairs(int n) {\n    // Initialize two variables `a` and `b` both to 1. These represent the number of distinct ways\n    // to reach the current and the previous step respectively.\n    int a = 1, b = 1;\n\n    // Loop until `n` becomes 0. During each iteration, decrement `n` by 1.\n    while (n-- > 0)\n        // Update the number of ways to reach the current step (`a`). This is done by\n        // first adding the number of ways to reach the current step (`a`) and the previous\n        // step (`b`) to `b`, and then subtracting the old value of `a` from the new `b`.\n        a = (b += a) - a;\n    // At the end of the loop, `a` contains the number of distinct ways to climb `n` stairs.\n    return a;\n}",
+    hint: "Think about how the number of ways to reach the nth stair can be formed from the sum of the ways to reach the (n-1)th and (n-2)th stair, similar to the Fibonacci sequence.",
+    boilerplateCode: [
+      {
+        language: "java",
+        boilerplate: "import java.util.Scanner;\n\npublic class Output {\n\n    public int climbStairs(int n) {\n        // to do: complete this code \n    }\n\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        String input = scanner.next();\n        int stairs = Integer.parseInt(input);\n        Output obj = new Output();\n        int result = obj.climbStairs(stairs);\n        System.out.println(result);\n        scanner.close();\n    }\n}",
+      },
+      {
+        language: "python3",
+        boilerplate: "class Output:\n    def climbStairs(self, n):\n        # complete this code \n        pass\n\nif __name__ == \"__main__\":\n    stairs = int(input())\n    obj = Output()\n    result = obj.climbStairs(stairs)\n    print(result)"
+      },
+      {
+        language: "cpp",
+        boilerplate: "#include <iostream>\n#include <string>\n\nclass Output {\npublic:\n    int climbStairs(int n) {\n        // to do: complete this code \n    }\n};\n\nint main() {\n    std::string input;\n    std::cin >> input;\n\n    int stairs = std::stoi(input);\n\n    Output obj;\n\n    int result = obj.climbStairs(stairs);\n\n    std::cout << result << std::endl;\n\n    return 0;\n}"
+      }
+    ],
+    testCases: [
+      {
+        input: "2",
+        output: "2",
+      },
+      {
+        input: "3",
+        output: "3",
+      },
+    ],
+    difficulty: "easy",
+  },
+  {
     _id: "64be40b82be5025c53df612a",
     title: "Coin Change",
     topic: "64b0a7b6a28359d1e6367bff",
@@ -588,6 +915,50 @@ export const problems = [
       },
     ],
     difficulty: "medium",
+  },
+  {
+    _id: "64c0bdbc9bb6840492e317cc",
+    title: "Edit Distance",
+    topic: "64b0a7b6a28359d1e6367bff",
+    description: "Given two strings word1 and word2, return the minimum number of operations required to convert word1 to word2.\
+    You have the following three operations permitted on a word:\
+    Insert a character\
+    Delete a character\
+    Replace a character",
+    modelDescription: "This solution uses dynamic programming to find the minimum number of operations (insertion, deletion, and replacement) required to transform word1 to word2.",
+    exampleCase: "Input: word1 = \"horse\", word2 = \"ros\"\
+    Output: 3\
+    Explanation: \
+    horse -> rorse (replace \'h\' with \'r\')\
+    rorse -> rose (remove \'r\')\
+    rose -> ros (remove \'e\')",
+    solution: "public int minDistance(String word1, String word2) {\n    // Get lengths of both words\n    int m = word1.length();\n    int n = word2.length();\n\n    // Create a cost matrix of size m+1 x n+1, with m and n being the lengths of word1 and word2 respectively\n    int[][] cost = new int[m + 1][n + 1];\n\n    // Initialize first row and column of the cost matrix to represent transformations to empty string\n    for(int i = 0; i <= m; i++)\n        cost[i][0] = i;\n    for(int i = 1; i <= n; i++)\n        cost[0][i] = i;\n\n    // Fill the rest of the cost matrix\n    for(int i = 0; i < m; i++) {\n        for(int j = 0; j < n; j++) {\n            // If characters at current position of both words are same, cost is same as diagonal cell value\n            if(word1.charAt(i) == word2.charAt(j))\n                cost[i + 1][j + 1] = cost[i][j];\n            else {\n                // Else, cost is 1 plus minimum of costs of insertion, removal and replacement operations\n                int a = cost[i][j]; // replacement\n                int b = cost[i][j + 1]; // insertion\n                int c = cost[i + 1][j]; // removal\n                cost[i + 1][j + 1] = a < b ? (a < c ? a : c) : (b < c ? b : c);\n                cost[i + 1][j + 1]++;\n            }\n        }\n    }\n\n    // The last cell of the matrix holds the answer - minimum number of operations required to transform word1 to word2\n    return cost[m][n];\n}",
+    hint: "Think about a dynamic programming solution where the subproblem is the minimum number of operations to convert prefixes of the two words.",
+    boilerplateCode: [
+      {
+        language: "java",
+        boilerplate: "import java.util.Scanner;\n\npublic class Output {\n\n    public int minDistance(String word1, String word2) {\n        // to do: complete this code \n    }\n\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        String input = scanner.nextLine();\n        String[] words = input.split(\", \");\n        Output obj = new Output();\n        int result = obj.minDistance(words[0], words[1]);\n        System.out.println(result);\n        scanner.close();\n    }\n}\n",
+      },
+      {
+        language: "python3",
+        boilerplate: "class Output:\n    def minDistance(self, word1, word2):\n        # complete this code \n        pass\n\n\nif __name__ == \"__main__\":\n    input_str = input()\n    words = input_str.split(\", \")\n    obj = Output()\n    result = obj.minDistance(words[0], words[1])\n    print(result)\n"
+      },
+      {
+        language: "cpp",
+        boilerplate: "#include <iostream>\n#include <vector>\n#include <string>\n#include <sstream>\n\nclass Output {\npublic:\n    int minDistance(std::string word1, std::string word2) {\n        // complete this code \n    }\n};\n\nint main() {\n    std::string input;\n    std::getline(std::cin, input);\n\n    std::string word1, word2;\n    std::stringstream ss(input);\n    std::getline(ss, word1, ',');\n    std::getline(ss, word2);\n\n    Output obj;\n    int result = obj.minDistance(word1, word2);\n    std::cout << result << std::endl;\n\n    return 0;\n}\n"
+      }
+    ],
+    testCases: [
+      {
+        input: "horse, ros",
+        output: "3",
+      },
+      {
+        input: "intention, execution",
+        output: "5",
+      },
+    ],
+    difficulty: "hard",
   }
 ];
 

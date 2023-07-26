@@ -38,7 +38,7 @@ export const topics = [
       _id: "64b0a7a84e2fbc9509c28d64",
       title: "Trees",
       content: "64b06ad156a41ebc96130c62", // ID of a Content
-      problems: ["64bef00eb9e9d60dca9e3559", "64bef448be0f5e5dfcfa2dbb"],
+      problems: ["64bef00eb9e9d60dca9e3559", "64bef448be0f5e5dfcfa2dbb", "64bf7dbcf8bb4fe94d307a89"],
       length: "medium",
       difficulty: "medium",
     },
@@ -46,7 +46,7 @@ export const topics = [
       _id: "64b0a7aea5c3fe2ade14f9c4",
       title: "Heap",
       content: "64b06c391035f07b0f5f65f8", // ID of a Content
-      problems: [],
+      problems: ["64c0572caf3a4882de1a2a38", "64c05a31b83cb33cb4baa733", "64c05c88e4b6ce76a9a5d87a"],
       length: "medium",
       difficulty: "medium",
     },
@@ -54,7 +54,7 @@ export const topics = [
       _id: "64b0a7b20fe2987f17160099",
       title: "Graphs",
       content: "64b06fc8864d3dce86f3a3e7", // ID of a Content
-      problems: [],
+      problems: ["64c06d1f9e46bec553c953e9", "64c08fa0f64ef52dd745e5fb", "64c092c118bf1ff73b6f589c"],
       length: "long",
       difficulty: "hard",
     },
@@ -62,7 +62,7 @@ export const topics = [
       _id: "64b0a7b6a28359d1e6367bff",
       title: "Dynamic Programming",
       content: "64b070dc699bd986d145a182", // ID of a Content
-      problems: ["64be40b82be5025c53df612a"],
+      problems: ["64c0bb5a1fc75b176268a7bb", "64be40b82be5025c53df612a", "64c0bdbc9bb6840492e317cc"],
       length: "long",
       difficulty: "hard",
     },
