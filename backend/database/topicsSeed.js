@@ -62,7 +62,7 @@ export const topics = [
       _id: "64b0a7b6a28359d1e6367bff",
       title: "Dynamic Programming",
       content: "64b070dc699bd986d145a182", // ID of a Content
-      problems: ["64c0bb5a1fc75b176268a7bb", "64be40b82be5025c53df612a"],
+      problems: ["64c0bb5a1fc75b176268a7bb", "64be40b82be5025c53df612a", "64c0bdbc9bb6840492e317cc"],
       length: "long",
       difficulty: "hard",
     },

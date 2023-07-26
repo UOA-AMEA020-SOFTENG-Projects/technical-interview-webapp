@@ -915,6 +915,50 @@ export const problems = [
       },
     ],
     difficulty: "medium",
+  },
+  {
+    _id: "64c0bdbc9bb6840492e317cc",
+    title: "Edit Distance",
+    topic: "64b0a7b6a28359d1e6367bff",
+    description: "Given two strings word1 and word2, return the minimum number of operations required to convert word1 to word2.\
+    You have the following three operations permitted on a word:\
+    Insert a character\
+    Delete a character\
+    Replace a character",
+    modelDescription: "This solution uses dynamic programming to find the minimum number of operations (insertion, deletion, and replacement) required to transform word1 to word2.",
+    exampleCase: "Input: word1 = \"horse\", word2 = \"ros\"\
+    Output: 3\
+    Explanation: \
+    horse -> rorse (replace \'h\' with \'r\')\
+    rorse -> rose (remove \'r\')\
+    rose -> ros (remove \'e\')",
+    solution: "public int minDistance(String word1, String word2) {\n    // Get lengths of both words\n    int m = word1.length();\n    int n = word2.length();\n\n    // Create a cost matrix of size m+1 x n+1, with m and n being the lengths of word1 and word2 respectively\n    int[][] cost = new int[m + 1][n + 1];\n\n    // Initialize first row and column of the cost matrix to represent transformations to empty string\n    for(int i = 0; i <= m; i++)\n        cost[i][0] = i;\n    for(int i = 1; i <= n; i++)\n        cost[0][i] = i;\n\n    // Fill the rest of the cost matrix\n    for(int i = 0; i < m; i++) {\n        for(int j = 0; j < n; j++) {\n            // If characters at current position of both words are same, cost is same as diagonal cell value\n            if(word1.charAt(i) == word2.charAt(j))\n                cost[i + 1][j + 1] = cost[i][j];\n            else {\n                // Else, cost is 1 plus minimum of costs of insertion, removal and replacement operations\n                int a = cost[i][j]; // replacement\n                int b = cost[i][j + 1]; // insertion\n                int c = cost[i + 1][j]; // removal\n                cost[i + 1][j + 1] = a < b ? (a < c ? a : c) : (b < c ? b : c);\n                cost[i + 1][j + 1]++;\n            }\n        }\n    }\n\n    // The last cell of the matrix holds the answer - minimum number of operations required to transform word1 to word2\n    return cost[m][n];\n}",
+    hint: "Think about a dynamic programming solution where the subproblem is the minimum number of operations to convert prefixes of the two words.",
+    boilerplateCode: [
+      {
+        language: "java",
+        boilerplate: "import java.util.Scanner;\n\npublic class Output {\n\n    public int minDistance(String word1, String word2) {\n        // to do: complete this code \n    }\n\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        String input = scanner.nextLine();\n        String[] words = input.split(\", \");\n        Output obj = new Output();\n        int result = obj.minDistance(words[0], words[1]);\n        System.out.println(result);\n        scanner.close();\n    }\n}\n",
+      },
+      {
+        language: "python3",
+        boilerplate: "class Output:\n    def minDistance(self, word1, word2):\n        # complete this code \n        pass\n\n\nif __name__ == \"__main__\":\n    input_str = input()\n    words = input_str.split(\", \")\n    obj = Output()\n    result = obj.minDistance(words[0], words[1])\n    print(result)\n"
+      },
+      {
+        language: "cpp",
+        boilerplate: "#include <iostream>\n#include <vector>\n#include <string>\n#include <sstream>\n\nclass Output {\npublic:\n    int minDistance(std::string word1, std::string word2) {\n        // complete this code \n    }\n};\n\nint main() {\n    std::string input;\n    std::getline(std::cin, input);\n\n    std::string word1, word2;\n    std::stringstream ss(input);\n    std::getline(ss, word1, ',');\n    std::getline(ss, word2);\n\n    Output obj;\n    int result = obj.minDistance(word1, word2);\n    std::cout << result << std::endl;\n\n    return 0;\n}\n"
+      }
+    ],
+    testCases: [
+      {
+        input: "horse, ros",
+        output: "3",
+      },
+      {
+        input: "intention, execution",
+        output: "5",
+      },
+    ],
+    difficulty: "hard",
   }
 ];
 
