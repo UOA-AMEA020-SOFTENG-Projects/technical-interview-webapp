@@ -225,7 +225,7 @@ const TopicsList = ({ topics }) => {
                 border: "1px solid", 
                 borderRadius: "5px", 
                 backgroundColor: "darkgray", 
-                marginLeft: "5rem"
+                marginLeft: "5rem", 
               }}
             >
               <h3 style={{ textAlign: "center", marginBottom: "20px" }}>
@@ -287,7 +287,7 @@ const TopicsList = ({ topics }) => {
                   <div className={styles["problem-details"]}>
                     <Form.Check
                       type="checkbox"
-                      checked={problemStatuses[problem._id]}
+                      checked={problemStatuses[problem._id] ?? false}
                       disabled
                       style={{ marginRight: "10px" }}
                     />

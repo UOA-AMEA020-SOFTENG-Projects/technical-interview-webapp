@@ -99,6 +99,30 @@ const updateProblemCompletionStatus = async (problemId, userId, complete) => {
   await user.save();
 };
 
+const getProblemDuration = async (problemId) => {
+  if (invalidId(problemId)) {
+    throw new Error("Id format invalid");
+  }
+
+  const problem = await Problem.findById(problemId);
+
+  if (!problem) {
+    throw new Error("Problem not found");
+  }
+
+  const { difficulty } = problem;
+
+  const duration = timerDurations.find(
+    (timer) => timer.difficulty === difficulty
+  )?.duration;
+
+  if (!duration) {
+    throw new Error("Duration not found");
+  }
+
+  return duration;
+};
+
 export {
   createProblem,
   deleteProblem,
@@ -109,4 +133,5 @@ export {
   addTestCaseToProblem,
   addBoilerplateToProblem,
   updateProblemCompletionStatus,
+  getProblemDuration
 };

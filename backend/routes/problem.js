@@ -1,5 +1,6 @@
 import express from "express";
 import { StatusCodes } from "http-status-codes";
+import { timerDurations } from "../static-data/timer.js";
 import {
   createProblem,
   addBoilerplateToProblem,
@@ -9,7 +10,8 @@ import {
   getProblem,
   addTestCaseToProblem,
   getProblemCompletedStatus, 
-  updateProblemCompletionStatus
+  updateProblemCompletionStatus, 
+  getProblemDuration
 } from "../dao/problemDAO.js";
 import { authenticateToken } from "../middleware/authenticator.js";
 import User from "../models/user.js";
@@ -247,5 +249,30 @@ problemRouter.get(
     }
   }
 );
+
+problemRouter.get("/problem/:problemId/duration", async (req, res) => {
+  const { problemId } = req.params;
+
+  try {
+    const problem = await Problem.findById(problemId);
+    if (!problem) {
+      return res.status(404).json({ message: "Problem not found" });
+    }
+
+    const { difficulty } = problem;
+
+    const duration = timerDurations.find(
+      (timer) => timer.difficulty === difficulty
+    )?.duration;
+
+    if (!duration) {
+      return res.status(404).json({ message: "Duration not found" });
+    }
+
+    res.status(StatusCodes.OK).json({ duration });
+  } catch (err) {
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: err.message });
+  }
+});
 
 export default problemRouter;

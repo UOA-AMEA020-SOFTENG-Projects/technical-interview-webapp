@@ -47,3 +47,19 @@
     justify-content: center;
     width: 100%;
 }
+
+.switchContainer {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+  
+.onText {
+    color: green; 
+    font-weight: bold; 
+  }
+  
+  .offText {
+    color: red; 
+    font-weight: bold; 
+  }

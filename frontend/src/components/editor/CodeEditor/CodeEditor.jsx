@@ -4,9 +4,12 @@ import useSolution from "../../../hooks/useSolution";
 import useUpdateSolution from "../../../hooks/useUpdateSolution";
 import AceEditor from "react-ace";
 import { Modal, Button } from "react-bootstrap";
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import Form from "react-bootstrap/Form";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Spinner from "react-bootstrap/Spinner";
+import Badge from "react-bootstrap/Badge";
+import Countdown from "react-countdown";
 import axios from "axios";
 import styles from "./CodeEditor.module.css";
 import { themes } from "../../../../config/themes.js";
@@ -45,6 +48,7 @@ function CodeEditor({ problem }) {
   const [feedback, setFeedback] = useState("");
   const [showFeedback, setShowFeedback] = useState(false);
   const [modelAnswer, setModelAnswer] = useState("");
+  const [testCaseLoading, setTestCaseLoading] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState(
     problem.boilerplateCode[0].language
   );
@@ -56,6 +60,8 @@ function CodeEditor({ problem }) {
   const [selectedTheme, setSelectedTheme] = useState("xcode");
   const [showHint, setShowHint] = useState(false);
   const [showSolutionModal, setShowSolutionModal] = useState(false);
+  const [testMode, setTestMode] = useState(false);
+  const [countdown, setCountdown] = useState(null);
 
   const saveSolution = (newValue, language) => {
     axios
@@ -82,6 +88,44 @@ function CodeEditor({ problem }) {
 
   const themeChangeHandler = (event) => {
     setSelectedTheme(event.target.value);
+  };
+
+  // handler for the switch
+  const toggleSwitch = async () => {
+    if (!testMode) {
+      try {
+        const response = await fetch(
+          `http://localhost:3000/problem/${problem._id}/duration`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to retrieve duration");
+        }
+        const data = await response.json();
+        const { duration } = data;
+        if (!duration) {
+          throw new Error("Duration not found");
+        }
+        setCountdown(Date.now() + duration * 1000);
+      } catch (error) {
+        console.log(error.message);
+      }
+    }
+    setTestMode(!testMode);
+  };
+
+  const CountdownRenderer = ({ hours, minutes, seconds, completed }) => {
+    if (completed) {
+      toast.warning("Times up! Did you manage to finish the problem?", {
+        position: toast.POSITION.BOTTOM_CENTER,
+      });
+
+      return <span style={{ fontWeight: "600", color: "red" }}>Times up!</span>;
+    }
+    return (
+      <span style={{ fontWeight: "600" }}>
+        {hours}:{minutes}:{seconds}
+      </span>
+    );
   };
 
   // update the language mode of the editor based on the language selected
@@ -140,15 +184,16 @@ function CodeEditor({ problem }) {
   };
 
   const testSubmitHandler = async () => {
+    setTestCaseLoading(true);
     try {
       // call endpoint 3 here
       const response = await axios.post(
         `http://localhost:3000/editor/${problem._id}/testCase`,
         { code: value },
-        { 
-          params: { language_id: selectedLanguage }, 
+        {
+          params: { language_id: selectedLanguage },
           headers: { Authorization: `Bearer ${token}` },
-        }, 
+        }
       );
 
       if (response.status !== 200) {
@@ -158,21 +203,25 @@ function CodeEditor({ problem }) {
       }
 
       setTestResults(response.data.testResults);
-      
+
       // Check if all test cases passed
-      const allTestCasesPassed = response.data.testResults.every(result => result.passed);
-      
+      const allTestCasesPassed = response.data.testResults.every(
+        (result) => result.passed
+      );
+
       if (allTestCasesPassed) {
         toast.success("Problem successfully Completed!", {
-          position: toast.POSITION.BOTTOM_CENTER
+          position: toast.POSITION.BOTTOM_CENTER,
         });
       }
     } catch (error) {
       setErrorMsg("Code not compiling");
       setIsErrorVisible(true);
+      setTestCaseLoading(false);
     } finally {
       // save the users solution for the problem
       saveSolution(value, selectedLanguage);
+      setTestCaseLoading(false);
     }
   };
 
@@ -257,7 +306,48 @@ function CodeEditor({ problem }) {
   return (
     <div className={styles.editorWrapper}>
       <div>
-        <h2>{problem.title}</h2>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <p>
+            <span style={{ fontSize: "2rem", fontWeight: "600" }}>
+              {problem.title}
+            </span>
+            {problem.difficulty === "easy" ? (
+              <Badge style={{ marginLeft: "5px", padding: "7px" }} bg="success">
+                Easy
+              </Badge>
+            ) : problem.difficulty === "medium" ? (
+              <Badge
+                style={{ marginLeft: "5px", padding: "7px" }}
+                bg="warning"
+                text="dark"
+              >
+                Medium
+              </Badge>
+            ) : (
+              <Badge style={{ marginLeft: "5px", padding: "7px" }} bg="danger">
+                Hard
+              </Badge>
+            )}
+          </p>
+          <div>
+            <Form.Check
+              type="switch"
+              id="testModeSwitch"
+              label="Test Mode"
+              checked={testMode}
+              onChange={toggleSwitch}
+            />
+            {testMode && countdown && (
+              <Countdown date={countdown} renderer={CountdownRenderer} />
+            )}
+          </div>
+        </div>
         <p>{problem.description}</p>
       </div>
       <div
@@ -348,6 +438,18 @@ function CodeEditor({ problem }) {
               overflow: "auto",
             }}
           >
+            {testCaseLoading && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: "50%",
+                      left: "50%",
+                      transform: "translate(-50%, -50%)",
+                    }}
+                  >
+                    <Spinner animation="border" />
+                  </div>
+                )}
             <h3>Test Case Results: </h3>
             {testResults.map((result, index) => (
               <div key={index} style={{ paddingTop: "0.5rem" }}>
