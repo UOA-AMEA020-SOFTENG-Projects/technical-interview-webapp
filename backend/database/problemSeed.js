@@ -670,6 +670,49 @@ export const problems = [
     difficulty: "medium",
   },
   {
+    _id: "64c05c88e4b6ce76a9a5d87a",
+    title: "Task Scheduler",
+    topic: "64b0a7aea5c3fe2ade14f9c4",
+    description: "Given a characters array tasks, representing the tasks a CPU needs to do, where each letter represents a different task. Tasks could be done in any order. Each task is done in one unit of time. For each unit of time, the CPU could complete either one task or just be idle.\
+    However, there is a non-negative integer n that represents the cooldown period between two same tasks (the same letter in the array), that is that there must be at least n units of time between any two same tasks.\
+    Return the least number of units of times that the CPU will take to finish all the given tasks.",
+    modelDescription: "This solution calculates the least number of intervals that the CPU will take to finish all the given tasks while obeying the constraints of a cooldown period n between tasks of the same type, using a frequency-based priority queue and maintaining a task execution count.",
+    exampleCase: "Input: tasks = [\"A\",\"A\",\"A\",\"B\",\"B\",\"B\"], n = 2\
+    Output: 8",
+    solution: "import java.util.*;\n\npublic class Output {\n\n    public int leastInterval(char[] tasks, int n) {\n        Map<Character, Integer> map = new HashMap<>();\n        for (int i = 0; i < tasks.length; i++) {\n            map.put(tasks[i], map.getOrDefault(tasks[i], 0) + 1);\n        }\n        PriorityQueue<Map.Entry<Character, Integer>> q = new PriorityQueue<>(\n                (a,b) -> a.getValue() != b.getValue() ? b.getValue() - a.getValue() : a.getKey() - b.getKey());\n\n        q.addAll(map.entrySet());\n\n        int count = 0;\n        while (!q.isEmpty()) {\n            int k = n + 1;\n            List<Map.Entry> tempList = new ArrayList<>();\n            while (k > 0 && !q.isEmpty()) {\n                Map.Entry<Character, Integer> top = q.poll();\n                top.setValue(top.getValue() - 1);\n                tempList.add(top);\n                k--;\n                count++;\n            }\n\n            for (Map.Entry<Character, Integer> e : tempList) {\n                if (e.getValue() > 0) q.add(e);\n            }\n\n            if (q.isEmpty()) break;\n            count = count + k;\n        }\n        return count;\n    }\n}",
+    hint: "Arrange the characters in string such that each same character is K distance apart, where distance in this problems is time b/w two similar task execution.\
+    Add them to a priority Q and sort based on the highest frequency.",
+    boilerplateCode: [
+      {
+        language: "java",
+        boilerplate: "import java.util.*;\n\npublic class Output {\n\n    public int leastInterval(char[] tasks, int n) {\n        // to do: complete this code \n    }\n\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        String input = scanner.nextLine();\n\n        String[] parts = input.split(\", n = \");\n        int n = Integer.parseInt(parts[1]);\n\n        String tasksString = parts[0].replace(\"tasks = [\\\"\", \"\").replace(\"\\\"]\", \"\");\n        String[] tasksStringArray = tasksString.split(\"\\\",\\\"\");\n\n        char[] tasks = new char[tasksStringArray.length];\n        for (int i = 0; i < tasksStringArray.length; i++) {\n            tasks[i] = tasksStringArray[i].charAt(0);\n        }\n\n        Output output = new Output();\n        System.out.println(output.leastInterval(tasks, n));\n    }\n}",
+      },
+      {
+        language: "python3",
+        boilerplate: "import heapq\n\nclass Output:\n    def leastInterval(self, tasks, n):\n        # to do: complete code \n        pass\n\nif __name__ == \"__main__\":\n    input_string = input().strip()\n    tasks_string, n_string = input_string.split(\", n = \")\n    tasks = [x for x in tasks_string.replace(\"tasks = [\\\"\", \"\").replace(\"\\\"]\", \"\").split(\"\\\",\\\"\")]\n    n = int(n_string)\n    output = Output()\n    print(output.leastInterval(tasks, n))"
+      },
+      {
+        language: "cpp",
+        boilerplate: "#include <iostream>\n#include <queue>\n#include <unordered_map>\n#include <vector>\n#include <string>\n#include <sstream>\n\nclass Output {\npublic:\n    int leastInterval(std::vector<char>& tasks, int n) {\n        // to do: complete this code \n    }\n};\n\nint main() {\n    std::string input;\n    getline(std::cin, input);\n\n    std::string tasksString = input.substr(input.find('[') + 2, input.find(']') - input.find('[') - 3);\n    std::stringstream ss(tasksString);\n    std::vector<char> tasks;\n    std::string temp;\n    while (getline(ss, temp, ',')) {\n        tasks.push_back(temp[2]);\n    }\n\n    int n = std::stoi(input.substr(input.rfind('=') + 2));\n\n    Output output;\n    std::cout << output.leastInterval(tasks, n) << std::endl;\n\n    return 0;\n}"
+      }
+    ],
+    testCases: [
+      {
+        input: "tasks = [\"A\",\"A\",\"A\",\"B\",\"B\",\"B\"], n = 2",
+        output: "8",
+      },
+      {
+        input: "tasks = [\"A\",\"A\",\"A\",\"B\",\"B\",\"B\"], n = 0",
+        output: "6",
+      },
+      {
+        input: "tasks = [\"A\",\"A\",\"A\",\"A\",\"A\",\"A\",\"B\",\"C\",\"D\",\"E\",\"F\",\"G\"], n = 2",
+        output: "16",
+      },
+    ],
+    difficulty: "hard",
+  },
+  {
     _id: "64be40b82be5025c53df612a",
     title: "Coin Change",
     topic: "64b0a7b6a28359d1e6367bff",
