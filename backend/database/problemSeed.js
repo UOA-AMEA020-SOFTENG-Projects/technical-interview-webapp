@@ -844,6 +844,44 @@ export const problems = [
     difficulty: "hard",
   },
   {
+    _id: "64c0bb5a1fc75b176268a7bb",
+    title: "Climbing Stairs",
+    topic: "64b0a7b6a28359d1e6367bff",
+    description: "You are climbing a staircase. It takes n steps to reach the top.\
+    Each time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top?",
+    modelDescription: "This solution is a space-optimized implementation of the Fibonacci sequence to solve the problem.",
+    exampleCase: "Input: n = 3\
+    Output: 3\
+    Explanation: There are three ways to climb to the top.",
+    solution: "public int climbStairs(int n) {\n    // Initialize two variables `a` and `b` both to 1. These represent the number of distinct ways\n    // to reach the current and the previous step respectively.\n    int a = 1, b = 1;\n\n    // Loop until `n` becomes 0. During each iteration, decrement `n` by 1.\n    while (n-- > 0)\n        // Update the number of ways to reach the current step (`a`). This is done by\n        // first adding the number of ways to reach the current step (`a`) and the previous\n        // step (`b`) to `b`, and then subtracting the old value of `a` from the new `b`.\n        a = (b += a) - a;\n    // At the end of the loop, `a` contains the number of distinct ways to climb `n` stairs.\n    return a;\n}",
+    hint: "Think about how the number of ways to reach the nth stair can be formed from the sum of the ways to reach the (n-1)th and (n-2)th stair, similar to the Fibonacci sequence.",
+    boilerplateCode: [
+      {
+        language: "java",
+        boilerplate: "import java.util.Scanner;\n\npublic class Output {\n\n    public int climbStairs(int n) {\n        // to do: complete this code \n    }\n\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        String input = scanner.next();\n        int stairs = Integer.parseInt(input);\n        Output obj = new Output();\n        int result = obj.climbStairs(stairs);\n        System.out.println(result);\n        scanner.close();\n    }\n}",
+      },
+      {
+        language: "python3",
+        boilerplate: "class Output:\n    def climbStairs(self, n):\n        # complete this code \n        pass\n\nif __name__ == \"__main__\":\n    stairs = int(input())\n    obj = Output()\n    result = obj.climbStairs(stairs)\n    print(result)"
+      },
+      {
+        language: "cpp",
+        boilerplate: "#include <iostream>\n#include <string>\n\nclass Output {\npublic:\n    int climbStairs(int n) {\n        // to do: complete this code \n    }\n};\n\nint main() {\n    std::string input;\n    std::cin >> input;\n\n    int stairs = std::stoi(input);\n\n    Output obj;\n\n    int result = obj.climbStairs(stairs);\n\n    std::cout << result << std::endl;\n\n    return 0;\n}"
+      }
+    ],
+    testCases: [
+      {
+        input: "2",
+        output: "2",
+      },
+      {
+        input: "3",
+        output: "3",
+      },
+    ],
+    difficulty: "easy",
+  },
+  {
     _id: "64be40b82be5025c53df612a",
     title: "Coin Change",
     topic: "64b0a7b6a28359d1e6367bff",
