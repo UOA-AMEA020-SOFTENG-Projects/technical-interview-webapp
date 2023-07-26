@@ -804,6 +804,46 @@ export const problems = [
     difficulty: "medium",
   },
   {
+    _id: "64c092c118bf1ff73b6f589c",
+    title: "Course Schedule",
+    topic: "64b0a7b20fe2987f17160099",
+    description: "There are a total of numCourses courses you have to take, labeled from 0 to numCourses - 1. You are given an array prerequisites where prerequisites[i] = [ai, bi] indicates that you must take course bi first if you want to take course ai.\
+    For example, the pair [0, 1], indicates that to take course 0 you have to first take course 1.\
+    Return true if you can finish all courses. Otherwise, return false.",
+    modelDescription: "This solution is using the approach of topological sorting to determine if it\'s possible to take all courses with the given prerequisites.",
+    exampleCase: "Input: numCourses = 2, prerequisites = [[1,0]]\
+    Output: true\
+    Explanation: There are a total of 2 courses to take. \
+    To take course 1 you should have finished course 0. So it is possible.",
+    solution: "\npublic boolean canFinish(int numCourses, int[][] prerequisites) {\n    // Create adjacency matrix to represent directed graph where an edge i->j means j is prerequisite for i\n    int[][] matrix = new int[numCourses][numCourses];\n\n    // This array will hold the in-degree (number of incoming edges) for each course\n    int[] indegree = new int[numCourses];\n\n    // Loop through prerequisites, update the adjacency matrix and in-degree array\n    for (int i=0; i<prerequisites.length; i++) {\n        int ready = prerequisites[i][0]; // course that needs a prerequisite\n        int pre = prerequisites[i][1]; // prerequisite course\n        if (matrix[pre][ready] == 0)\n            indegree[ready]++; // increase in-degree if it's not a duplicate case\n        matrix[pre][ready] = 1; // set matrix value to 1 indicating an edge from pre to ready\n    }\n\n    // Count of courses that we can take\n    int count = 0;\n\n    // Queue to perform BFS\n    Queue<Integer> queue = new LinkedList<Integer>();\n\n    // Add courses with in-degree 0 (no prerequisites) to the queue\n    for (int i=0; i<indegree.length; i++) {\n        if (indegree[i] == 0) queue.offer(i);\n    }\n\n    // BFS: remove courses from queue and decrease in-degree of its dependent courses\n    while (!queue.isEmpty()) {\n        int course = queue.poll(); // take the course\n        count++; // increase count since we have now taken this course\n        for (int i=0; i<numCourses; i++) {\n            // if course is a prerequisite for i\n            if (matrix[course][i] != 0) {\n                if (--indegree[i] == 0) // if no more prerequisites for i\n                    queue.offer(i); // add it to the queue\n            }\n        }\n    }\n    \n    // If count is same as numCourses, it means we can take all courses\n    return count == numCourses;\n}\n",
+    hint: "Think about how you can represent the problem as a directed graph, where an edge represents a course that is prerequisite of another.",
+    boilerplateCode: [
+      {
+        language: "java",
+        boilerplate: "import java.util.Arrays;\nimport java.util.LinkedList;\nimport java.util.Queue;\nimport java.util.Scanner;\n\npublic class Output {\n\n    public boolean canFinish(int numCourses, int[][] prerequisites) {\n        // to do: complete this code\n    }\n\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n\n        String input = scanner.nextLine();\n\n        String[] parts = input.split(\", \");\n        int numCourses = Integer.parseInt(parts[0].split(\" = \")[1]);\n\n        String prerequisitesPart = parts[1].split(\" = \")[1];\n        prerequisitesPart = prerequisitesPart.replace(\"[[\", \"\").replace(\"]]\", \"\");\n        String[] pairs = prerequisitesPart.split(\"\\\\],\\\\[\");\n\n        int[][] prerequisites = new int[pairs.length][2];\n        for (int i = 0; i < pairs.length; i++) {\n            String[] pair = pairs[i].split(\",\");\n            prerequisites[i][0] = Integer.parseInt(pair[0]);\n            prerequisites[i][1] = Integer.parseInt(pair[1]);\n        }\n\n        Output output = new Output();\n        boolean canFinish = output.canFinish(numCourses, prerequisites);\n        System.out.println(canFinish);\n    }\n}",
+      },
+      {
+        language: "python3",
+        boilerplate: "from collections import deque\n\ndef can_finish(numCourses, prerequisites):\n    # to do: complete this code\n    pass\n\n\nif __name__ == \"__main__\":\n    # Read the input string\n    input_string = input()\n\n    # Extract numCourses and prerequisites from the input string\n    parts = input_string.split(\", \")\n    numCourses = int(parts[0].split(\" = \")[1])\n\n    prerequisitesPart = parts[1].split(\" = \")[1]\n    prerequisitesPart = prerequisitesPart.replace(\"[[\", \"\").replace(\"]]\", \"\")\n    pairs = prerequisitesPart.split(\"],[\")\n\n    prerequisites = [(int(pair.split(\",\")[0]), int(pair.split(\",\")[1])) for pair in pairs]\n\n    # Call the canFinish function and print the result\n    result = can_finish(numCourses, prerequisites)\n    print(str(result).lower())\n"
+      },
+      {
+        language: "cpp",
+        boilerplate: "#include <vector>\n#include <deque>\n#include <sstream>\n#include <iostream>\n\nbool canFinish(int numCourses, std::vector<std::pair<int, int>>& prerequisites) {\n    // to do: complete this function\n}\n\nint main() {\n    std::string input_string;\n    std::getline(std::cin, input_string);\n\n    std::stringstream ss(input_string);\n    std::string temp;\n    std::getline(ss, temp, '=');\n    int numCourses;\n    ss >> numCourses;\n\n    std::getline(ss, temp, '[');\n    std::vector<std::pair<int, int>> prerequisites;\n    while (std::getline(ss, temp, ']')) {\n        std::stringstream pairStream(temp.substr(temp.find('[') + 1));\n        int first, second;\n        char comma;\n        pairStream >> first >> comma >> second;\n        prerequisites.push_back({first, second});\n        if (ss.peek() == ',') ss.ignore();\n    }\n\n    std::cout << (canFinish(numCourses, prerequisites) ? \"true\" : \"false\") << std::endl;\n\n    return 0;\n}\n"
+      }
+    ],
+    testCases: [
+      {
+        input: "numCourses = 2, prerequisites = [[1,0]]",
+        output: "true",
+      },
+      {
+        input: "numCourses = 2, prerequisites = [[1,0],[0,1]]",
+        output: "false",
+      },
+    ],
+    difficulty: "hard",
+  },
+  {
     _id: "64be40b82be5025c53df612a",
     title: "Coin Change",
     topic: "64b0a7b6a28359d1e6367bff",
