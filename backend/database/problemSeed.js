@@ -713,6 +713,58 @@ export const problems = [
     difficulty: "hard",
   },
   {
+    _id: "64c06d1f9e46bec553c953e9",
+    title: "Number of Islands",
+    topic: "64b0a7b20fe2987f17160099",
+    description: "Given an m x n 2D binary grid grid which represents a map of \'1\'s (land) and \'0\'s (water), return the number of islands.\
+    An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.",
+    modelDescription: "The solution counts the number of islands in a 2D grid by iterating through each cell, incrementing a counter when a land cell (\'1\') is found, and then clearing all connected land cells to avoid double counting.",
+    exampleCase: "Input: grid = [\
+      [\"1\",\"1\",\"1\",\"1\",\"0\"],\
+      [\"1\",\"1\",\"0\",\"1\",\"0\"],\
+      [\"1\",\"1\",\"0\",\"0\",\"0\"],\
+      [\"0\",\"0\",\"0\",\"0\",\"0\"]\
+    ]\
+    Output: 1",
+    solution: "",
+    hint: "Consider the grid as a graph, where each cell is a node that can be connected to up to four other cells (up, down, left, and right). You can use Depth-First Search (DFS) to explore all connected cells.",
+    boilerplateCode: [
+      {
+        language: "java",
+        boilerplate: "import java.util.*;\n\npublic class Output {\n\n    public int numIslands(char[][] grid) {\n        // to do: complete this code \n    }\n\n\n\tpublic static void main(String[] args) {\n\t    Scanner scanner = new Scanner(System.in);\n\n\t    String input = scanner.nextLine();\n\t    input = input.replace(\"grid = \", \"\").replace(\"\\\\\", \"\").replace(\"[[\", \"\").replace(\"]]\", \"\").replace(\"\\n\", \"\").replace(\" \", \"\");\n\t    String[] rowStrings = input.split(\"\\\\],\\\\[\");\n\n\t    char[][] grid = new char[rowStrings.length][];\n\n\t    for (int i = 0; i < rowStrings.length; i++) {\n\t        String[] colStrings = rowStrings[i].split(\",\");\n\t        grid[i] = new char[colStrings.length];\n\n\t        for (int j = 0; j < colStrings.length; j++) {\n\t            grid[i][j] = colStrings[j].replace(\"\\\"\", \"\").charAt(0);\n\t        }\n\t    }\n\n\t    Output output = new Output();\n\t    System.out.println(output.numIslands(grid));\n\t}\n}",
+      },
+      {
+        language: "python3",
+        boilerplate: "class Output:\n\n    def numIslands(self, grid):\n        # to do: complete this function \n        pass\n\nif __name__ == \"__main__\":\n    input_str = input().replace(\"grid = \", \"\").replace(\"\\\\\", \"\").replace(\"[[\", \"\").replace(\"]]\", \"\").replace(\"\\n\", \"\").replace(\" \", \"\")\n    row_strings = input_str.split(\"]],[\")\n    grid = []\n    for row_str in row_strings:\n        col_strings = row_str.split(\",\")\n        row = []\n        for col_str in col_strings:\n            row.append(col_str.replace(\"\\\"\", \"\"))\n        grid.append(row)\n    output = Output()\n    print(output.numIslands(grid))"
+      },
+      {
+        language: "cpp",
+        boilerplate: "#include <iostream>\n#include <vector>\n#include <string>\n#include <sstream>\n\nusing namespace std;\n\nclass Output {\npublic:\n    int numIslands(vector<vector<char>>& grid) {\n        // to do: complete this function \n    }\n};\n\nint main() {\n    string input;\n    getline(cin, input);\n\n    input = input.substr(input.find(\"[[\") + 2, input.find(\"]]\") - 2);\n    istringstream iss(input);\n    string line;\n\n    vector<vector<char>> grid;\n\n    while (getline(iss, line, ']')) {\n        line = line.substr(1, line.size() - 2);\n        istringstream iss2(line);\n        string cell;\n        vector<char> row;\n\n        while (getline(iss2, cell, ',')) {\n            cell = cell.substr(2, 1);\n            row.push_back(cell[0]);\n        }\n\n        grid.push_back(row);\n    }\n\n    Output output;\n    cout << output.numIslands(grid) << endl;\n\n    return 0;\n}\n"
+      }
+    ],
+    testCases: [
+      {
+        input: "grid = [\
+          [\"1\",\"1\",\"1\",\"1\",\"0\"],\
+          [\"1\",\"1\",\"0\",\"1\",\"0\"],\
+          [\"1\",\"1\",\"0\",\"0\",\"0\"],\
+          [\"0\",\"0\",\"0\",\"0\",\"0\"]\
+        ]",
+        output: "1",
+      },
+      {
+        input: "grid = [\
+          [\"1\",\"1\",\"0\",\"0\",\"0\"],\
+          [\"1\",\"1\",\"0\",\"0\",\"0\"],\
+          [\"0\",\"0\",\"1\",\"0\",\"0\"],\
+          [\"0\",\"0\",\"0\",\"1\",\"1\"]\
+        ]",
+        output: "3",
+      },
+    ],
+    difficulty: "easy",
+  },
+  {
     _id: "64be40b82be5025c53df612a",
     title: "Coin Change",
     topic: "64b0a7b6a28359d1e6367bff",
