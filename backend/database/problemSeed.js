@@ -765,6 +765,45 @@ export const problems = [
     difficulty: "easy",
   },
   {
+    _id: "64c08fa0f64ef52dd745e5fb",
+    title: "Max Area of Island",
+    topic: "64b0a7b20fe2987f17160099",
+    description: "You are given an m x n binary matrix grid. An island is a group of 1\'s (representing land) connected 4-directionally (horizontal or vertical.) You may assume all four edges of the grid are surrounded by water.\
+    The area of an island is the number of cells with a value 1 in the island.\
+    Return the maximum area of an island in grid. If there is no island, return 0.",
+    modelDescription: "This solution calculates the maximum area of an island in a 2D grid. It treats each cell of the grid as a potential starting point of an island and uses depth-first search to calculate the area of the island.",
+    exampleCase: "Input: grid = [[0,0,1,0,0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,1,1,1,0,0,0],[0,1,1,0,1,0,0,0,0,0,0,0,0],[0,1,0,0,1,1,0,0,1,0,1,0,0],[0,1,0,0,1,1,0,0,1,1,1,0,0],[0,0,0,0,0,0,0,0,0,0,1,0,0],[0,0,0,0,0,0,0,1,1,1,0,0,0],[0,0,0,0,0,0,0,1,1,0,0,0,0]]\
+    Output: 6\
+    Explanation: The answer is not 11, because the island must be connected 4-directionally.",
+    solution: "public int maxAreaOfIsland(int[][] grid) {\n    int max_area = 0; // Initialize the maximum area to be 0\n    // Iterate through each cell in the grid\n    for(int i = 0; i < grid.length; i++) {\n        for(int j = 0; j < grid[0].length; j++) {\n            // If the cell value is 1 (representing land), calculate the area of island starting from this cell\n            if(grid[i][j] == 1) {\n                // Compare and update the maximum area of island found so far\n                max_area = Math.max(max_area, AreaOfIsland(grid, i, j));\n            }\n        }\n    }\n    // Return the maximum area of island found in the entire grid\n    return max_area;\n}\n\npublic int AreaOfIsland(int[][] grid, int i, int j) {\n    // Check if the current cell is within the grid and is a land (value is 1)\n    if( i >= 0 && i < grid.length && j >= 0 && j < grid[0].length && grid[i][j] == 1) {\n        // Set the cell value to 0, marking it as visited\n        grid[i][j] = 0;\n        // Recursively calculate the area of island by visiting top, down, left, and right cells\n        return 1 + AreaOfIsland(grid, i+1, j) + AreaOfIsland(grid, i-1, j) + AreaOfIsland(grid, i, j-1) + AreaOfIsland(grid, i, j+1);\n    }\n    // If the cell is out of grid boundaries or it's a water (value is 0), it does not contribute to the island area\n    return 0;\n}\n",
+    hint: "Think of the grid as a graph, where each cell with 1 is a node. Now consider how you would explore this graph if you were to find the largest connected component (island). You might find depth-first search (DFS) or breadth-first search (BFS) approaches useful here.",
+    boilerplateCode: [
+      {
+        language: "java",
+        boilerplate: "import java.util.*;\n\npublic class Output {\n\n    public int maxAreaOfIsland(int[][] grid) {\n        // to do: complete code \n    }\n\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        String input = scanner.nextLine();\n\n        input = input.replace(\"[[\", \"\").replace(\"]]\", \"\");\n        String[] rowStrings = input.split(\"\\\\],\\\\[\");\n\n        int[][] grid = new int[rowStrings.length][];\n\n        for (int i = 0; i < rowStrings.length; i++) {\n            String[] colStrings = rowStrings[i].split(\",\");\n            grid[i] = new int[colStrings.length];\n\n            for (int j = 0; j < colStrings.length; j++) {\n                grid[i][j] = Integer.parseInt(colStrings[j]);\n            }\n        }\n\n        Output output = new Output();\n        System.out.println(output.maxAreaOfIsland(grid));\n    }\n}\n",
+      },
+      {
+        language: "python3",
+        boilerplate: "class Output:\n    def maxAreaOfIsland(self, grid):\n        # complete code \n        pass\n\n\ndef main():\n    input_str = input()\n    input_str = input_str.replace(\"[[\", \"\").replace(\"]]\", \"\")\n    row_strings = input_str.split(\",[\")\n    \n    grid = []\n    for row_str in row_strings:\n        grid_row = list(map(int, row_str.split(',')))\n        grid.append(grid_row)\n\n    output = Output()\n    print(output.maxAreaOfIsland(grid))\n\nif __name__ == \"__main__\":\n    main()\n"
+      },
+      {
+        language: "cpp",
+        boilerplate: "#include <iostream>\n#include <vector>\n#include <sstream>\n#include <string>\n\nclass Output {\npublic:\n    int maxAreaOfIsland(std::vector<std::vector<int>>& grid) {\n        // to do: complete code\n    }\n};\n\nint main() {\n    std::string input;\n    getline(std::cin, input);\n    input = input.substr(2, input.size() - 4);\n    \n    std::stringstream ss(input);\n    std::string row;\n    std::vector<std::vector<int>> grid;\n    \n    while (getline(ss, row, ']')) {\n        row = row.substr(2, row.size() - 1);\n        std::stringstream ssRow(row);\n        std::string cell;\n        std::vector<int> gridRow;\n        while (getline(ssRow, cell, ',')) {\n            gridRow.push_back(std::stoi(cell));\n        }\n        grid.push_back(gridRow);\n    }\n    \n    Output output;\n    std::cout << output.maxAreaOfIsland(grid);\n}\n"
+      }
+    ],
+    testCases: [
+      {
+        input: "[[0,0,1,0,0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,1,1,1,0,0,0],[0,1,1,0,1,0,0,0,0,0,0,0,0],[0,1,0,0,1,1,0,0,1,0,1,0,0],[0,1,0,0,1,1,0,0,1,1,1,0,0],[0,0,0,0,0,0,0,0,0,0,1,0,0],[0,0,0,0,0,0,0,1,1,1,0,0,0],[0,0,0,0,0,0,0,1,1,0,0,0,0]]",
+        output: "6",
+      },
+      {
+        input: "[[0,0,0,0,0,0,0,0]]",
+        output: "0",
+      },
+    ],
+    difficulty: "medium",
+  },
+  {
     _id: "64be40b82be5025c53df612a",
     title: "Coin Change",
     topic: "64b0a7b6a28359d1e6367bff",
