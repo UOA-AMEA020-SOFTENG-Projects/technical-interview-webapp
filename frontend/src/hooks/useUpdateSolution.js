@@ -8,6 +8,8 @@ const useUpdateSolution = (problemId, requiresAuth = false, authToken = "", init
   const [language, setLanguage] = useState(initialLanguage);
   const [code, setCode] = useState(initialCode);
 
+  const BaseURL = import.meta.env.VITE_API_BASE_URL;
+
   // Initialize useRef with true
   const firstUpdate = useRef(true);
 
@@ -27,7 +29,7 @@ const useUpdateSolution = (problemId, requiresAuth = false, authToken = "", init
         ? { "Authorization": `Bearer ${authToken}`, 'Content-Type': 'application/json' }
         : { 'Content-Type': 'application/json' };
 
-      const requestUrl = `http://localhost:3000/editor/${problemId}/saveSolution?language_id=${language}`;
+      const requestUrl = `${BaseURL}/editor/${problemId}/saveSolution?language_id=${language}`;
       const body = JSON.stringify({ code });
 
       try {
@@ -50,7 +52,7 @@ const useUpdateSolution = (problemId, requiresAuth = false, authToken = "", init
       }
     };
     fetchData();
-  }, [problemId, requiresAuth, authToken, reFetchToggle, language, code]);
+  }, [problemId, requiresAuth, authToken, reFetchToggle, language, code, BaseURL]);
 
   const updateLanguageAndCode = (newLanguage, newCode) => {
     setLanguage(newLanguage);

@@ -2,6 +2,8 @@ import React from "react";
 import { useLoaderData, redirect, json } from 'react-router-dom';
 import TopicContent from "../components/content/TopicContent/TopicContent";
 
+const BaseURL = import.meta.env.VITE_API_BASE_URL;
+
 const ContentPage = () => {
 
   const data = useLoaderData();
@@ -24,7 +26,7 @@ export const loader = async ({ request, params }) => {
   
   const topicId = params.topicId;
 
-  const response = await fetch('http://localhost:3000/topic/' + topicId + "/content");
+  const response = await fetch(`${BaseURL}/topic/${topicId}/content`);
 
   if (!response.ok) {
       const err = await response.json();

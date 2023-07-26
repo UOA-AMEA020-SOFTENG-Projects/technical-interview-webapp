@@ -3,6 +3,8 @@ import { redirect, json } from "react-router-dom";
 import SignUpForm from "../components/forms/SignUpForm/SignUpForm";
 import { deserializeUserDetails } from "../utils/parseJWT";
 
+const BaseURL = import.meta.env.VITE_API_BASE_URL;
+
 const SignupPage = () => {
 
   return (
@@ -26,7 +28,7 @@ export const action = async ({ request, params }) => {
     password: loginData.password
   };
 
-  const response = await fetch("http://localhost:3000/user/register", {
+  const response = await fetch(`${BaseURL}/user/register`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

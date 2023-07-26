@@ -2,6 +2,8 @@ import React from "react";
 import { redirect, json } from "react-router-dom";
 import SignInForm from "../components/forms/SignInForm/SignInForm";
 
+const BaseURL = import.meta.env.VITE_API_BASE_URL;
+
 const LoginPage = () => {
 
   return (
@@ -22,7 +24,7 @@ export const action = async ({ request, params }) => {
     password: loginData.password
   };
 
-  const response = await fetch("http://localhost:3000/user/login", {
+  const response = await fetch(`${BaseURL}/user/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

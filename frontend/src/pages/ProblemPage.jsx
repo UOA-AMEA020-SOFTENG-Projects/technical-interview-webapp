@@ -2,6 +2,8 @@ import React from "react";
 import { useLoaderData, redirect, json } from 'react-router-dom';
 import CodeEditor from "../components/editor/CodeEditor/CodeEditor";
 
+const BaseURL = import.meta.env.VITE_API_BASE_URL;
+
 const ProblemPage = () => {
 
   const problem = useLoaderData();
@@ -17,7 +19,7 @@ export const loader = async ({ request, params }) => {
   
   const problemId = params.problemId;
 
-  const response = await fetch('http://localhost:3000/problem/' + problemId);
+  const response = await fetch(`${BaseURL}/problem/` + problemId);
 
   if (!response.ok) {
       const err = await response.json();
