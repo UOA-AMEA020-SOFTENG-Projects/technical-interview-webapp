@@ -726,7 +726,7 @@ export const problems = [
       [\"0\",\"0\",\"0\",\"0\",\"0\"]\
     ]\
     Output: 1",
-    solution: "",
+    solution: "public int numIslands(char[][] grid) {\n    // The variable 'count' will store the number of islands\n    int count = 0;\n\n    // Iterate over each cell in the grid\n    for (int i = 0; i < grid.length; i++) {\n        for (int j = 0; j < grid[i].length; j++) {\n            // If a cell with '1' is found, it represents the start of an island\n            if (grid[i][j] == '1') {\n                // Increment the count of islands\n                count++;\n                // Clear the rest of the current island to avoid counting it more than once\n                clearRestOfLand(grid, i, j);\n            }\n        }\n    }\n    return count;\n}\n\nprivate void clearRestOfLand(char[][] grid, int i, int j) {\n    // The base case of the recursion: if the current cell is out of the grid's bounds or it's water ('0'), stop the recursion\n    if (i < 0 || j < 0 || i >= grid.length || j >= grid[i].length || grid[i][j] == '0') return;\n\n    // Set the current cell to '0' (water), marking it as visited\n    grid[i][j] = '0';\n\n    // Recursively visit the North, South, East, and West cells\n    clearRestOfLand(grid, i+1, j); // North\n    clearRestOfLand(grid, i-1, j); // South\n    clearRestOfLand(grid, i, j+1); // East\n    clearRestOfLand(grid, i, j-1); // West\n\n    return;\n}",
     hint: "Consider the grid as a graph, where each cell is a node that can be connected to up to four other cells (up, down, left, and right). You can use Depth-First Search (DFS) to explore all connected cells.",
     boilerplateCode: [
       {
