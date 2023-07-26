@@ -62,7 +62,7 @@ questionRouter.post(
         return res.status(404).json({ message: "Cannot find user" });
       }
       
-
+      console.log(user);
       console.log(req.body,66);
 
       res
