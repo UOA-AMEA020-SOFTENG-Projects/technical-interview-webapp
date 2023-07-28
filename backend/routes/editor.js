@@ -11,6 +11,8 @@ import mongoose from "mongoose";
 
 const editorRouter = new express.Router();
 
+const JOBE_URL = process.env.JOBE_URL;
+
 editorRouter.put("/editor/similarity/:problemId", async (req, res) => {
   try {
     // Fetch problem from the database by its ID
@@ -54,14 +56,30 @@ editorRouter.put("/editor/similarity/:problemId", async (req, res) => {
 
     let similarityScoreRaw = await dataPromise;
 
-    const similarityScoreComparison = parseFloat(similarityScoreRaw).toFixed(1); 
-    const similarityScore = parseFloat(similarityScoreRaw).toFixed(1) * 100; 
+    console.log(similarityScoreRaw, 57); 
+
+    if (parseFloat(similarityScoreRaw)< 0){ 
+      similarityScoreRaw = 0;
+    }
+
+    if (parseFloat(similarityScoreRaw) > 1){
+      similarityScoreRaw = 1;
+    }
+
+    console.log(similarityScoreRaw, 67);
+
+    const similarityScoreComparison = parseFloat(similarityScoreRaw).toFixed(2); 
+    const similarityScore = (parseFloat(similarityScoreRaw) * 100).toFixed(2); 
+
+    console.log(similarityScore, 72);
+    console.log(similarityScoreComparison,73);
 
     // Find the corresponding feedback
     let feedback = feedbackPrompts.find(prompt => similarityScoreComparison >= prompt.min && similarityScoreComparison <= prompt.max).feedback;
 
     return res.status(StatusCodes.OK).json({ similarityScore, feedback, modelAnswer });
   } catch (error) {
+    console.log(error.message)
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(error.message);
   }
 });
@@ -236,7 +254,7 @@ editorRouter.post("/editor/code", async (req, res) => {
     };
 
     const response = await axios.post(
-      "http://localhost:4000/jobe/index.php/restapi/runs",
+      `${JOBE_URL}/jobe/index.php/restapi/runs`,
       codeData,
       {
         headers: {
@@ -279,8 +297,6 @@ editorRouter.post("/editor/:problemId/testCase",authenticateToken, async (req, r
       console.log(279);
       return res.status(StatusCodes.NOT_FOUND).json({ message: "User not found." });
     }
-
-
 
     const sourcecode = req.body.code;
     const selectedLanguage = req.query.language_id;
@@ -336,7 +352,7 @@ editorRouter.post("/editor/:problemId/testCase",authenticateToken, async (req, r
       };
 
       const response = await axios.post(
-        "http://localhost:4000/jobe/index.php/restapi/runs",
+        `${JOBE_URL}/jobe/index.php/restapi/runs`,
         codeData,
         {
           headers: {

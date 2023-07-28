@@ -5,6 +5,8 @@ import styles from "./QuestionnaireForm.module.css";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+const BaseURL = import.meta.env.VITE_API_BASE_URL;
+
 const QuestionnaireForm = ({ questions }) => {
   const navigate = useNavigate();
   const token = localStorage.getItem("authToken");
@@ -55,7 +57,7 @@ const QuestionnaireForm = ({ questions }) => {
     console.log(answers, 26);
 
     const response = await fetch(
-      "http://localhost:3000/question/submit-answers",
+      `${BaseURL}/question/submit-answers`,
       {
         method: "POST",
         headers: {
@@ -138,7 +140,7 @@ const QuestionnaireForm = ({ questions }) => {
                       {question.image && (
                         <Card.Img
                           variant="bottom"
-                          src={`http://localhost:3000/${question.image}`}
+                          src={`${BaseURL}/${question.image}`}
                           alt={question.questionContent}
                           className={styles.cardImage}
                         />

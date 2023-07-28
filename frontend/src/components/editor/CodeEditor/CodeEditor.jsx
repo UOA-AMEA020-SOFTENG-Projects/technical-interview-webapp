@@ -31,12 +31,14 @@ import "ace-builds/src-noconflict/mode-c_cpp";
 import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/mode-php";
 
+const BaseURL = import.meta.env.VITE_API_BASE_URL;
+
 function CodeEditor({ problem }) {
   const token = localStorage.getItem("authToken");
 
   // FIX REQUIRED FOR ENDPOINT: if the code submitted is the same as the boilerplate then dont add entry to user schema
   const { data, isLoading, error, refetch, setLanguage } = useSolution(
-    `http://localhost:3000/problem/${problem._id}/codecontent`,
+    `${BaseURL}/problem/${problem._id}/codecontent`,
     "GET",
     true,
     token,
@@ -66,7 +68,7 @@ function CodeEditor({ problem }) {
   const saveSolution = (newValue, language) => {
     axios
       .post(
-        `http://localhost:3000/editor/${problem._id}/saveSolution`,
+        `${BaseURL}/editor/${problem._id}/saveSolution`,
         { code: newValue },
         {
           params: { language_id: language },
@@ -95,7 +97,7 @@ function CodeEditor({ problem }) {
     if (!testMode) {
       try {
         const response = await fetch(
-          `http://localhost:3000/problem/${problem._id}/duration`
+          `${BaseURL}/problem/${problem._id}/duration`
         );
         if (!response.ok) {
           throw new Error("Failed to retrieve duration");
@@ -165,7 +167,7 @@ function CodeEditor({ problem }) {
     try {
       // call endpoint 2 here
       const response = await axios.post(
-        "http://localhost:3000/editor/code",
+        `${BaseURL}/editor/code`,
         { code: value },
         { params: { language_id: selectedLanguage } }
       );
@@ -188,7 +190,7 @@ function CodeEditor({ problem }) {
     try {
       // call endpoint 3 here
       const response = await axios.post(
-        `http://localhost:3000/editor/${problem._id}/testCase`,
+        `${BaseURL}/editor/${problem._id}/testCase`,
         { code: value },
         {
           params: { language_id: selectedLanguage },
@@ -233,7 +235,7 @@ function CodeEditor({ problem }) {
 
     try {
       const similarityResponse = await axios.put(
-        "http://localhost:3000/editor/similarity/" + problem._id,
+        `${BaseURL}/editor/similarity/${problem._id}`,
         textDescription,
         {
           headers: {
@@ -272,7 +274,7 @@ function CodeEditor({ problem }) {
     // make request to endpoint to reset the solution back to the boilerplate
     try {
       const response = await fetch(
-        `http://localhost:3000/editor/${problem._id}/clearSolution?language_id=${selectedLanguage}`,
+        `${BaseURL}/editor/${problem._id}/clearSolution?language_id=${selectedLanguage}`,
         {
           method: "DELETE",
           headers: {

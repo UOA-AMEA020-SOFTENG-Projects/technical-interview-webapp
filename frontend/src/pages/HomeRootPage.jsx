@@ -2,6 +2,8 @@ import React from "react";
 import { Outlet, useLocation, useLoaderData, redirect, json } from "react-router-dom";
 import LoggedInHeader from "../components/headers/PrimaryHeader/LoggedInHeader/LoggedInHeader";
 
+const BaseURL = import.meta.env.VITE_API_BASE_URL;
+
 const HomeRootPage = () => {
   const data = useLoaderData();
   const location = useLocation();
@@ -34,7 +36,7 @@ export const loader = async ({ request, params }) => {
 
   const token = localStorage.getItem('authToken');
 
-  const response = await fetch('http://localhost:3000/user/profile', {
+  const response = await fetch(`${BaseURL}/user/profile`, {
     method: 'GET',
     headers: {
         'Authorization': 'Bearer ' + token

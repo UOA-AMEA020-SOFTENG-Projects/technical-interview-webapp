@@ -7,6 +7,8 @@ import { Container, Row, Col, Card, Modal, Button, ListGroup } from "react-boots
 import { PieChart, Pie, Cell } from "recharts";
 import styles from "./TopicsList.module.css";
 
+const BaseURL = import.meta.env.VITE_API_BASE_URL;
+
 const TopicsList = ({ topics }) => {
   const [show, setShow] = useState(false);
   const token = localStorage.getItem("authToken");
@@ -32,7 +34,7 @@ const TopicsList = ({ topics }) => {
 
   useEffect(() => {
     const fetchCompletedData = async () => {
-      const response = await fetch("http://localhost:3000/user/completed", {
+      const response = await fetch(`${BaseURL}/user/completed`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -48,7 +50,7 @@ const TopicsList = ({ topics }) => {
   useEffect(() => {
     const fetchRecommendedProblems = async () => {
       const response = await fetch(
-        "http://localhost:3000/user/recommended-list",
+        `${BaseURL}/user/recommended-list`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -66,7 +68,7 @@ const TopicsList = ({ topics }) => {
     const statuses = {};
     for (let problem of problems) {
       const response = await fetch(
-        `http://localhost:3000/problem/${problem._id}/recommended`,
+        `${BaseURL}/problem/${problem._id}/recommended`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -86,7 +88,7 @@ const TopicsList = ({ topics }) => {
   useEffect(() => {
     const fetchProgress = async (topicId) => {
       const response = await fetch(
-        `http://localhost:3000/topic/${topicId}/progress`,
+        `${BaseURL}/topic/${topicId}/progress`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -109,7 +111,7 @@ const TopicsList = ({ topics }) => {
       const statuses = {};
       for (let problem of currentTopic?.problems || []) {
         const response = await fetch(
-          `http://localhost:3000/problem/${problem._id}/status`,
+          `${BaseURL}/problem/${problem._id}/status`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
