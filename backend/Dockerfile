@@ -34,11 +34,14 @@ COPY . .
 # Make sure python script is executable and in correct path
 COPY --from=python-stage /usr/src/python/sbert.py ./sbert/sbert.py
 
+# making sure that the sentencetransformer dependencies pre install, instead of when the endpoint is run
+RUN python ./sbert/sbert.py --text1 "dummy text 11" --text2 "dummy text 12"
+
 # Set necessary environments for Node.js
 ENV NODE_ENV=production
 
 # Expose correct port
-EXPOSE 8080
+EXPOSE 3000
 
 # Command to run the app
 CMD [ "npm", "start" ]
