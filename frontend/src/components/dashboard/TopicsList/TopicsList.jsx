@@ -3,7 +3,15 @@ import { Form } from "react-bootstrap";
 import ProgressBar from "react-bootstrap/ProgressBar";
 import Badge from "react-bootstrap/Badge";
 import { useNavigate, Link } from "react-router-dom";
-import { Container, Row, Col, Card, Modal, Button, ListGroup } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  Modal,
+  Button,
+  ListGroup,
+} from "react-bootstrap";
 import { PieChart, Pie, Cell } from "recharts";
 import styles from "./TopicsList.module.css";
 
@@ -49,14 +57,11 @@ const TopicsList = ({ topics }) => {
 
   useEffect(() => {
     const fetchRecommendedProblems = async () => {
-      const response = await fetch(
-        `${BaseURL}/user/recommended-list`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await fetch(`${BaseURL}/user/recommended-list`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       const data = await response.json();
       setRecommendedProblems(data);
     };
@@ -87,14 +92,11 @@ const TopicsList = ({ topics }) => {
 
   useEffect(() => {
     const fetchProgress = async (topicId) => {
-      const response = await fetch(
-        `${BaseURL}/topic/${topicId}/progress`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await fetch(`${BaseURL}/topic/${topicId}/progress`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       const data = await response.json();
       console.log(data.progress, 31);
       return data.progress;
@@ -129,16 +131,13 @@ const TopicsList = ({ topics }) => {
 
   return (
     <>
-      <h1 style={{ marginTop: "20vh" }}>
+      <h1 className="mt-5">
         <b>Dashboard</b>
       </h1>
-      <Container
-        className="d-flex align-items-center min-vw-100"
-        style={{ marginLeft: "30rem", marginBottom: "5rem" }}
-      >
-        <Row className="g-4 w-200">
+      <Container className={`d-flex align-items-center min-vw-100 mt-5 mb-5 ${styles.containerPadding}`}>
+        <Row className="g-4">
           <Col xs={12} md={6}>
-            <Row xs={1} md={2} className="g-4 w-200">
+            <Row xs={1} md={2} className="g-4">
               {topics.map((topic, index) => (
                 <Col key={index}>
                   <Card
@@ -186,22 +185,23 @@ const TopicsList = ({ topics }) => {
               ))}
             </Row>
           </Col>
-          <Col
-            xs={12}
-            md={6}
-            className="d-flex flex-column align-items-center w-25"
-          >
+          <Col xs={12} md={6} className="d-flex flex-column align-items-center">
             <div>
-              <h3>
+              <h3 style={{ marginTop: "16px" }}>
                 <b>Problems attempted by you</b>
               </h3>
             </div>
-            <PieChart width={700} height={500} style={{ marginLeft: "7rem" }}>
+            <PieChart
+              width={600}
+              height={200}
+              style={{ marginTop: "20px", marginBottom: "20px" }}
+            >
+              {" "}
               <Pie
                 dataKey="problems"
                 isAnimationActive={true}
                 data={completedData}
-                outerRadius={150}
+                outerRadius={100}
                 fill="#8884d8"
                 labelLine={false}
                 label={({ name, percent }) =>
@@ -217,33 +217,36 @@ const TopicsList = ({ topics }) => {
               </Pie>
             </PieChart>
             <div
-              style={{
-                marginTop: "2rem",
-                overflow: "auto",
-                maxHeight: "24.0rem",
-                height: "24.0rem",
-                width: "30rem",
-                padding: "15px 5px", 
-                border: "1px solid", 
-                borderRadius: "5px", 
-                backgroundColor: "darkgray", 
-                marginLeft: "5rem", 
-              }}
+              className="mt-3 overflow-auto rounded p-3 bg-dark text-light"
+              style={{ maxHeight: "24.0rem", height: "24.0rem", width: "80%" }}
             >
               <h3 style={{ textAlign: "center", marginBottom: "20px" }}>
                 <b>Recommended Problems</b>
               </h3>
               <ListGroup>
-                {recommendedProblems.length !== 0 ? recommendedProblems.map((problem, index) => (
-                  <ListGroup.Item
-                    key={index}
-                    action
-                    onClick={() => navigate(`/home/problem/${problem._id}`)}
-                    style={{ backgroundColor: "#5A5A5A", color: "white"}}
+                {recommendedProblems.length !== 0 ? (
+                  recommendedProblems.map((problem, index) => (
+                    <ListGroup.Item
+                      key={index}
+                      action
+                      onClick={() => navigate(`/home/problem/${problem._id}`)}
+                      style={{ backgroundColor: "#5A5A5A", color: "white" }}
+                    >
+                      {problem.title}
+                    </ListGroup.Item>
+                  ))
+                ) : (
+                  <p
+                    style={{
+                      textDecoration: "underline",
+                      textAlign: "center",
+                      paddingTop: "10px",
+                    }}
                   >
-                    {problem.title}
-                  </ListGroup.Item>
-                )) : <p style={{ textDecoration: "underline", textAlign: "center", paddingTop: "10px"}}>No more problems specifically recommended for you. Please work on other problems.</p>}
+                    No more problems specifically recommended for you. Please
+                    work on other problems.
+                  </p>
+                )}
               </ListGroup>
             </div>
           </Col>
