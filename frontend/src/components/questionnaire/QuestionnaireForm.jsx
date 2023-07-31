@@ -107,15 +107,13 @@ const QuestionnaireForm = ({ questions }) => {
               <Form onSubmit={handleSubmit} key={key}>
                 <Card className={`mb-4 ${styles.customCard}`}>
                   <Card.Body className={styles.cardBody}>
-                    <Card.Text className={styles.cardText} style={{ marginBottom: "5rem"}}>
-                      <h2 className={styles.desc} style={{ marginBottom: "1.5rem"}}>
-                        <b>Questionnaire</b>
-                      </h2>
-                      <p className={styles.desc}>
-                        Please answer the following questions to the best of
-                        your ability so that we can customize the learning
-                        material to your needs.
-                      </p>
+                    <Card.Text className={styles.cardText} style={{ marginBottom: "1.5rem"}}>
+                      <b>Questionnaire</b>
+                    </Card.Text>
+                    <Card.Text className={styles.desc} style={{ marginBottom: "5rem"}}>
+                      Please answer the following questions to the best of
+                      your ability so that we can customize the learning
+                      material to your needs.
                     </Card.Text>
                     <Card.Text style={{ fontSize: "1.5em" }}>
                       <b>Q). {question.questionContent}</b>
