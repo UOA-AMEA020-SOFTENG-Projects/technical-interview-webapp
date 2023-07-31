@@ -70,3 +70,25 @@
         padding: 0.5rem 1rem;
     }
 }
+
+
+@media (max-height: 800px){
+
+    .userInfo {
+        font-size: 0.5em;
+    }
+
+    .userInfo .username {
+        margin-right: 1rem; 
+    }
+
+    .userInfo .signout {
+        padding: 0.25rem 0.5rem; 
+        border-radius: 5px;
+    }
+
+    .logo {
+        height: 100px;
+    }
+
+}
