@@ -1,3 +1,8 @@
+.megaContainer{
+  padding-top: 10%;
+  padding-bottom: 5%;
+}
+
 .problem-container {
   border-radius: 0.75rem;
   padding: 0.75rem;
@@ -55,40 +60,26 @@
 }
 
 
-@media (min-width: 768px) {
-.modalClass .modal-dialog {
-  width: 50vw;
-}
-}
-
-/* TopicsList.module.css */
-@media (max-width: 576px) {
-  /* styles for xs devices */
-}
-
-@media (min-width: 577px) and (max-width: 768px) {
-  /* styles for sm devices */
-}
-
-@media (min-width: 769px) and (max-width: 992px) {
-  /* styles for md devices */
-}
-
-@media (min-width: 993px) and (max-width: 1200px) {
-  /* styles for lg devices */
-}
-
-@media (min-width: 1201px) {
-  /* styles for xl devices */
-}
-
 .containerPadding {
-  padding-left: 70px; 
-  padding-right: 70px; 
+  padding-left: 150px; 
+  padding-right: 150px; 
   padding-top: 20px;
 }
 
-@media (max-width: 576px) {
+
+@media (max-width: 1300px) {
+  .modalClass .modal-dialog {
+    width: 50vw;
+  }
+
+  .containerPadding {
+    padding-left: 20px; 
+    padding-right: 20px; 
+    padding-top: 10px;
+  }
+}
+
+@media (max-width: 900px) {
   .containerPadding {
     padding-left: 10px; 
     padding-right: 10px; 
