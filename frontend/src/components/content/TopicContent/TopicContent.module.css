@@ -50,3 +50,23 @@
     word-wrap: break-word;
     font-size: 16px;
 }
+
+@media (max-height: 1000px) {
+    .container {
+        margin-top: 15rem;
+        margin-bottom: 10rem;
+        width: 85vw; 
+        height: auto;
+        overflow-y: auto; 
+    } 
+}
+
+@media (max-height: 700px) {
+    .container {
+        margin-top: 12rem;
+        margin-bottom: 10rem;
+        width: 90vw; 
+        height: auto;
+        overflow-y: auto; 
+    } 
+}
