@@ -195,7 +195,7 @@ const TopicsList = ({ topics }) => {
             <PieChart
               width={600}
               height={200}
-              style={{ marginTop: "20px", marginBottom: "20px" }}
+              style={{ marginTop: "20px", marginBottom: "80px" }}
             >
               {" "}
               <Pie
