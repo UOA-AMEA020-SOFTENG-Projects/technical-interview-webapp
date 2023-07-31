@@ -145,6 +145,7 @@ const TopicsList = ({ topics }) => {
                     style={{
                       borderRadius: "5px",
                       padding: "30px 50px",
+                      cursor: "pointer",
                     }}
                     onClick={() => handleShow(topic)}
                   >

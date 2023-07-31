@@ -351,6 +351,84 @@ function CodeEditor({ problem }) {
           </div>
         </div>
         <p>{problem.description}</p>
+        <h5>Example case: </h5>
+        <p>
+          {problem.exampleCase
+            .split("Explanation:")
+            .flatMap((item, index) =>
+              index !== 0
+                ? [
+                    <br key={`explanation-${index}`} />,
+                    <strong>Explanation:</strong>,
+                    ...item
+                      .split("Output:")
+                      .flatMap((outputItem, outputIndex) =>
+                        outputIndex !== 0
+                          ? [
+                              <br key={`output-${outputIndex}`} />,
+                              <strong>Output:</strong>,
+                              ...outputItem
+                                .split("Input:")
+                                .flatMap((inputItem, inputIndex) =>
+                                  inputIndex !== 0
+                                    ? [
+                                        <strong key={`input-${inputIndex}`}>
+                                          Input:
+                                        </strong>,
+                                        inputItem,
+                                      ]
+                                    : [inputItem]
+                                ),
+                            ]
+                          : outputItem
+                              .split("Input:")
+                              .flatMap((inputItem, inputIndex) =>
+                                inputIndex !== 0
+                                  ? [
+                                      <strong key={`input-${inputIndex}`}>
+                                        Input:
+                                      </strong>,
+                                      inputItem,
+                                    ]
+                                  : [inputItem]
+                              )
+                      ),
+                  ]
+                : item
+                    .split("Output:")
+                    .flatMap((outputItem, outputIndex) =>
+                      outputIndex !== 0
+                        ? [
+                            <br key={`output-${outputIndex}`} />,
+                            <strong>Output:</strong>,
+                            ...outputItem
+                              .split("Input:")
+                              .flatMap((inputItem, inputIndex) =>
+                                inputIndex !== 0
+                                  ? [
+                                      <strong key={`input-${inputIndex}`}>
+                                        Input:
+                                      </strong>,
+                                      inputItem,
+                                    ]
+                                  : [inputItem]
+                              ),
+                          ]
+                        : outputItem
+                            .split("Input:")
+                            .flatMap((inputItem, inputIndex) =>
+                              inputIndex !== 0
+                                ? [
+                                    <strong key={`input-${inputIndex}`}>
+                                      Input:
+                                    </strong>,
+                                    inputItem,
+                                  ]
+                                : [inputItem]
+                            )
+                    )
+            )}
+        </p>
       </div>
       <div
         style={{
@@ -441,17 +519,17 @@ function CodeEditor({ problem }) {
             }}
           >
             {testCaseLoading && (
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: "50%",
-                      left: "50%",
-                      transform: "translate(-50%, -50%)",
-                    }}
-                  >
-                    <Spinner animation="border" />
-                  </div>
-                )}
+              <div
+                style={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                }}
+              >
+                <Spinner animation="border" />
+              </div>
+            )}
             <h3>Test Case Results: </h3>
             {testResults.map((result, index) => (
               <div key={index} style={{ paddingTop: "0.5rem" }}>
@@ -494,7 +572,7 @@ function CodeEditor({ problem }) {
           </div>
           <div
             style={{
-              backgroundColor: "#660000",
+              backgroundColor: "#95b1de",
               height: "10rem",
               borderRadius: "10px",
               padding: "20px",
@@ -593,6 +671,7 @@ function CodeEditor({ problem }) {
           <pre>{problem.solution}</pre>
         </Modal.Body>
       </Modal>
+
       {isErrorVisible && (
         <div
           style={{

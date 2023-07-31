@@ -3,12 +3,11 @@ import SecondaryHeader from "../components/headers/SecondaryHeader/SecondaryHead
 import LandingBody from "../components/landing/LandingBody";
 
 const LandingPage = () => {
-
   return (
-    <>
+    <div style={{minHeight: '100vh', display: 'flex', flexDirection: 'column'}}>
       <SecondaryHeader />
       <LandingBody />
-    </>
+    </div>
   );
 };
 
