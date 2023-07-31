@@ -32,7 +32,7 @@
     margin: auto;
     max-width: 100%;
     width: 90%; 
-    max-height: 90vh; 
+    max-height: 30vh; 
     height: auto;
     background-color: #8fac51;
     display: flex;
@@ -44,7 +44,7 @@
 .modal-back {
     background-color: #8fac51;
     overflow-y: auto;
-    max-height: 80vh;
+    max-height: 30vh;
 }
 
 .modal-header {
@@ -61,14 +61,14 @@
 @media (min-width: 768px) {
   .modal-custom {
     width: 70%; 
-    max-height: 70vh; 
+    max-height: 30vh; 
   }
 }
 
 @media (min-width: 1024px) {
   .modal-custom {
     width: 50%; 
-    max-height: 70vh; 
+    max-height: 30vh; 
   }
 }
 
@@ -88,3 +88,31 @@
     color: red; 
     font-weight: bold; 
   }
+
+
+@media (max-height: 1070px) {
+    .editorWrapper {
+        margin-top: 15rem;
+        padding-bottom: 5rem;
+        min-width: 70vw;
+        max-width: 90vw;
+    } 
+}
+
+@media (max-height: 900px) {
+    .editorWrapper {
+        margin-top: 12.5rem;
+        padding-bottom: 5rem;
+        min-width: 70vw;
+        max-width: 90vw;
+    } 
+}
+
+@media (max-height: 700px) {
+    .editorWrapper {
+        margin-top: 11rem;
+        padding-bottom: 5rem;
+        min-width: 70vw;
+        max-width: 90vw;
+    } 
+}

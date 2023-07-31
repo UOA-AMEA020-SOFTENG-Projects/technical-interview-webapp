@@ -28,7 +28,7 @@ form div {
 }
 
 input {
-    width: 30rem;
+    width: 40rem;
     padding: 10px;
     font-size: 1.2em;
     border-radius: 5px;
@@ -52,4 +52,28 @@ h1 {
     margin-bottom: 3.5rem;
 }
 
+
+@media (max-width: 1200px) and (max-height: 1600px) {
+    .button {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.7em;
+    }
+  
+    .link {
+        font-size: 0.7em;
+    }
+
+    input {
+        width: 30rem;
+        padding: 10px;
+        font-size: 0.7em;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+
+    .label {
+        font-size: 1.25em;
+    }
+
+}
   

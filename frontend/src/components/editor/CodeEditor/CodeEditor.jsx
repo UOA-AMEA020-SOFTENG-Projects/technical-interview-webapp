@@ -36,7 +36,6 @@ const BaseURL = import.meta.env.VITE_API_BASE_URL;
 function CodeEditor({ problem }) {
   const token = localStorage.getItem("authToken");
 
-  // FIX REQUIRED FOR ENDPOINT: if the code submitted is the same as the boilerplate then dont add entry to user schema
   const { data, isLoading, error, refetch, setLanguage } = useSolution(
     `${BaseURL}/problem/${problem._id}/codecontent`,
     "GET",
@@ -359,20 +358,26 @@ function CodeEditor({ problem }) {
               index !== 0
                 ? [
                     <br key={`explanation-${index}`} />,
-                    <strong>Explanation:</strong>,
+                    <strong key={`explanation-strong-${index}`}>
+                      Explanation:
+                    </strong>,
                     ...item
                       .split("Output:")
                       .flatMap((outputItem, outputIndex) =>
                         outputIndex !== 0
                           ? [
                               <br key={`output-${outputIndex}`} />,
-                              <strong>Output:</strong>,
+                              <strong key={`output-strong-${outputIndex}`}>
+                                Output:
+                              </strong>,
                               ...outputItem
                                 .split("Input:")
                                 .flatMap((inputItem, inputIndex) =>
                                   inputIndex !== 0
                                     ? [
-                                        <strong key={`input-${inputIndex}`}>
+                                        <strong
+                                          key={`input-strong-${inputIndex}`}
+                                        >
                                           Input:
                                         </strong>,
                                         inputItem,
@@ -385,7 +390,9 @@ function CodeEditor({ problem }) {
                               .flatMap((inputItem, inputIndex) =>
                                 inputIndex !== 0
                                   ? [
-                                      <strong key={`input-${inputIndex}`}>
+                                      <strong
+                                        key={`input-strong-${inputIndex}`}
+                                      >
                                         Input:
                                       </strong>,
                                       inputItem,
@@ -400,13 +407,17 @@ function CodeEditor({ problem }) {
                       outputIndex !== 0
                         ? [
                             <br key={`output-${outputIndex}`} />,
-                            <strong>Output:</strong>,
+                            <strong key={`output-strong-${outputIndex}`}>
+                              Output:
+                            </strong>,
                             ...outputItem
                               .split("Input:")
                               .flatMap((inputItem, inputIndex) =>
                                 inputIndex !== 0
                                   ? [
-                                      <strong key={`input-${inputIndex}`}>
+                                      <strong
+                                        key={`input-strong-${inputIndex}`}
+                                      >
                                         Input:
                                       </strong>,
                                       inputItem,
@@ -419,7 +430,7 @@ function CodeEditor({ problem }) {
                             .flatMap((inputItem, inputIndex) =>
                               inputIndex !== 0
                                 ? [
-                                    <strong key={`input-${inputIndex}`}>
+                                    <strong key={`input-strong-${inputIndex}`}>
                                       Input:
                                     </strong>,
                                     inputItem,
@@ -466,7 +477,7 @@ function CodeEditor({ problem }) {
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <div style={{ width: "65%" }}>
           <AceEditor
-            mode={getAceMode(selectedLanguage)}
+            mode={!testMode && getAceMode(selectedLanguage)}
             theme={selectedTheme}
             onChange={userInputHandler}
             name="editor"
@@ -475,11 +486,11 @@ function CodeEditor({ problem }) {
             fontSize={14}
             showPrintMargin={true}
             showGutter={true}
-            highlightActiveLine={true}
+            highlightActiveLine={!testMode}
             setOptions={{
-              enableBasicAutocompletion: true,
-              enableLiveAutocompletion: true,
-              enableSnippets: true,
+              enableBasicAutocompletion: !testMode,
+              enableLiveAutocompletion: !testMode,
+              enableSnippets: !testMode,
               showLineNumbers: true,
               tabSize: 2,
             }}

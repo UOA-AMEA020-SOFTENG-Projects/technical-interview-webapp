@@ -16,12 +16,13 @@
     width: auto; /* Maintains the aspect ratio of the logo */
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1100px) and (max-height: 1500px) {
     .header {
         height: 15vh; /* Reduced header height for smaller devices */
     }
 
     .logo {
-        height: 50%; /* Smaller logo for smaller devices */
+        height: 75px; /* Adjust the height as per your preference */
+        width: 350px; /* Maintains the aspect ratio of the logo */
     }
 }

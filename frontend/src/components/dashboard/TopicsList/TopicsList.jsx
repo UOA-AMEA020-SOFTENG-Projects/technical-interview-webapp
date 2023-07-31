@@ -130,7 +130,7 @@ const TopicsList = ({ topics }) => {
   }, [show, token, currentTopic]);
 
   return (
-    <>
+    <div className={styles.megaContainer}>
       <h1 className="mt-5">
         <b>Dashboard</b>
       </h1>
@@ -195,7 +195,7 @@ const TopicsList = ({ topics }) => {
             <PieChart
               width={600}
               height={200}
-              style={{ marginTop: "20px", marginBottom: "20px" }}
+              style={{ marginTop: "20px", marginBottom: "80px" }}
             >
               {" "}
               <Pie
@@ -219,7 +219,7 @@ const TopicsList = ({ topics }) => {
             </PieChart>
             <div
               className="mt-3 overflow-auto rounded p-3 bg-dark text-light"
-              style={{ maxHeight: "24.0rem", height: "24.0rem", width: "80%" }}
+              style={{ maxHeight: "24.0rem", height: "24.0rem", width: "60%" }}
             >
               <h3 style={{ textAlign: "center", marginBottom: "20px" }}>
                 <b>Recommended Problems</b>
@@ -325,7 +325,7 @@ const TopicsList = ({ topics }) => {
           </Modal.Body>
         </Modal>
       </Container>
-    </>
+    </div>
   );
 };
 
