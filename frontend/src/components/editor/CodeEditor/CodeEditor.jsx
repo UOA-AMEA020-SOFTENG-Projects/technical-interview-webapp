@@ -572,7 +572,7 @@ function CodeEditor({ problem }) {
           </div>
           <div
             style={{
-              backgroundColor: "#660000",
+              backgroundColor: "#95b1de",
               height: "10rem",
               borderRadius: "10px",
               padding: "20px",
