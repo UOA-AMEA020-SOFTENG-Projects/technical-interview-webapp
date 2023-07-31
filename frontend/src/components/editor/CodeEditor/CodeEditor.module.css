@@ -88,3 +88,31 @@
     color: red; 
     font-weight: bold; 
   }
+
+
+@media (max-height: 1070px) {
+    .editorWrapper {
+        margin-top: 15rem;
+        padding-bottom: 5rem;
+        min-width: 70vw;
+        max-width: 90vw;
+    } 
+}
+
+@media (max-height: 900px) {
+    .editorWrapper {
+        margin-top: 12.5rem;
+        padding-bottom: 5rem;
+        min-width: 70vw;
+        max-width: 90vw;
+    } 
+}
+
+@media (max-height: 700px) {
+    .editorWrapper {
+        margin-top: 11rem;
+        padding-bottom: 5rem;
+        min-width: 70vw;
+        max-width: 90vw;
+    } 
+}
