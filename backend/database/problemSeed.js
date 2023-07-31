@@ -10,7 +10,7 @@ export const problems = [
       "Given an integer array nums, return true if any value appears at least twice in the array, and return false if every element is distinct.",
     modelDescription:
       "Checks whether an array contains any duplicate elements. It utilizes a HashSet data structure to efficiently store and check for uniqueness of elements.",
-    exampleCase: "Example input: nums = [1, 2, 3, 1]. Output: true.",
+    exampleCase: "Input: nums = [1, 2, 3, 1]. Output: true.",
     solution: "import java.util.HashSet;\n\npublic class Solution {\n    public boolean containsDuplicate(int[] nums) {\n        // If the input array is null or empty, return false since there can be no duplicates\n        if (nums == null || nums.length == 0)\n            return false;\n        \n        // Create a new HashSet. HashSet stores unique elements, and its add method returns false if the element was already in the set.\n        HashSet<Integer> set = new HashSet<Integer>();\n        \n        // Loop through the array\n        for (int i: nums) {\n            // Attempt to add each element in the array to the set\n            if (!set.add(i)) {\n                // If the add method returns false, it means the element was already in the set and hence, is a duplicate.\n                return true;\n            }\n        }\n        \n        // If we've gone through the whole array and found no duplicates, return false.\n        return false;\n    }\n}",
     hint: "Try using a hash map.",
     boilerplateCode: [
