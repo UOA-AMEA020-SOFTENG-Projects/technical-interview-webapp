@@ -42,7 +42,7 @@ const SignUpForm = () => {
                 />
             </div>
             <button type="submit" disabled={isSubmitting} className={styles.button}>{isSubmitting ? 'Submitting...' : 'Sign Up'}</button>
-            <Link id="signinLink" to={"/login"} style={{ marginTop: "2rem"}}>
+            <Link id="signinLink" to={"/login"} style={{ marginTop: "2rem"}} className={styles.link}>
                 <p>Already have an account? Log in.</p>
             </Link>
             { data && data.errors && <label style={{ color: 'red' }}>{ data.errors }</label>}
