@@ -86,3 +86,10 @@
     padding-top: 10px;
   }
 }
+
+@media (max-height: 1200px) {
+  .megaContainer{
+    padding-top: 5%;
+    padding-bottom: 5%;
+  }
+}
