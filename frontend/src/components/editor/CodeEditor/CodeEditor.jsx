@@ -465,7 +465,7 @@ function CodeEditor({ problem }) {
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <div style={{ width: "65%" }}>
           <AceEditor
-            mode={getAceMode(selectedLanguage)}
+            mode={!testMode && getAceMode(selectedLanguage)}
             theme={selectedTheme}
             onChange={userInputHandler}
             name="editor"
@@ -474,11 +474,11 @@ function CodeEditor({ problem }) {
             fontSize={14}
             showPrintMargin={true}
             showGutter={true}
-            highlightActiveLine={true}
+            highlightActiveLine={!testMode}
             setOptions={{
-              enableBasicAutocompletion: true,
-              enableLiveAutocompletion: true,
-              enableSnippets: true,
+              enableBasicAutocompletion: !testMode, 
+              enableLiveAutocompletion: !testMode, 
+              enableSnippets: !testMode, 
               showLineNumbers: true,
               tabSize: 2,
             }}
