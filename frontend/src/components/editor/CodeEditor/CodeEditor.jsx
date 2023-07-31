@@ -358,20 +358,26 @@ function CodeEditor({ problem }) {
               index !== 0
                 ? [
                     <br key={`explanation-${index}`} />,
-                    <strong>Explanation:</strong>,
+                    <strong key={`explanation-strong-${index}`}>
+                      Explanation:
+                    </strong>,
                     ...item
                       .split("Output:")
                       .flatMap((outputItem, outputIndex) =>
                         outputIndex !== 0
                           ? [
                               <br key={`output-${outputIndex}`} />,
-                              <strong>Output:</strong>,
+                              <strong key={`output-strong-${outputIndex}`}>
+                                Output:
+                              </strong>,
                               ...outputItem
                                 .split("Input:")
                                 .flatMap((inputItem, inputIndex) =>
                                   inputIndex !== 0
                                     ? [
-                                        <strong key={`input-${inputIndex}`}>
+                                        <strong
+                                          key={`input-strong-${inputIndex}`}
+                                        >
                                           Input:
                                         </strong>,
                                         inputItem,
@@ -384,7 +390,9 @@ function CodeEditor({ problem }) {
                               .flatMap((inputItem, inputIndex) =>
                                 inputIndex !== 0
                                   ? [
-                                      <strong key={`input-${inputIndex}`}>
+                                      <strong
+                                        key={`input-strong-${inputIndex}`}
+                                      >
                                         Input:
                                       </strong>,
                                       inputItem,
@@ -399,13 +407,17 @@ function CodeEditor({ problem }) {
                       outputIndex !== 0
                         ? [
                             <br key={`output-${outputIndex}`} />,
-                            <strong>Output:</strong>,
+                            <strong key={`output-strong-${outputIndex}`}>
+                              Output:
+                            </strong>,
                             ...outputItem
                               .split("Input:")
                               .flatMap((inputItem, inputIndex) =>
                                 inputIndex !== 0
                                   ? [
-                                      <strong key={`input-${inputIndex}`}>
+                                      <strong
+                                        key={`input-strong-${inputIndex}`}
+                                      >
                                         Input:
                                       </strong>,
                                       inputItem,
@@ -418,7 +430,7 @@ function CodeEditor({ problem }) {
                             .flatMap((inputItem, inputIndex) =>
                               inputIndex !== 0
                                 ? [
-                                    <strong key={`input-${inputIndex}`}>
+                                    <strong key={`input-strong-${inputIndex}`}>
                                       Input:
                                     </strong>,
                                     inputItem,
@@ -476,9 +488,9 @@ function CodeEditor({ problem }) {
             showGutter={true}
             highlightActiveLine={!testMode}
             setOptions={{
-              enableBasicAutocompletion: !testMode, 
-              enableLiveAutocompletion: !testMode, 
-              enableSnippets: !testMode, 
+              enableBasicAutocompletion: !testMode,
+              enableLiveAutocompletion: !testMode,
+              enableSnippets: !testMode,
               showLineNumbers: true,
               tabSize: 2,
             }}
