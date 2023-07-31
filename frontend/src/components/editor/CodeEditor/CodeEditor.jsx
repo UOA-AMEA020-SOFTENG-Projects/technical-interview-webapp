@@ -671,6 +671,7 @@ function CodeEditor({ problem }) {
           <pre>{problem.solution}</pre>
         </Modal.Body>
       </Modal>
+
       {isErrorVisible && (
         <div
           style={{
