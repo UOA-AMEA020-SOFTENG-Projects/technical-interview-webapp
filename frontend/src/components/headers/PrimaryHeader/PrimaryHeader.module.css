@@ -20,8 +20,4 @@
     .header {
         height: 15vh; /* Reduced header height for smaller devices */
     }
-
-    .logo {
-        height: 50%; /* Smaller logo for smaller devices */
-    }
 }

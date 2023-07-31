@@ -100,25 +100,25 @@ const QuestionnaireForm = ({ questions }) => {
 
   return (
     <>
-      <Container className={styles.container}>
+      <Container style={{ paddingTop: "100px" }} className={styles.container}>
         <Row>
-          <Col className="d-flex justify-content-center">
+          <Col>
             <div className={styles.formContainer}>
-              <div className={styles.header} style={{ paddingTop: "100px" }}>
-                <h2 className={styles.desc}>
-                  <b>Questionnaire</b>
-                </h2>
-                <p className={styles.desc}>
-                  Please answer the following questions to the best of your
-                  ability so that we can customize the learning material to your
-                  needs.
-                </p>
-              </div>
               <Form onSubmit={handleSubmit} key={key}>
                 <Card className={`mb-4 ${styles.customCard}`}>
                   <Card.Body className={styles.cardBody}>
-                    <Card.Text className={styles.cardText}>
-                      {question.questionContent}
+                    <Card.Text className={styles.cardText} style={{ marginBottom: "5rem"}}>
+                      <h2 className={styles.desc} style={{ marginBottom: "1.5rem"}}>
+                        <b>Questionnaire</b>
+                      </h2>
+                      <p className={styles.desc}>
+                        Please answer the following questions to the best of
+                        your ability so that we can customize the learning
+                        material to your needs.
+                      </p>
+                    </Card.Text>
+                    <Card.Text style={{ fontSize: "1.5em" }}>
+                      <b>Q). {question.questionContent}</b>
                     </Card.Text>
                     {question.image && (
                       <Card.Img

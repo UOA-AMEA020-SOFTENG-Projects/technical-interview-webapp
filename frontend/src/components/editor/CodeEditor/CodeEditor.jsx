@@ -36,7 +36,6 @@ const BaseURL = import.meta.env.VITE_API_BASE_URL;
 function CodeEditor({ problem }) {
   const token = localStorage.getItem("authToken");
 
-  // FIX REQUIRED FOR ENDPOINT: if the code submitted is the same as the boilerplate then dont add entry to user schema
   const { data, isLoading, error, refetch, setLanguage } = useSolution(
     `${BaseURL}/problem/${problem._id}/codecontent`,
     "GET",

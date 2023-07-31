@@ -1,3 +1,5 @@
+
+
 import mongoose from "mongoose";
 import Content from "../models/content.js";
 
@@ -88,7 +90,7 @@ export const contents = [
     videoURL: "https://www.youtube.com/embed/vYquumk4nWw",
     code: "class Main {\n    // Function to find nth fibonacci number\n    public static int fib(int n)\n    {\n        if (n <= 1) {\n            return n;\n        }\n        int x = fib(n - 1);\n        int y = fib(n - 2);\n \n        return x + y;\n    }\n \n    // Driver Code\n    public static void main(String[] args)\n    {\n        int n = 5;\n \n        // Function Call\n        System.out.print(fib(n));\n    }\n}",
   },
-  // add more contents here...
+  
 ];
 
 export async function seedContents() {

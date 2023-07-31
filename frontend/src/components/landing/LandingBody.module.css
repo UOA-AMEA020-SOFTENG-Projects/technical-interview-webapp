@@ -7,3 +7,15 @@
   margin-bottom: 5rem;
 }
   
+
+
+@media (max-width: 768px) {
+  .carouselContainer {
+    position: absolute;
+    top: 40vh;
+    left: 30%;
+    width: 80vw;
+    height: auto;
+    margin-bottom: 5rem;
+  }
+}
