@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { Form, Button, Card, Container, Row, Col } from "react-bootstrap";
 import styles from "./QuestionnaireForm.module.css";
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const BaseURL = import.meta.env.VITE_API_BASE_URL;
 
@@ -45,46 +45,41 @@ const QuestionnaireForm = ({ questions }) => {
 
     // Check that all questions have been answered
     if (answers.length < questions.length) {
+      console.log(47);
 
-        console.log(47)
-
-        toast.error("Please answer all questions before submitting.", {
-          position: toast.POSITION.BOTTOM_CENTER,
-        });
-        return;
+      toast.error("Please answer all questions before submitting.", {
+        position: toast.POSITION.BOTTOM_CENTER,
+      });
+      return;
     }
 
     console.log(answers, 26);
 
-    const response = await fetch(
-      `${BaseURL}/question/submit-answers`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(answers),
-      }
-    );
+    const response = await fetch(`${BaseURL}/question/submit-answers`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(answers),
+    });
 
     if (!response.ok) {
-        console.log(70)
+      console.log(70);
 
-        toast.error("Error submitting your answers. Please try again.", {
-          position: toast.POSITION.BOTTOM_CENTER,
-        });
-        return;
-    } 
+      toast.error("Error submitting your answers. Please try again.", {
+        position: toast.POSITION.BOTTOM_CENTER,
+      });
+      return;
+    }
 
     console.log(78);
     toast.success("Answers submitted successfully!", {
-        position: toast.POSITION.BOTTOM_CENTER,
+      position: toast.POSITION.BOTTOM_CENTER,
     });
 
     // redirect the user to the dashboard
     navigate("/home/dashboard");
-
   };
 
   const handleNext = () => {
@@ -109,42 +104,46 @@ const QuestionnaireForm = ({ questions }) => {
         <Row>
           <Col className="d-flex justify-content-center">
             <div className={styles.formContainer}>
-              <Form onSubmit={handleSubmit} key={key}>
-                <h2 className={`${styles.desc}`}>
-                    <b>Questionnaire</b>
+              <div className={styles.header} style={{ paddingTop: "100px" }}>
+                <h2 className={styles.desc}>
+                  <b>Questionnaire</b>
                 </h2>
-                <p style={{ marginBottom: "2rem"}} className={styles.desc}>Please answer the following questions to the best of your ability so that we can customise the learning material to your needs.</p>
+                <p className={styles.desc}>
+                  Please answer the following questions to the best of your
+                  ability so that we can customize the learning material to your
+                  needs.
+                </p>
+              </div>
+              <Form onSubmit={handleSubmit} key={key}>
                 <Card className={`mb-4 ${styles.customCard}`}>
                   <Card.Body className={styles.cardBody}>
                     <Card.Text className={styles.cardText}>
                       {question.questionContent}
                     </Card.Text>
-                    <div className={styles.cardContent}>
-                      <div className={styles.responsesContainer}>
-                        {question.responses.map((response, i) => (
-                          <Form.Check
-                            custom
-                            type="radio"
-                            id={`${question._id}-${i}`}
-                            label={response}
-                            name={`group-${question._id}`}
-                            key={i}
-                            className={styles.customCheck}
-                            style={{ marginBottom: "1rem" }}
-                            onChange={() =>
-                              handleResponseChange(question._id, response)
-                            }
-                          />
-                        ))}
-                      </div>
-                      {question.image && (
-                        <Card.Img
-                          variant="bottom"
-                          src={`${BaseURL}/${question.image}`}
-                          alt={question.questionContent}
-                          className={styles.cardImage}
+                    {question.image && (
+                      <Card.Img
+                        variant="bottom"
+                        src={`${BaseURL}/${question.image}`}
+                        alt={question.questionContent}
+                        className={styles.cardImage}
+                      />
+                    )}
+                    <div className={styles.responsesContainer}>
+                      {question.responses.map((response, i) => (
+                        <Form.Check
+                          custom
+                          type="radio"
+                          id={`${question._id}-${i}`}
+                          label={response}
+                          name={`group-${question._id}`}
+                          key={i}
+                          className={styles.customCheck}
+                          style={{ marginBottom: "1rem" }}
+                          onChange={() =>
+                            handleResponseChange(question._id, response)
+                          }
                         />
-                      )}
+                      ))}
                     </div>
                   </Card.Body>
                 </Card>

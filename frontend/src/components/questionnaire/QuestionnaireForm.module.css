@@ -1,66 +1,65 @@
 .container {
-    max-width: 100%;
-    margin-top: 15vh;
-  }
-  
-  .formContainer {
-    width: 70%;
-    margin-bottom: 5rem;
-  }
-  
-  .customCard {
-    width: 70rem;
-    margin-left: 15%;
-    margin-right: 15%;
-    padding: 2.5rem;
-    border-radius: 10px;
-  }
+  width: 100%;
+  margin-top: 15vh;
+}
 
-  .desc {
-    width: 70rem;
-    margin-left: 15%;
-    margin-right: 15%;
-  }
-  
-  .cardText {
-    font-size: 1.8em;
-    font-weight: 600;
-  }
-  
-  .cardImage {
-    width: 30%;
-    height: auto;
-  }
-  
-  .cardContent {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-  }
-  
-  .responsesContainer {
-    width: 65%;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .customCheck {
-    font-size: 1.5em;
-  }
-  
-  .customCheck input[type="radio"] {
-    border: 1px solid #000;
-  }
-  
-  .customButton {
-    width: 100%;
-    padding: 10px;
-    font-size: 1.3em;
-  }
-  
-  /* New to place the Previous, Next, and Submit buttons side by side */
-  .btn {
-    width: 33%;
-    height: 100%;
-  }
-  
+.formContainer {
+  width: 90%; /* updated width */
+  padding: 0 5%; /* updated padding */
+  box-sizing: border-box;
+  margin-bottom: 5rem;
+}
+
+.customCard {
+  width: 100%;
+  padding: 2.5rem;
+  border-radius: 10px;
+}
+
+.desc {
+  width: 100%;
+}
+
+.cardText {
+  font-size: 1.2em;
+  font-weight: 600;
+}
+
+.cardContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cardImage {
+  width: 70%;
+  height: auto;
+  margin-top: 0.5rem; /* less margin/padding above the image */
+  margin-bottom: 1.5rem; /* more margin/padding below the image */
+}
+
+.responsesContainer {
+  width: 65%;
+  display: flex;
+  flex-direction: column;
+}
+
+.customCheck {
+  font-size: 1.5em;
+}
+
+.customCheck input[type="radio"] {
+  border: 1px solid #000;
+}
+
+.customButton {
+  width: 10%;
+  padding: 10px;
+  font-size: 1.3em;
+}
+
+/* New to place the Previous, Next, and Submit buttons side by side */
+.btn {
+  width: 33%;
+  height: 100%;
+}
