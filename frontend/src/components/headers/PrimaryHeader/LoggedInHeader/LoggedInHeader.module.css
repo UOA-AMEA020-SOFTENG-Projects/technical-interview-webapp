@@ -72,7 +72,7 @@
 }
 
 
-@media (max-height: 800px){
+@media (max-height: 580px){
 
     .userInfo {
         font-size: 0.5em;
