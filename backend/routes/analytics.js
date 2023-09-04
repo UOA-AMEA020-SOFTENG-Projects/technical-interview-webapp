@@ -1,5 +1,7 @@
 import express from "express";
 import { User } from "../models/user.js";
+import { StatusCodes } from "http-status-codes";
+import { invalidId } from "../util/validator.js";
 
 const analyticsRouter = new express.Router();
 
@@ -12,7 +14,7 @@ analyticsRouter.get("/completed-recommended-ratio/:userId", authenticateToken, a
     try {
         const userId = req.params.userId;
         
-        if (!mongoose.Types.ObjectId.isValid(userId)) {
+        if (!invalidId(userId)) {
             return res.status(400).send('Invalid user ID');
         }
 
@@ -36,7 +38,7 @@ analyticsRouter.get("/completed-recommended-ratio/:userId", authenticateToken, a
             ratio: countRecommendedCompleted / (countNonRecommendedCompleted + countRecommendedCompleted)  
         });
     } catch (err) {
-        res.status(500).json({ message: "Error fetching data", error: err });
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: "Error fetching data", error: err });
     }
 });
 
