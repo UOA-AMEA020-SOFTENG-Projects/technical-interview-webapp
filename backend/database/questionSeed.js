@@ -72,6 +72,60 @@ export const questions = [
     image: "dynamic.png",
     order: 9
   },
+  {
+    _id: "64f65a291e5bb26d4632b95f",
+    questionContent: "How long do you have left to prepare for your technical interview?",
+    responses: ["Less than 1 week", "1-4 weeks", "More than 4 weeks"],
+    order: 10
+  },
+  {
+    _id: "64f65ab8f789b22453eb5c97",
+    questionContent: "Rate your proficiency in Arrays",
+    responses: ["Low", "Average", "High"],
+    order: 11
+  },
+  {
+    _id: "64f65abe0089d830090858f9",
+    questionContent: "Rate your proficiency in Stack",
+    responses: ["Low", "Average", "High"],
+    order: 12
+  },
+  {
+    _id: "64f65ac2725bdeefc54106c8",
+    questionContent: "Rate your proficiency in Binary Search",
+    responses: ["Low", "Average", "High"],
+    order: 13
+  },
+  {
+    _id: "64f65ac6a2a45663db85cf94",
+    questionContent: "Rate your proficiency in Linked List",
+    responses: ["Low", "Average", "High"],
+    order: 14
+  },
+  {
+    _id: "64f65acad10de881a30680ff",
+    questionContent: "Rate your proficiency in Trees",
+    responses: ["Low", "Average", "High"],
+    order: 15
+  },
+  {
+    _id: "64f65ace6cff97e72cc51887",
+    questionContent: "Rate your proficiency in Heap",
+    responses: ["Low", "Average", "High"],
+    order: 16
+  },
+  {
+    _id: "64f65ad31a0037df63c06052",
+    questionContent: "Rate your proficiency in Graphs",
+    responses: ["Low", "Average", "High"],
+    order: 17
+  },
+  {
+    _id: "64f65ad63ee61f95a6159d1e",
+    questionContent: "Rate your proficiency in Dynamic Programming",
+    responses: ["Low", "Average", "High"],
+    order: 18
+  },
 
   ];
 

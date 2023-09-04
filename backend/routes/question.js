@@ -7,6 +7,8 @@ import mongoose from "mongoose";
 import Question from "../models/question.js";
 import User from "../models/user.js";
 import Topic from "../models/topic.js";
+import * as dotenv from "dotenv";
+dotenv.config();
 
 const questionRouter = new express.Router();
 
@@ -39,12 +41,23 @@ questionRouter.post("/question", async (req, res) => {
 /**
  * Get questionnaire
  */
-questionRouter.get("/questions", async (req, res) => {
+questionRouter.get('/questions', async (req, res) => {
   try {
-    const questions = await Question.find().sort("order");
+    const questionSet = process.env.QUESTION_SET;
+
+    let queryCondition = {};
+
+    if (questionSet === '1') {
+      queryCondition = { order: { $gte: 1, $lte: 9 } };
+    } else if (questionSet === '2') {
+      queryCondition = { order: { $gte: 10 } };
+    }
+
+    const questions = await Question.find(queryCondition).sort('order');
     res.status(200).json(questions);
+
   } catch (err) {
-    res.status(500).json({ message: "Error fetching questions", error: err });
+    res.status(500).json({ message: 'Error fetching questions', error: err });
   }
 });
 
