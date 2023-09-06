@@ -1,7 +1,7 @@
 import express from "express";
 import { User } from "../models/user.js";
 import { StatusCodes } from "http-status-codes";
-import { invalidId } from "../util/validator.js";
+import invalidId from "../util/validator.js";
 
 const analyticsRouter = new express.Router();
 
@@ -10,7 +10,7 @@ const analyticsRouter = new express.Router();
  * Engagement is measured by them atleast attempting to run the code once for that specific problem. 
  * Implemented through creating an endpoint to extract this data from db.
  */
-analyticsRouter.get("/analytics/completed-ratio/:userId", authenticateToken, async (req, res) => {
+analyticsRouter.get("/analytics/completed-ratio/:userId", async (req, res) => {
     try {
         const userId = req.params.userId;
         
@@ -42,7 +42,7 @@ analyticsRouter.get("/analytics/completed-ratio/:userId", authenticateToken, asy
     }
 });
 
-analyticsRouter.get("/analytics/average-ratio", authenticateToken, async (req, res) => {
+analyticsRouter.get("/analytics/average-ratio", async (req, res) => {
     try {
         const allUsers = await User.find();
 
