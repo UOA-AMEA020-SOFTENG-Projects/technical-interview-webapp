@@ -12,6 +12,8 @@ import mongoose from "mongoose";
 const editorRouter = new express.Router();
 
 const JOBE_URL = process.env.JOBE_URL;
+const BASE_MODEL = process.env.MODEL;
+const FINE_TUNE_MODEL_PATH = process.env.FINE_TUNE_MODEL_PATH;
 
 editorRouter.put("/editor/similarity/:problemId", async (req, res) => {
   try {
@@ -27,13 +29,26 @@ editorRouter.put("/editor/similarity/:problemId", async (req, res) => {
     const submittedAnswer = answer.answer;
     const modelAnswer = problem.modelDescription; // Get the model answer from the problem instance
 
-    const python = spawn("python", [
-      "./sbert/sbert.py",
-      "--text1",
-      submittedAnswer,
-      "--text2",
-      modelAnswer,
-    ]);
+
+    if (BASE_MODEL === 1){
+      python = spawn("python", [
+        "./sbert/sbert.py",
+        "--text1",
+        submittedAnswer,
+        "--text2",
+        modelAnswer,
+      ]);
+    } else {
+      python = spawn("python", [
+        "./sbert/sbert-ft-exec.py",
+        "--text1",
+        submittedAnswer,
+        "--text2",
+        modelAnswer,
+        "--model_path",
+        FINE_TUNE_MODEL_PATH
+      ]);
+    }
 
     let dataPromise = new Promise((resolve, reject) => {
       python.stdout.on("data", (data) => {
