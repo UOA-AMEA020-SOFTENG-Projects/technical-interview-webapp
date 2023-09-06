@@ -9,7 +9,7 @@ import topicRouter from "./routes/topic.js";
 import userRouter from "./routes/user.js";
 import contentRouter from "./routes/content.js";
 import questionRouter from "./routes/question.js";
-//import analyticsRouter from "./routes/analytics.js";
+import analyticsRouter from "./routes/analytics.js";
 
 
 const app = express();
@@ -26,7 +26,7 @@ app.use(topicRouter);
 app.use(contentRouter);
 app.use(userRouter);
 app.use(questionRouter);
-//app.use(analyticsRouter);
+app.use(analyticsRouter);
 
 app.use((error, req, res, next) => {
   const status = error.status || 500;

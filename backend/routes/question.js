@@ -70,6 +70,8 @@ questionRouter.post(
   "/question/submit-answers",
   authenticateToken,
   async (req, res, next) => {
+    const questionSet = process.env.QUESTION_SET;
+    if (questionSet === 1) {
     try {
       const user = await User.findOne({ username: req.user.username });
       if (!user) {
@@ -134,7 +136,78 @@ questionRouter.post(
           error: error,          
         });
     }
+  } else {
+    try {
+      const user = await User.findOne({ username: req.user.username });
+      if (!user) {
+        return res.status(404).json({ message: "Cannot find user" });
+      }
+
+      const responses = req.body.reduce((acc, curr) => {
+        acc[curr.questionId] = curr.selectedResponse;
+        return acc;
+      }, {});
+
+      const allTopics = await Topic.find({});
+      const topicIdToLength = allTopics.reduce((acc, curr) => {
+        acc[curr._id] = curr.length;
+        return acc;
+      }, {});
+
+      const recommendedProblems = [];
+
+      const topicIds = {
+        '64f65ab8f789b22453eb5c97': '64b0a79871ac5ad2b373f4a5',
+        '64f65abe0089d830090858f9': '64b0a79c4808f5b754ca2b19',
+        '64f65ac2725bdeefc54106c8':	'64b0a7a1664e6698b9720575',
+        '64f65ac6a2a45663db85cf94':	'64b0a7a4b5130ea9e3664ef0',
+        '64f65acad10de881a30680ff':	'64b0a7a84e2fbc9509c28d64',
+        '64f65ace6cff97e72cc51887':	'64b0a7aea5c3fe2ade14f9c4',
+        '64f65ad31a0037df63c06052':	'64b0a7b20fe2987f17160099',
+        '64f65ad63ee61f95a6159d1e':	'64b0a7b6a28359d1e6367bff',
+        
+      };
+
+      const validLengths = responses['64f65a291e5bb26d4632b95f'] === 'Less than 1 week' 
+        ? ['short'] 
+        : responses['64f65a291e5bb26d4632b95f'] === '1-4 weeks' 
+          ? ['short', 'medium'] 
+          : ['short', 'medium', 'long'];
+
+      for (const questionId in topicIds) {
+        const topicId = topicIds[questionId];
+        const selectedResponse = responses[questionId];
+        let difficulty;
+
+        if (selectedResponse === "Low") {
+          difficulty = 'easy';
+        } else if (selectedResponse === "Average") {
+          difficulty = 'medium';
+        } else if (selectedResponse === "High") {
+          difficulty = 'hard';
+        }
+
+        if (validLengths.includes(topicIdToLength[topicId])) {
+          const problems = await Problem.find({ topic: topicId, difficulty });
+          recommendedProblems.push(...problems.map(p => p._id));
+        }
+      }
+
+      user.problemsRecommended = recommendedProblems;
+      await user.save();
+
+      res.status(200).json({
+        message: "Answers submitted successfully and problem recommended.",
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        message: "Error in submitting answers and recommending problem",
+        error: error,
+      });
+    }
   }
+}
 );
 
 
