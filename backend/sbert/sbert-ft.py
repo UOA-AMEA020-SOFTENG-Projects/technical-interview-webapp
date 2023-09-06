@@ -58,6 +58,7 @@ def fine_tune_model(train_data_path, valid_data_path, model_name='all-MiniLM-L6-
     model.fit(train_objectives=[(train_dataloader, train_loss)], 
               evaluator=valid_evaluator, 
               epochs=epochs,
+              optimizer_params={'lr': 5e-5},  
               callback=callback)
 
     model.save(save_path)
