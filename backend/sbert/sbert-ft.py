@@ -37,6 +37,16 @@ def fine_tune_model(train_data_path, valid_data_path, model_name='all-MiniLM-L6-
     print(train_sentences1)
     print(train_sentences2)
     print(train_labels)
+
+    # Callback to write information to log file after each epoch
+    def callback(score, epoch, steps):
+        train_score = train_evaluator(model)
+        with open("training-logs.txt", "a") as log_file:
+            log_file.write(f"#############################################################\n")
+            log_file.write(f"Epoch {epoch + 1}:\n")
+            log_file.write(f"\tEstimated Training Loss: {train_score}\n")
+            log_file.write(f"\tValidation Accuracy: {score:.4f}\n")
+            log_file.write(f"#############################################################")
     
     # Create evaluator
     train_evaluator = EmbeddingSimilarityEvaluator(train_sentences1, train_sentences2, train_labels)
@@ -47,7 +57,8 @@ def fine_tune_model(train_data_path, valid_data_path, model_name='all-MiniLM-L6-
     # Fine-tune the model on your dataset
     model.fit(train_objectives=[(train_dataloader, train_loss)], 
               evaluator=valid_evaluator, 
-              epochs=epochs)
+              epochs=epochs,
+              callback=callback)
 
     model.save(save_path)
 
