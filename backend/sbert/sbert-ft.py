@@ -11,7 +11,7 @@ def fine_tune_model(train_data_path, valid_data_path, model_name='all-MiniLM-L6-
     # Load training dataset
     with open(train_data_path, 'r') as file:
         csv_reader = csv.reader(file)
-        train_examples = [InputExample(texts=[row[0], row[1]], label=9) for row in csv_reader]
+        train_examples = [InputExample(texts=[row[0], row[1]], label=float(row[2])) for row in csv_reader]
 
     train_dataloader = DataLoader(train_examples, shuffle=True, batch_size=16)
 
@@ -29,6 +29,14 @@ def fine_tune_model(train_data_path, valid_data_path, model_name='all-MiniLM-L6-
     train_sentences1 = [example.texts[0] for example in train_examples]
     train_sentences2 = [example.texts[1] for example in train_examples]
     train_labels = [example.label for example in train_examples]
+
+    print(valid_sentences1)
+    print(valid_sentences2)
+    print(valid_labels)
+
+    print(train_sentences1)
+    print(train_sentences2)
+    print(train_labels)
     
     # Create evaluator
     train_evaluator = EmbeddingSimilarityEvaluator(train_sentences1, train_sentences2, train_labels)
