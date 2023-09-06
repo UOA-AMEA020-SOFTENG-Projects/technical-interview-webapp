@@ -43,13 +43,13 @@ questionRouter.post("/question", async (req, res) => {
  */
 questionRouter.get('/questions', async (req, res) => {
   try {
-    const questionSet = process.env.QUESTION_SET;
+    const QUESTION_SET = process.env.QUESTION_SET;
 
     let queryCondition = {};
 
-    if (questionSet === '1') {
+    if (QUESTION_SET === '1') {
       queryCondition = { order: { $gte: 1, $lte: 9 } };
-    } else if (questionSet === '2') {
+    } else if (QUESTION_SET === '2') {
       queryCondition = { order: { $gte: 10 } };
     }
 
