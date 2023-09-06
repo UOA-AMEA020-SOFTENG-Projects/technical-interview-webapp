@@ -1,33 +1,33 @@
 #############################################################
 Epoch 1:
-	Training Spearman Correlation: 0.6740775152258283
-	Validation Spearman Correlation: 0.7661
+	Estimated Training Loss: 0.6741305148341218
+	Validation Accuracy: 0.7661
 ##########################################################################################################################
 Epoch 2:
-	Training Spearman Correlation: 0.6819293017715341
-	Validation Spearman Correlation: 0.7613
+	Estimated Training Loss: 0.6816459300086835
+	Validation Accuracy: 0.7663
 ##########################################################################################################################
 Epoch 3:
-	Training Spearman Correlation: 0.6953202611172183
-	Validation Spearman Correlation: 0.7600
+	Estimated Training Loss: 0.6948239611035038
+	Validation Accuracy: 0.7639
 ##########################################################################################################################
 Epoch 4:
-	Training Spearman Correlation: 0.7145100069675564
-	Validation Spearman Correlation: 0.7660
+	Estimated Training Loss: 0.7138204508017297
+	Validation Accuracy: 0.7669
 ##########################################################################################################################
 Epoch 5:
-	Training Spearman Correlation: 0.7379099841533735
-	Validation Spearman Correlation: 0.7635
+	Estimated Training Loss: 0.7366191352800641
+	Validation Accuracy: 0.7683
 ##########################################################################################################################
 Epoch 6:
-	Training Spearman Correlation: 0.7638294118137047
-	Validation Spearman Correlation: 0.7712
+	Estimated Training Loss: 0.7641204709425224
+	Validation Accuracy: 0.7740
 ##########################################################################################################################
 Epoch 7:
-	Training Spearman Correlation: 0.7913172441073787
-	Validation Spearman Correlation: 0.7758
+	Estimated Training Loss: 0.7908684054521458
+	Validation Accuracy: 0.7733
 ##########################################################################################################################
 Epoch 8:
-	Training Spearman Correlation: 0.8142177777310105
-	Validation Spearman Correlation: 0.7853
+	Estimated Training Loss: 0.8153302718562719
+	Validation Accuracy: 0.7818
 #############################################################
