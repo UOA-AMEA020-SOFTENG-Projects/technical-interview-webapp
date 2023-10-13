@@ -29,6 +29,7 @@ editorRouter.put("/editor/similarity/:problemId", async (req, res) => {
     const submittedAnswer = answer.answer;
     const modelAnswer = problem.modelDescription; // Get the model answer from the problem instance
 
+    let python;
 
     if (BASE_MODEL === 1){
       python = spawn("python", [

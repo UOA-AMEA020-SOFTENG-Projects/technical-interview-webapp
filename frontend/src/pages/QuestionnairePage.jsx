@@ -22,7 +22,9 @@ export const loader = async ({ request, params }) => {
   
     if (!response.ok) {
         const err = await response.json();
-  
+        
+        console.log("ofiuhewoubifewboufweboufeobufeobqeobfobqwobqfbfffffiffff")
+
         return json({ message: err.message }, { status: 500 });
     } else {
         const data = await response.json();
