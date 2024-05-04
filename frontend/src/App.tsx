@@ -9,7 +9,7 @@ import SignupPage from "./pages/SignupPage.jsx";
 import DashboardPage from "./pages/DashboardPage.jsx";
 import ContentPage from "./pages/ContentPage.jsx";
 import ProblemPage from "./pages/ProblemPage.jsx";
-import ErrorPage from "./pages/ErrorPage.jsx";
+import ErrorPage from "./pages/ErrorPage.tsx";
 import RootPage from "./pages/RootPage.jsx";
 import HomeRootPage from "./pages/HomeRootPage.jsx";
 import { loader as topicsLoader } from "./pages/DashboardPage.jsx";
