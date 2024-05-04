@@ -8,8 +8,9 @@ import { seedQuestions } from "./questionSeed.js";
 async function seedDatabase() {
   try {
     await connectDB(
-      "mongodb+srv://root:root1234@algochamp-cluster.npdxemw.mongodb.net/test"
+      "mongodb+srv://npat566:XjqO97chao4jBZhF@algochamp.0yxylh8.mongodb.net/test"
     );
+
     console.log("Connected to the seed Database successfully");
 
     await seedTopics();
