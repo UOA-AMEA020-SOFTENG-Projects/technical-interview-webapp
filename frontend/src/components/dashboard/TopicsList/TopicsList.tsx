@@ -110,7 +110,7 @@ const TopicsList = ({ topics }) => {
       <Col key={index}>
         <Card
           style={{
-            borderRadius: "5px",
+            borderRadius: "10px",
             cursor: "pointer",
           }}
           onClick={() => handleShow(topic)}
@@ -127,6 +127,8 @@ const TopicsList = ({ topics }) => {
               style={{
                 padding: "0.5em 0",
                 borderRadius: "5px",
+                backgroundColor: "transparent",
+                border: "1px solid black",
               }}
               variant="determinate"
               value={topicsProgress[topic._id]}
