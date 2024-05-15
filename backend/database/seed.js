@@ -5,11 +5,11 @@ import { seedContents } from "./contentSeed.js";
 import { seedProblems } from "./problemSeed.js";
 import { seedQuestions } from "./questionSeed.js";
 
+const MONGO_URI = import.meta.env.MONGO_URI;
+
 async function seedDatabase() {
   try {
-    await connectDB(
-      "mongodb+srv://npat566:XjqO97chao4jBZhF@algochamp.0yxylh8.mongodb.net/test"
-    );
+    await connectDB();
 
     console.log("Connected to the seed Database successfully");
 
