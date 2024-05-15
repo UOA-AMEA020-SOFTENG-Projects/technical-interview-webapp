@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { Form } from "react-bootstrap";
 import { useNavigate, Link } from "react-router-dom";
-import { Container, Row, Col, Modal, Button, ListGroup } from "react-bootstrap";
+import { Container, Row, Col, Modal, Button } from "react-bootstrap";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import LinearProgress from "@mui/material/LinearProgress";
 import styles from "./TopicsList.module.css";
-import { Box, CardHeader, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import RecommendedProblems from "../RecommendedProblems/RecommendedProblems";
 import Statistics from "../Statistics/Statistics";
 
@@ -23,12 +23,22 @@ interface Topic {
   problems: Problem[];
 }
 
-const TopicsList = ({ topics }) => {
+interface Props {
+  topics: Topic[];
+}
+
+const TopicsList = ({ topics }: Props) => {
   const [show, setShow] = useState(false);
   const [currentTopic, setCurrentTopic] = useState<Topic | null>(null);
-  const [topicsProgress, setTopicsProgress] = useState({});
-  const [problemStatuses, setProblemStatuses] = useState({});
-  const [recommendedStatuses, setRecommendedStatuses] = useState({});
+  const [topicsProgress, setTopicsProgress] = useState<Record<string, number>>(
+    {}
+  );
+  const [problemStatuses, setProblemStatuses] = useState<
+    Record<string, boolean>
+  >({});
+  const [recommendedStatuses, setRecommendedStatuses] = useState<
+    Record<string, boolean>
+  >({});
 
   const token = localStorage.getItem("authToken");
 
@@ -36,7 +46,7 @@ const TopicsList = ({ topics }) => {
 
   const handleClose = () => setShow(false);
 
-  const handleShow = async (topic) => {
+  const handleShow = async (topic: Topic) => {
     setCurrentTopic(topic);
     const recommendedStatuses = await fetchRecommendationStatuses(
       topic.problems
@@ -45,8 +55,8 @@ const TopicsList = ({ topics }) => {
     setShow(true);
   };
 
-  const fetchRecommendationStatuses = async (problems) => {
-    const statuses = {};
+  const fetchRecommendationStatuses = async (problems: Problem[]) => {
+    const statuses: Record<string, boolean> = {};
     for (let problem of problems) {
       const response = await fetch(
         `${BaseURL}/problem/${problem._id}/recommended`,
@@ -62,19 +72,21 @@ const TopicsList = ({ topics }) => {
     return statuses;
   };
 
-  const navigateContentHandler = (topicId, title) => {
+  const navigateContentHandler = (
+    topicId: string | undefined,
+    title: string | undefined
+  ) => {
     navigate(`/home/content/${topicId}?title=${title}`);
   };
 
   useEffect(() => {
-    const fetchProgress = async (topicId) => {
+    const fetchProgress = async (topicId: string) => {
       const response = await fetch(`${BaseURL}/topic/${topicId}/progress`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       const data = await response.json();
-      console.log(data.progress, 31);
       return data.progress;
     };
 
@@ -86,7 +98,7 @@ const TopicsList = ({ topics }) => {
 
   useEffect(() => {
     const fetchProblemStatuses = async () => {
-      const statuses = {};
+      const statuses: Record<string, boolean> = {};
       for (let problem of currentTopic?.problems || []) {
         const response = await fetch(
           `${BaseURL}/problem/${problem._id}/status`,

@@ -4,7 +4,11 @@ import logo from "../../../../assets/primarylogo.png";
 import styles from "./LoggedInHeader.module.css";
 import { Button } from "@mui/material";
 
-const LoggedInHeader = ({ username }) => {
+interface Props {
+  username: string;
+}
+
+const LoggedInHeader = ({ username }: Props) => {
   const navigate = useNavigate();
 
   const signoutHandler = () => {
