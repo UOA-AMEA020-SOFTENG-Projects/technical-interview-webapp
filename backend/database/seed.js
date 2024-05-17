@@ -9,7 +9,7 @@ const MONGO_URI = import.meta.env.MONGO_URI;
 
 async function seedDatabase() {
   try {
-    await connectDB();
+    await connectDB(MONGO_URI);
 
     console.log("Connected to the seed Database successfully");
 

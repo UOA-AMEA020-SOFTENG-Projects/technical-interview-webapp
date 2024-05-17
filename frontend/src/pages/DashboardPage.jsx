@@ -26,8 +26,6 @@ export const loader = async ({ request, params }) => {
   } else {
     const data = await response.json();
 
-    console.log("topics: " + data);
-
     return data;
   }
 };
