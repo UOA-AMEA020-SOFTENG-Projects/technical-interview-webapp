@@ -5,10 +5,9 @@ import SignInForm from "../components/forms/SignInForm/SignInForm";
 const BaseURL = import.meta.env.VITE_API_BASE_URL;
 
 const LoginPage = () => {
-
   return (
     <div>
-        <SignInForm />
+      <SignInForm />
     </div>
   );
 };
@@ -18,10 +17,10 @@ export default LoginPage;
 export const action = async ({ request, params }) => {
   const loginData = Object.fromEntries(await request.formData());
 
-  // create request body object to submit and make the post request 
+  // create request body object to submit and make the post request
   const requestData = {
     username: loginData.username,
-    password: loginData.password
+    password: loginData.password,
   };
 
   const response = await fetch(`${BaseURL}/user/login`, {
@@ -32,10 +31,8 @@ export const action = async ({ request, params }) => {
     body: JSON.stringify(requestData),
   });
 
-  if (!response.ok){
-
-    console.log(response.status,35); 
-
+  if (!response.ok) {
+    console.log(response.status, 35);
 
     if (response.status === 401 || response.status === 400) {
       const errdata = await response.json();
@@ -58,6 +55,6 @@ export const action = async ({ request, params }) => {
   const token = resData.accessToken;
 
   localStorage.setItem("authToken", token);
-  
+
   return redirect("/home/dashboard");
 };

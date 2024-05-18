@@ -1,5 +1,5 @@
 import express from "express";
-import cors from 'cors';
+import cors from "cors";
 import editorRouter from "./routes/editor.js";
 import connectDB from "./database/mongoose.js";
 import * as url from "url";
@@ -10,7 +10,6 @@ import userRouter from "./routes/user.js";
 import contentRouter from "./routes/content.js";
 import questionRouter from "./routes/question.js";
 import analyticsRouter from "./routes/analytics.js";
-
 
 const app = express();
 const PORT = process.env.PORT || 3000;

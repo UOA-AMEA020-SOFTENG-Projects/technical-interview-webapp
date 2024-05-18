@@ -1,17 +1,15 @@
 import React from "react";
-import { useLoaderData, redirect, json } from 'react-router-dom';
+import { useLoaderData, redirect, json } from "react-router-dom";
 import TopicsList from "../components/dashboard/TopicsList/TopicsList";
 
 const BaseURL = import.meta.env.VITE_API_BASE_URL;
 
 const DashboardPage = () => {
-
   const topics = useLoaderData();
 
   return (
     <div>
-        <h1>Dashboard</h1>
-        <TopicsList topics={topics}/>
+      <TopicsList topics={topics} />
     </div>
   );
 };
@@ -19,19 +17,15 @@ const DashboardPage = () => {
 export default DashboardPage;
 
 export const loader = async ({ request, params }) => {
-
-
   const response = await fetch(`${BaseURL}/topic`);
 
   if (!response.ok) {
-      const err = await response.json();
+    const err = await response.json();
 
-      return json({ message: err.message }, { status: 500 });
+    return json({ message: err.message }, { status: 500 });
   } else {
-      const data = await response.json();
+    const data = await response.json();
 
-      console.log("topics: " + data);
-
-      return data;
+    return data;
   }
-}
+};
