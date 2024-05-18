@@ -1,10 +1,8 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import { Stack, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
-
-const BaseURL = import.meta.env.VITE_API_BASE_URL;
 
 interface Problem {
   _id: string;
@@ -24,11 +22,10 @@ interface Props {
 const TopicsList = ({ topics }: Props) => {
   const [showTopics, setShowTopics] = useState(true);
   const [currentTopic, setCurrentTopic] = useState<Topic | null>(null);
-  const token = localStorage.getItem("authToken");
 
-  const handleClose = () => setShowTopics(true);
+  const handleShowTopicList = () => setShowTopics(true);
 
-  const handleShow = async (topic: Topic) => {
+  const handleShowQuestionsList = (topic: Topic) => {
     setCurrentTopic(topic);
     setShowTopics(false);
   };
@@ -42,7 +39,7 @@ const TopicsList = ({ topics }: Props) => {
           cursor: "pointer",
           borderWidth: 0,
         }}
-        onClick={() => handleShow(topic)}
+        onClick={() => handleShowQuestionsList(topic)}
         key={index}
       >
         <CardContent style={{ textAlign: "left", padding: "1em" }}>
@@ -84,7 +81,7 @@ const TopicsList = ({ topics }: Props) => {
         topicListItems
       ) : (
         <>
-          <button onClick={handleClose}>back</button>
+          <button onClick={handleShowTopicList}>back</button>
           {currentTopicQuestionItems}
         </>
       )}
