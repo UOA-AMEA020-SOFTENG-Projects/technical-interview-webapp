@@ -71,7 +71,7 @@ const TopicsList = ({ topics }: Props) => {
         </Card>
       ))
     ) : (
-      <p style={{ color: "white" }}>No problems available for this topic.</p>
+      <p>No problems available for this topic.</p>
     );
   }, [currentTopic]);
 
