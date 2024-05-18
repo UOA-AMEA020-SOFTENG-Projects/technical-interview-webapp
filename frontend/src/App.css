@@ -3,13 +3,13 @@ body {
   margin-top: 5em;
   background-color: fff;
   justify-content: center;
-  color: black;
+  color: #0d062d;
   font-family: Arial, sans-serif;
-  overflow-y: auto;
 }
 
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  overflow-y: hidden;
 }
