@@ -5,11 +5,11 @@ body {
   justify-content: center;
   color: #0d062d;
   font-family: Arial, sans-serif;
+  overflow: auto;
 }
 
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  overflow-y: hidden;
 }
