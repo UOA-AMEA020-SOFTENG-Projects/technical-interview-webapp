@@ -1,22 +1,35 @@
 import React from "react";
-import { useLoaderData, redirect, json } from "react-router-dom";
+import { useLoaderData, json } from "react-router-dom";
 import TopicsList from "../components/dashboard/TopicsList/TopicsList";
+import { Grid, Typography } from "@mui/material";
 
 const BaseURL = import.meta.env.VITE_API_BASE_URL;
 
+interface Problem {
+  _id: string;
+  title: string;
+}
+
+interface Topic {
+  _id: string;
+  title: string;
+  problems: Problem[];
+}
+
 const DashboardPage = () => {
-  const topics = useLoaderData();
+  const topics = useLoaderData() as Topic[];
 
   return (
-    <div>
+    <Grid container direction="row">
+      <Typography variant="h3"> Welcome Back</Typography>
       <TopicsList topics={topics} />
-    </div>
+    </Grid>
   );
 };
 
 export default DashboardPage;
 
-export const loader = async ({ request, params }) => {
+export const loader = async () => {
   const response = await fetch(`${BaseURL}/topic`);
 
   if (!response.ok) {

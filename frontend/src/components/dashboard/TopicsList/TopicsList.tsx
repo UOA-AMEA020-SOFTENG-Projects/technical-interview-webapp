@@ -9,6 +9,7 @@ import styles from "./TopicsList.module.css";
 import { Box, Typography } from "@mui/material";
 import RecommendedProblems from "../RecommendedProblems/RecommendedProblems";
 import Statistics from "../Statistics/Statistics";
+import TopicQuestions from "../TopicQuestions/TopicQuestions";
 
 const BaseURL = import.meta.env.VITE_API_BASE_URL;
 
@@ -42,8 +43,6 @@ const TopicsList = ({ topics }: Props) => {
 
   const token = localStorage.getItem("authToken");
 
-  const navigate = useNavigate();
-
   const handleClose = () => setShow(false);
 
   const handleShow = async (topic: Topic) => {
@@ -70,13 +69,6 @@ const TopicsList = ({ topics }: Props) => {
       statuses[problem._id] = data.isRecommended;
     }
     return statuses;
-  };
-
-  const navigateContentHandler = (
-    topicId: string | undefined,
-    title: string | undefined
-  ) => {
-    navigate(`/home/content/${topicId}?title=${title}`);
   };
 
   useEffect(() => {
@@ -157,7 +149,6 @@ const TopicsList = ({ topics }: Props) => {
         className={`d-flex align-items-center min-vw-100 mt-5 mb-5 ${styles.containerPadding}`}
       >
         <Row className="g-4">
-          <Typography variant="h3"> Welcome Back</Typography>
           <Col xs={12} md={6}>
             <Row xs={1} md={2} className="g-4">
               {topicListItems}
@@ -169,78 +160,13 @@ const TopicsList = ({ topics }: Props) => {
           </Col>
         </Row>
 
-        <Modal
+        <TopicQuestions
           show={show}
-          onHide={handleClose}
-          size="lg"
-          aria-labelledby="contained-modal-title-vcenter"
-          centered
-          className={styles.modalClass}
-        >
-          <Modal.Body
-            style={{ backgroundColor: "#8FAC51", textAlign: "center" }}
-          >
-            <Modal.Title
-              style={{
-                textAlign: "center",
-                color: "white",
-                fontSize: "1.75em",
-              }}
-            >
-              <b>{currentTopic?.title}</b>
-            </Modal.Title>
-            <Button
-              variant="outline-light"
-              style={{ color: "white", marginTop: "1rem" }}
-              className="mb-3"
-              onClick={() =>
-                navigateContentHandler(currentTopic?._id, currentTopic?.title)
-              }
-            >
-              Content
-            </Button>
-            <p
-              style={{ textAlign: "center", color: "white", marginTop: "2rem" }}
-            >
-              <b>Problems</b>
-            </p>
-            {currentTopic?.problems.length ? (
-              currentTopic.problems.map((problem, i) => (
-                <div key={i} className={styles["problem-container"]}>
-                  <div className={styles["problem-details"]}>
-                    <Form.Check
-                      type="checkbox"
-                      checked={problemStatuses[problem._id] ?? false}
-                      disabled
-                      style={{ marginRight: "10px" }}
-                    />
-                    <Link to={`/home/problem/${problem._id}`}>
-                      <p style={{ marginBottom: "0px", fontSize: "1.25em" }}>
-                        {problem.title}
-                      </p>
-                    </Link>
-                  </div>
-                  {recommendedStatuses[problem._id] && (
-                    <p
-                      style={{
-                        color: "#960000",
-                        fontWeight: "bold",
-                        marginBottom: "0px",
-                        fontSize: "1em",
-                      }}
-                    >
-                      Recommended for You
-                    </p>
-                  )}
-                </div>
-              ))
-            ) : (
-              <p style={{ color: "white" }}>
-                No problems available for this topic.
-              </p>
-            )}
-          </Modal.Body>
-        </Modal>
+          currentTopic={currentTopic}
+          handleClose={handleClose}
+          problemStatuses={problemStatuses}
+          recommendedStatuses={recommendedStatuses}
+        />
       </Container>
     </div>
   );
