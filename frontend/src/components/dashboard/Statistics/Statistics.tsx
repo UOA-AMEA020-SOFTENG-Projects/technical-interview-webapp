@@ -27,7 +27,6 @@ const Statistics = () => {
       <div
         style={{
           height: "100px",
-          width: "60%",
           border: "2px solid black",
           display: "flex",
           alignItems: "center",

@@ -1,15 +1,9 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Form } from "react-bootstrap";
-import { useNavigate, Link } from "react-router-dom";
-import { Container, Row, Col, Modal, Button } from "react-bootstrap";
+import { Col } from "react-bootstrap";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import LinearProgress from "@mui/material/LinearProgress";
-import styles from "./TopicsList.module.css";
 import { Box, Typography } from "@mui/material";
-import RecommendedProblems from "../RecommendedProblems/RecommendedProblems";
-import Statistics from "../Statistics/Statistics";
-import TopicQuestions from "../TopicQuestions/TopicQuestions";
 
 const BaseURL = import.meta.env.VITE_API_BASE_URL;
 
@@ -111,65 +105,38 @@ const TopicsList = ({ topics }: Props) => {
 
   const topicListItems = useMemo(() => {
     return topics.map((topic, index) => (
-      <Col key={index}>
-        <Card
-          style={{
-            borderRadius: "10px",
-            cursor: "pointer",
-          }}
-          onClick={() => handleShow(topic)}
-        >
-          <CardContent>
-            <Box style={{ display: "flex", justifyContent: "space-between" }}>
-              <Typography variant="h6" component="div">
-                {topic.title}
-              </Typography>
-              <p>{`${topicsProgress[topic._id]}%`}</p>
-            </Box>
+      <Card
+        style={{
+          borderRadius: "10px",
+          cursor: "pointer",
+        }}
+        onClick={() => handleShow(topic)}
+        key={index}
+      >
+        <CardContent>
+          <Box style={{ display: "flex", justifyContent: "space-between" }}>
+            <Typography variant="h6" component="div">
+              {topic.title}
+            </Typography>
+            <p>{`${topicsProgress[topic._id]}%`}</p>
+          </Box>
 
-            <LinearProgress
-              style={{
-                padding: "0.5em 0",
-                borderRadius: "5px",
-                backgroundColor: "transparent",
-                border: "1px solid black",
-              }}
-              variant="determinate"
-              value={topicsProgress[topic._id]}
-            />
-          </CardContent>
-        </Card>
-      </Col>
+          <LinearProgress
+            style={{
+              padding: "0.5em 0",
+              borderRadius: "5px",
+              backgroundColor: "transparent",
+              border: "1px solid black",
+            }}
+            variant="determinate"
+            value={topicsProgress[topic._id]}
+          />
+        </CardContent>
+      </Card>
     ));
   }, [topics]);
 
-  return (
-    <div className={styles.megaContainer}>
-      <Container
-        className={`d-flex align-items-center min-vw-100 mt-5 mb-5 ${styles.containerPadding}`}
-      >
-        <Row className="g-4">
-          <Col xs={12} md={6}>
-            <Row xs={1} md={2} className="g-4">
-              {topicListItems}
-            </Row>
-          </Col>
-          <Col xs={12} md={6} className="d-flex flex-column align-items-center">
-            <Statistics />
-            <RecommendedProblems />
-          </Col>
-        </Row>
-
-        <TopicQuestions
-          show={show}
-          currentTopic={currentTopic}
-          handleClose={handleClose}
-          problemStatuses={problemStatuses}
-          recommendedStatuses={recommendedStatuses}
-        />
-      </Container>
-    </div>
-  );
+  return <div>{topicListItems}</div>;
 };
 
 export default TopicsList;

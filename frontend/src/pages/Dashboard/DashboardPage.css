@@ -1,0 +1,25 @@
+.dashboards-page {
+  display: flex;
+  flex-direction: column;
+  padding: 0 3em;
+  max-width: 1400px;
+  margin: auto;
+}
+
+.dashboard-cols {
+  display: flex;
+  justify-content: space-between;
+  gap: 1em;
+  align-items: stretch;
+  flex-wrap: wrap;
+}
+
+.dashboard-col {
+  padding: 1em 2em;
+  flex-grow: 1;
+  min-width: 300px;
+  max-width: 400px;
+  background-color: #f5f5f5;
+  text-align: center;
+  border-radius: 25px;
+}

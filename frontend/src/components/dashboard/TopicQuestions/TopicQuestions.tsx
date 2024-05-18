@@ -1,4 +1,3 @@
-import React from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "../TopicsList/TopicsList.module.css";

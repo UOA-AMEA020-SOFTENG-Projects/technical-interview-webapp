@@ -3,11 +3,10 @@ import { useNavigate } from "react-router-dom";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
-import { Typography } from "@mui/material";
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
-  padding: theme.spacing(1),
+  padding: theme.spacing(2),
   textAlign: "center",
   color: theme.palette.text.secondary,
   boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.1)",
@@ -60,25 +59,13 @@ const RecommendedProblems = () => {
           paddingTop: "10px",
         }}
       >
-        No more problems specifically recommended for you. Please work on other
+        No problems specifically recommended for you. Please work on other
         problems.
       </p>
     );
   }, [recommendedProblems]);
 
-  return (
-    <div
-      className="overflow-auto rounded p-3 bg-light text-light"
-      style={{
-        width: "60%",
-      }}
-    >
-      <Typography variant="h6" textAlign="center" color="black">
-        Recommended Problems
-      </Typography>
-      <Stack spacing={1}>{recommendedProblemItems}</Stack>
-    </div>
-  );
+  return <Stack spacing={2}>{recommendedProblemItems}</Stack>;
 };
 
 export default RecommendedProblems;
