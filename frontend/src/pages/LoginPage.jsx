@@ -32,8 +32,6 @@ export const action = async ({ request, params }) => {
   });
 
   if (!response.ok) {
-    console.log(response.status, 35);
-
     if (response.status === 401 || response.status === 400) {
       const errdata = await response.json();
 
