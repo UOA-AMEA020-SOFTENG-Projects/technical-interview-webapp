@@ -1,8 +1,9 @@
 import { useState, useMemo } from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import { Stack, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
+import { IconButton, Stack, Typography } from "@mui/material";
+import ProblemElement from "./Problem";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 
 interface Problem {
   _id: string;
@@ -64,11 +65,7 @@ const TopicsList = ({ topics }: Props) => {
   const currentTopicQuestionItems = useMemo(() => {
     return currentTopic?.problems ? (
       currentTopic.problems.map((problem, i) => (
-        <Card key={i} variant="outlined">
-          <Link to={`/home/problem/${problem._id}`}>
-            <p style={{ fontSize: "1.25em" }}>{problem.title}</p>
-          </Link>
-        </Card>
+        <ProblemElement key={i} problem={problem} />
       ))
     ) : (
       <p>No problems available for this topic.</p>
@@ -76,16 +73,51 @@ const TopicsList = ({ topics }: Props) => {
   }, [currentTopic]);
 
   return (
-    <Stack spacing={2}>
-      {showTopics ? (
-        topicListItems
-      ) : (
-        <>
-          <button onClick={handleShowTopicList}>back</button>
-          {currentTopicQuestionItems}
-        </>
-      )}
-    </Stack>
+    <>
+      <Typography
+        variant="subtitle1"
+        textAlign="left"
+        borderBottom="4px solid #5030E5"
+        paddingBottom={1}
+        marginBottom={4}
+        display="flex"
+        alignItems="center"
+        gap={1}
+      >
+        {showTopics && (
+          <div
+            style={{
+              width: "7px",
+              height: "7px",
+              borderRadius: "50%",
+              backgroundColor: "#5030E5",
+            }}
+          />
+        )}
+        {showTopics ? (
+          "Topics"
+        ) : (
+          <>
+            <IconButton size="small" onClick={handleShowTopicList}>
+              <ArrowBackIosIcon fontSize="small" />
+            </IconButton>
+            {currentTopic?.title}
+          </>
+        )}
+      </Typography>
+
+      <div
+        style={{
+          height: "70vh",
+          overflowY: "scroll",
+          scrollbarWidth: "none",
+        }}
+      >
+        <Stack spacing={2}>
+          {showTopics ? topicListItems : <>{currentTopicQuestionItems}</>}
+        </Stack>
+      </div>
+    </>
   );
 };
 

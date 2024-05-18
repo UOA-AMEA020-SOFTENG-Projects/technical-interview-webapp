@@ -1,17 +1,7 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Paper from "@mui/material/Paper";
+import { useEffect, useMemo, useState } from "react";
 import Stack from "@mui/material/Stack";
-import { styled } from "@mui/material/styles";
-
-const Item = styled(Paper)(({ theme }) => ({
-  ...theme.typography.body2,
-  padding: theme.spacing(2),
-  textAlign: "center",
-  color: theme.palette.text.secondary,
-  boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.1)",
-  cursor: "pointer",
-}));
+import ProblemElement from "./Problem";
+import { Typography } from "@mui/material";
 
 const BaseURL = import.meta.env.VITE_API_BASE_URL;
 
@@ -22,8 +12,6 @@ interface Problem {
 
 const RecommendedProblems = () => {
   const [recommendedProblems, setRecommendedProblems] = useState<Problem[]>([]);
-
-  const navigate = useNavigate();
 
   const token = localStorage.getItem("authToken");
 
@@ -44,28 +32,50 @@ const RecommendedProblems = () => {
   const recommendedProblemItems = useMemo(() => {
     return recommendedProblems.length ? (
       recommendedProblems.map((problem, index) => (
-        <Item
-          onClick={() => navigate(`/home/problem/${problem._id}`)}
-          key={index}
-        >
-          {problem.title}
-        </Item>
+        <ProblemElement key={index} problem={problem} />
       ))
     ) : (
-      <p
-        style={{
-          textDecoration: "underline",
-          textAlign: "center",
-          paddingTop: "10px",
-        }}
-      >
+      <Typography variant="caption">
         No problems specifically recommended for you. Please work on other
         problems.
-      </p>
+      </Typography>
     );
   }, [recommendedProblems]);
 
-  return <Stack spacing={2}>{recommendedProblemItems}</Stack>;
+  return (
+    <>
+      <Typography
+        variant="subtitle1"
+        textAlign="left"
+        borderBottom="4px solid #FFA500"
+        paddingBottom={1}
+        marginBottom={4}
+        display="flex"
+        alignItems="center"
+        gap={1}
+      >
+        <div
+          style={{
+            width: "7px",
+            height: "7px",
+            borderRadius: "50%",
+            backgroundColor: "#FFA500",
+          }}
+        />
+        Ai Recommendations
+      </Typography>
+
+      <div
+        style={{
+          height: "70vh",
+          overflowY: "scroll",
+          scrollbarWidth: "none",
+        }}
+      >
+        <Stack spacing={2}>{recommendedProblemItems}</Stack>
+      </div>
+    </>
+  );
 };
 
 export default RecommendedProblems;

@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { Typography } from "@mui/material";
+import { useEffect, useState } from "react";
 
 const BaseURL = import.meta.env.VITE_API_BASE_URL as string;
 
@@ -24,16 +25,35 @@ const Statistics = () => {
 
   return (
     <>
+      <Typography
+        variant="subtitle1"
+        textAlign="left"
+        borderBottom="4px solid #8BC48A"
+        paddingBottom={1}
+        marginBottom={4}
+        display="flex"
+        alignItems="center"
+        gap={1}
+      >
+        <div
+          style={{
+            width: "7px",
+            height: "7px",
+            borderRadius: "50%",
+            backgroundColor: "#8BC48A",
+          }}
+        />
+        Your Statistics
+      </Typography>
+
       <div
         style={{
-          height: "100px",
-          border: "2px solid black",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+          height: "70vh",
+          overflowY: "scroll",
+          scrollbarWidth: "none",
         }}
       >
-        Statistics
+        Stats go here
       </div>
     </>
   );

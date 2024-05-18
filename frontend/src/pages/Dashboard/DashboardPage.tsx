@@ -1,9 +1,9 @@
 import { useLoaderData, json } from "react-router-dom";
-import TopicsList from "../../components/dashboard/TopicsList/TopicsList";
-import RecommendedProblems from "../../components/dashboard/RecommendedProblems/RecommendedProblems";
+import TopicsList from "../../components/dashboard/TopicsList";
+import RecommendedProblems from "../../components/dashboard/RecommendedProblems";
 import { Typography } from "@mui/material";
 import "./DashboardPage.css";
-import Statistics from "../../components/dashboard/Statistics/Statistics";
+import Statistics from "../../components/dashboard/Statistics";
 
 const BaseURL = import.meta.env.VITE_API_BASE_URL;
 
@@ -26,15 +26,12 @@ const DashboardPage = () => {
       <Typography variant="h3">Welcome Back</Typography>
       <div className="dashboard-cols">
         <div className="dashboard-col">
-          Topics
           <TopicsList topics={topics} />
         </div>
         <div className="dashboard-col">
-          Ai Recommendations
           <RecommendedProblems />
         </div>
         <div className="dashboard-col">
-          Your Statistics
           <Statistics />
         </div>
       </div>

@@ -11,13 +11,15 @@ import contentRouter from "./routes/content.js";
 import questionRouter from "./routes/question.js";
 import analyticsRouter from "./routes/analytics.js";
 
+const MONGO_URI = process.env.MONGO_URI;
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(cors());
 
-connectDB();
+connectDB(MONGO_URI);
 
 app.use(editorRouter);
 app.use(problemRouter);
