@@ -1,12 +1,25 @@
 .dashboards-page {
   display: flex;
+  justify-content: flex-start;
+  width: 100vw;
+  position: absolute;
+  left: 0;
+  height: 85%;
+}
+
+.home-page {
+  display: flex;
   flex-direction: column;
   padding: 0 3em;
-  max-width: 1400px;
   margin: auto;
 }
 
-.dashboard-cols {
+.dashboard-sidenav {
+  display: flex;
+  height: 100%;
+}
+
+.home-cols {
   display: flex;
   justify-content: center;
   gap: 1em;
@@ -14,7 +27,7 @@
   flex-wrap: wrap;
 }
 
-.dashboard-col {
+.home-col {
   padding: 1em 2em;
   width: 400px;
   max-width: 400;

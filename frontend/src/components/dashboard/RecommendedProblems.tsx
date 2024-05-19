@@ -27,7 +27,7 @@ const RecommendedProblems = () => {
     };
 
     fetchRecommendedProblems();
-  }, [token]);
+  }, []);
 
   const recommendedProblemItems = useMemo(() => {
     return recommendedProblems.length ? (
