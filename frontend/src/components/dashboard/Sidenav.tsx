@@ -35,14 +35,14 @@ const Sidenav = ({ navHeadings, navItems }: SidenavProps) => {
           sx={{
             padding: "0.5em 1em",
             paddingRight: "8em",
+            ":hover": {
+              backgroundColor: "rgba(171, 205, 98, 0.2)",
+            },
             bgcolor: idx === value ? "rgba(171, 205, 98, 0.2)" : "transparent",
             color: "#787486",
             justifyContent: "flex-start",
             alignItems: "center",
             gap: 2,
-            ":hover": {
-              backgroundColor: "rgba(171, 205, 98, 0.05)",
-            },
           }}
           disableRipple
           onClick={(e) => handleChange(e, idx)}
