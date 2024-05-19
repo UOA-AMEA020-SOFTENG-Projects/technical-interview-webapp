@@ -1,9 +1,11 @@
 import { useLoaderData, json } from "react-router-dom";
-import TopicsList from "../../components/dashboard/TopicsList";
-import RecommendedProblems from "../../components/dashboard/RecommendedProblems";
-import { Typography } from "@mui/material";
 import "./DashboardPage.css";
-import Statistics from "../../components/dashboard/Statistics";
+import Sidenav from "../../components/dashboard/Sidenav";
+import HomePage from "./HomePage";
+import GridViewOutlinedIcon from "@mui/icons-material/GridViewOutlined";
+import { Typography } from "@mui/material";
+import LightbulbOutlinedIcon from "@mui/icons-material/LightbulbOutlined";
+import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 
 const BaseURL = import.meta.env.VITE_API_BASE_URL;
 
@@ -21,20 +23,25 @@ interface Topic {
 const DashboardPage = () => {
   const topics = useLoaderData() as Topic[];
 
+  const navItems = [<HomePage topics={topics} />, <div>2 </div>, <div>3 </div>];
+  const navHeadinds = [
+    <>
+      <GridViewOutlinedIcon />
+      <Typography variant="overline">Home</Typography>
+    </>,
+    <>
+      <LightbulbOutlinedIcon />
+      <Typography variant="overline">Learn</Typography>
+    </>,
+    <>
+      <SettingsOutlinedIcon />
+      <Typography variant="overline">Settings</Typography>
+    </>,
+  ];
+
   return (
     <div className="dashboards-page">
-      <Typography variant="h3">Welcome Back</Typography>
-      <div className="dashboard-cols">
-        <div className="dashboard-col">
-          <TopicsList topics={topics} />
-        </div>
-        <div className="dashboard-col">
-          <RecommendedProblems />
-        </div>
-        <div className="dashboard-col">
-          <Statistics />
-        </div>
-      </div>
+      <Sidenav navItems={navItems} navHeadings={navHeadinds} />
     </div>
   );
 };
