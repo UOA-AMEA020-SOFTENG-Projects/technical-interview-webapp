@@ -5,7 +5,7 @@ class SM2:
         self.interval = 1
         self.repetitions = 0    # Number of repetitions
 
-    def update(self, quality):
+    def update(self, quality_of_response):
         """
         Parameters:
         quality (int): The quality of the response (0 to 5).
@@ -16,7 +16,7 @@ class SM2:
                        4: correct response with hesitation,
                        5: perfect response.
         """
-        if quality < 3:
+        if quality_of_response < 3:
             self.repetitions = 0
             self.interval = 1
         else:
@@ -30,8 +30,9 @@ class SM2:
             self.repetitions += 1
 
         # EF’:=EF+(0.1-(5-q)*(0.08+(5-q)*0.02))
+        # Note: If EF is less than 1.3 then let EF be 1.3
         self.ease_factor = max(
-            1.3, self.ease_factor + 0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02))
+            1.3, self.ease_factor + 0.1 - (5 - quality_of_response) * (0.08 + (5 - quality_of_response) * 0.02))
 
     def get_next_review_date(self, last_review_date):
         """
@@ -59,5 +60,4 @@ if __name__ == "__main__":
         sm2.update(quality)
         next_review_date = sm2.get_next_review_date(review_dates[-1])
         review_dates.append(next_review_date)
-        print(f"Quality: {quality}, Next Review Date: {next_review_date}, Interval: {
-              sm2.interval}, Ease Factor: {sm2.ease_factor}")
+        print(f"Quality: {quality}, Next Review Date: {next_review_date}, Interval: {sm2.interval}, Ease Factor: {sm2.ease_factor}")
