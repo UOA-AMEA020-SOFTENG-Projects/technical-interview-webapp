@@ -8,7 +8,7 @@ class SM2:
     def update(self, quality_of_response):
         """
         Parameters:
-        quality (int): The quality of the response (0 to 5).
+        quality_of_response (int): The quality of the response (0 to 5).
                        0: complete blackout,
                        1: incorrect response but remembered,
                        2: incorrect response but easy to recall,
