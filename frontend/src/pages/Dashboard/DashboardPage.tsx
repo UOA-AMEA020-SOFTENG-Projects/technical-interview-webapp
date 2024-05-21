@@ -1,4 +1,3 @@
-import { useLoaderData, json } from "react-router-dom";
 import "./DashboardPage.css";
 import Sidenav from "../../components/dashboard/Sidenav";
 import HomePage from "./HomePage";
@@ -6,6 +5,7 @@ import GridViewOutlinedIcon from "@mui/icons-material/GridViewOutlined";
 import { Typography } from "@mui/material";
 import LightbulbOutlinedIcon from "@mui/icons-material/LightbulbOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
+import { useEffect, useState } from "react";
 
 const BaseURL = import.meta.env.VITE_API_BASE_URL;
 
@@ -21,7 +21,31 @@ interface Topic {
 }
 
 const DashboardPage = () => {
-  const topics = useLoaderData() as Topic[];
+  const [topics, setTopics] = useState<Topic[]>([]);
+
+  useEffect(() => {
+    const fetchTopics = async () => {
+      try {
+        const response = await fetch(`${BaseURL}/topic`);
+
+        if (!response.ok) {
+          console.error("Could not fetch topics: ", response.statusText);
+          return;
+        } else {
+          const data = await response.json();
+          setTopics(data);
+        }
+      } catch (err) {
+        console.error("Could not fetch topics: ", err);
+      }
+    };
+
+    const timer = setTimeout(() => {
+      fetchTopics();
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const navItems = [<HomePage topics={topics} />, <div>2 </div>, <div>3 </div>];
   const navHeadinds = [
@@ -47,17 +71,3 @@ const DashboardPage = () => {
 };
 
 export default DashboardPage;
-
-export const loader = async () => {
-  const response = await fetch(`${BaseURL}/topic`);
-
-  if (!response.ok) {
-    const err = await response.json();
-
-    return json({ message: err.message }, { status: 500 });
-  } else {
-    const data = await response.json();
-
-    return data;
-  }
-};

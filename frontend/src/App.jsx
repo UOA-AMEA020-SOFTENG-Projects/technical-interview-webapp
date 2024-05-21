@@ -12,7 +12,6 @@ import ErrorPage from "./pages/ErrorPage.tsx";
 import RootPage from "./pages/RootPage.jsx";
 import HomeRootPage from "./pages/HomeRootPage.jsx";
 import DashboardPage from "./pages/Dashboard/DashboardPage.tsx";
-import { loader as topicsLoader } from "./pages/Dashboard/DashboardPage.tsx";
 import { loader as problemLoader } from "./pages/ProblemPage.jsx";
 import { loader as contentLoader } from "./pages/ContentPage.jsx";
 import { action as signupAction } from "./pages/SignupPage.jsx";
@@ -43,7 +42,6 @@ const router = createBrowserRouter([
           {
             path: "dashboard",
             element: <DashboardPage />,
-            loader: topicsLoader,
           },
           {
             path: "content/:topicId",
