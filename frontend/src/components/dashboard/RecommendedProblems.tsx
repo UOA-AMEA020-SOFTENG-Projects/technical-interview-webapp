@@ -2,13 +2,9 @@ import { useEffect, useMemo, useState } from "react";
 import Stack from "@mui/material/Stack";
 import ProblemElement from "./Problem";
 import { Typography } from "@mui/material";
+import { Problem } from "@/types";
 
 const BaseURL = import.meta.env.VITE_API_BASE_URL;
-
-interface Problem {
-  _id: string;
-  title: string;
-}
 
 const RecommendedProblems = () => {
   const [recommendedProblems, setRecommendedProblems] = useState<Problem[]>([]);

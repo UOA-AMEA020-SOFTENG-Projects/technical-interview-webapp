@@ -2,11 +2,7 @@ import { Card, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import { keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
-
-interface Problem {
-  _id: string;
-  title: string;
-}
+import { Problem as ProblemType } from "@/types";
 
 const fadeIn = keyframes`
   from {
@@ -25,7 +21,7 @@ const AnimatedCard = styled(Card)`
   border-radius: 10px;
 `;
 
-const Problem = ({ problem }: { problem: Problem }) => {
+const Problem = ({ problem }: { problem: ProblemType }) => {
   return (
     <Link
       to={`/home/problem/${problem._id}`}

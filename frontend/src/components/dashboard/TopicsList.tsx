@@ -6,17 +6,7 @@ import ProblemElement from "./Problem";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
-
-interface Problem {
-  _id: string;
-  title: string;
-}
-
-interface Topic {
-  _id: string;
-  title: string;
-  problems: Problem[];
-}
+import { Topic } from "@/types";
 
 interface Props {
   topics: Topic[];
