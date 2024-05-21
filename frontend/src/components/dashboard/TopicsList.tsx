@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import { IconButton, Stack, Typography } from "@mui/material";
+import { IconButton, Skeleton, Stack, Typography } from "@mui/material";
 import ProblemElement from "./Problem";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 
@@ -32,34 +32,61 @@ const TopicsList = ({ topics }: Props) => {
   };
 
   const topicListItems = useMemo(() => {
-    return topics.map((topic, index) => (
-      <Card
-        variant="outlined"
-        style={{
-          borderRadius: "10px",
-          cursor: "pointer",
-          borderWidth: 0,
-        }}
-        onClick={() => handleShowQuestionsList(topic)}
-        key={index}
-      >
-        <CardContent style={{ textAlign: "left", padding: "1em" }}>
-          <Typography variant="subtitle1" fontWeight="600">
-            {topic.title}
-          </Typography>
-          <Typography
-            variant="body2"
-            lineHeight="1.5"
-            fontSize="0.8rem"
-            fontWeight="300"
-            color="#787486"
+    return topics.length ? (
+      topics.map((topic, index) => (
+        <Card
+          variant="outlined"
+          style={{
+            borderRadius: "10px",
+            cursor: "pointer",
+            borderWidth: 0,
+          }}
+          onClick={() => handleShowQuestionsList(topic)}
+          key={index}
+        >
+          <CardContent style={{ textAlign: "left", padding: "1em" }}>
+            <Typography variant="subtitle1" fontWeight="600">
+              {topic.title}
+            </Typography>
+            <Typography
+              variant="body2"
+              lineHeight="1.5"
+              fontSize="0.8rem"
+              fontWeight="300"
+              color="#787486"
+            >
+              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quidem,
+              ab!
+            </Typography>
+          </CardContent>
+        </Card>
+      ))
+    ) : (
+      <>
+        {Array.from({ length: 8 }).map((_, index) => (
+          <Card
+            key={index}
+            variant="outlined"
+            style={{
+              borderRadius: "10px",
+              borderWidth: 0,
+            }}
           >
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quidem,
-            ab!
-          </Typography>
-        </CardContent>
-      </Card>
-    ));
+            <CardContent style={{ textAlign: "left", padding: "1em" }}>
+              <Typography variant="subtitle1">
+                <Skeleton animation="wave" />
+              </Typography>
+              <Typography variant="body2">
+                <Skeleton animation="wave" />
+              </Typography>
+              <Typography variant="body2">
+                <Skeleton animation="wave" />
+              </Typography>
+            </CardContent>
+          </Card>
+        ))}
+      </>
+    );
   }, [topics]);
 
   const currentTopicQuestionItems = useMemo(() => {

@@ -40,7 +40,11 @@ const DashboardPage = () => {
       }
     };
 
-    fetchTopics();
+    const timer = setTimeout(() => {
+      fetchTopics();
+    }, 1000);
+
+    return () => clearTimeout(timer);
   }, []);
 
   const navItems = [<HomePage topics={topics} />, <div>2 </div>, <div>3 </div>];
