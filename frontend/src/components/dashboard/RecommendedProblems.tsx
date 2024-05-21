@@ -2,37 +2,52 @@ import { useEffect, useMemo, useState } from "react";
 import Stack from "@mui/material/Stack";
 import ProblemElement from "./Problem";
 import { Typography } from "@mui/material";
+import { Problem } from "@/types";
 
 const BaseURL = import.meta.env.VITE_API_BASE_URL;
 
-interface Problem {
-  _id: string;
-  title: string;
-}
-
 const RecommendedProblems = () => {
-  const [recommendedProblems, setRecommendedProblems] = useState<Problem[]>([]);
+  const [recommendedProblems, setRecommendedProblems] = useState<Problem[]>(
+    Array(5).fill([])
+  );
+
+  const [loading, setLoading] = useState(true);
 
   const token = localStorage.getItem("authToken");
 
   useEffect(() => {
     const fetchRecommendedProblems = async () => {
-      const response = await fetch(`${BaseURL}/user/recommended-list`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const data = await response.json();
-      setRecommendedProblems(data);
+      try {
+        const response = await fetch(`${BaseURL}/user/recommended-list`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = await response.json();
+        setRecommendedProblems(data);
+        setLoading(false);
+      } catch (err) {
+        console.error("Could not fetch recommended problems: ", err);
+      }
     };
 
-    fetchRecommendedProblems();
+    // Delay for skeletons
+    const timer = setTimeout(() => {
+      fetchRecommendedProblems();
+    }, 500);
+
+    return () => clearTimeout(timer);
   }, []);
 
   const recommendedProblemItems = useMemo(() => {
     return recommendedProblems.length ? (
       recommendedProblems.map((problem, index) => (
-        <ProblemElement key={index} problem={problem} />
+        <ProblemElement
+          key={index}
+          delay={index * 0.075}
+          problem={problem}
+          loading={loading}
+        />
       ))
     ) : (
       <Typography variant="caption">

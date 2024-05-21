@@ -6,19 +6,9 @@ import { Typography } from "@mui/material";
 import LightbulbOutlinedIcon from "@mui/icons-material/LightbulbOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import { useEffect, useState } from "react";
+import { Topic } from "@/types";
 
 const BaseURL = import.meta.env.VITE_API_BASE_URL;
-
-interface Problem {
-  _id: string;
-  title: string;
-}
-
-interface Topic {
-  _id: string;
-  title: string;
-  problems: Problem[];
-}
 
 const DashboardPage = () => {
   const [topics, setTopics] = useState<Topic[]>([]);
@@ -40,6 +30,7 @@ const DashboardPage = () => {
       }
     };
 
+    // This is for skeletons
     const timer = setTimeout(() => {
       fetchTopics();
     }, 500);
