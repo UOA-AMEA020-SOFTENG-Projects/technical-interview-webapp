@@ -4,6 +4,8 @@ import CardContent from "@mui/material/CardContent";
 import { IconButton, Skeleton, Stack, Typography } from "@mui/material";
 import ProblemElement from "./Problem";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import { keyframes } from "@emotion/react";
+import styled from "@emotion/styled";
 
 interface Problem {
   _id: string;
@@ -20,6 +22,21 @@ interface Props {
   topics: Topic[];
 }
 
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
+
+const AnimatedCard = styled(Card)<{ delay: number }>`
+  animation: ${fadeIn} 0.5s ease-out forwards;
+  animation-delay: ${(props) => props.delay}s;
+  opacity: 0;
+`;
+
 const TopicsList = ({ topics }: Props) => {
   const [showTopics, setShowTopics] = useState(true);
   const [currentTopic, setCurrentTopic] = useState<Topic | null>(null);
@@ -34,7 +51,7 @@ const TopicsList = ({ topics }: Props) => {
   const topicListItems = useMemo(() => {
     return topics.length ? (
       topics.map((topic, index) => (
-        <Card
+        <AnimatedCard
           variant="outlined"
           style={{
             borderRadius: "10px",
@@ -43,6 +60,7 @@ const TopicsList = ({ topics }: Props) => {
           }}
           onClick={() => handleShowQuestionsList(topic)}
           key={index}
+          delay={index * 0.075}
         >
           <CardContent style={{ textAlign: "left", padding: "1em" }}>
             <Typography variant="subtitle1" fontWeight="600">
@@ -59,7 +77,7 @@ const TopicsList = ({ topics }: Props) => {
               ab!
             </Typography>
           </CardContent>
-        </Card>
+        </AnimatedCard>
       ))
     ) : (
       <>

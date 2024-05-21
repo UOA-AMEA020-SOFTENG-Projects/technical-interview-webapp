@@ -42,7 +42,7 @@ const DashboardPage = () => {
 
     const timer = setTimeout(() => {
       fetchTopics();
-    }, 1000);
+    }, 500);
 
     return () => clearTimeout(timer);
   }, []);
