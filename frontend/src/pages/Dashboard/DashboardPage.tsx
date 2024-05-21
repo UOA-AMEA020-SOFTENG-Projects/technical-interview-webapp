@@ -30,6 +30,7 @@ const DashboardPage = () => {
       }
     };
 
+    // This is for skeletons
     const timer = setTimeout(() => {
       fetchTopics();
     }, 500);
