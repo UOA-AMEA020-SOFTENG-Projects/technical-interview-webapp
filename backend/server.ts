@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import cors from "cors";
 import editorRouter from "./routes/editor.js";
 import connectDB from "./database/mongoose.js";
@@ -29,7 +29,7 @@ app.use(userRouter);
 app.use(questionRouter);
 app.use(analyticsRouter);
 
-app.use((error, req, res, next) => {
+app.use((error: any, req: Request, res: Response) => {
   const status = error.status || 500;
   const message = error.message || "Something went wrong.";
   res.status(status).json({ message: message });
@@ -45,7 +45,7 @@ if (process.env.NODE_ENV === "production") {
 
   app.use(express.static(path.join(dirname, "../frontend/dist")));
 
-  app.get("*", (req, res) => {
+  app.get("*", (req: Request, res: Response) => {
     res.sendFile(path.join(dirname, "../frontend/dist/index.html"));
   });
 }
