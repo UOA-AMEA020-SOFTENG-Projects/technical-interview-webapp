@@ -35,6 +35,9 @@ const AnimatedCard = styled(Card)<{ delay: number }>`
   animation: ${fadeIn} 0.5s ease-out forwards;
   animation-delay: ${(props) => props.delay}s;
   opacity: 0;
+  border-radius: 10px;
+  cursor: pointer;
+  border: none;
 `;
 
 const TopicsList = ({ topics }: Props) => {
@@ -53,11 +56,6 @@ const TopicsList = ({ topics }: Props) => {
       topics.map((topic, index) => (
         <AnimatedCard
           variant="outlined"
-          style={{
-            borderRadius: "10px",
-            cursor: "pointer",
-            borderWidth: 0,
-          }}
           onClick={() => handleShowQuestionsList(topic)}
           key={index}
           delay={index * 0.075}

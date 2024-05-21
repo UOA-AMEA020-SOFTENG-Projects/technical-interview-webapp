@@ -20,6 +20,9 @@ const fadeIn = keyframes`
 const AnimatedCard = styled(Card)`
   animation: ${fadeIn} 0.5s ease-out forwards;
   opacity: 0;
+  border: none;
+  padding: 0.7em 1em;
+  border-radius: 10px;
 `;
 
 const Problem = ({ problem }: { problem: Problem }) => {
@@ -28,10 +31,7 @@ const Problem = ({ problem }: { problem: Problem }) => {
       to={`/home/problem/${problem._id}`}
       style={{ textDecoration: "none" }}
     >
-      <AnimatedCard
-        variant="outlined"
-        style={{ borderWidth: 0, padding: "0.7em 1em", borderRadius: 10 }}
-      >
+      <AnimatedCard variant="outlined">
         <Typography variant="subtitle1" fontWeight="600" textAlign="left">
           {problem.title}
         </Typography>
