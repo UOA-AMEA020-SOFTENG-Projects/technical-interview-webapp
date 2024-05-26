@@ -2,6 +2,7 @@ import express, { Express, Request, Response } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
+import topicsRouter from "./routes/topics";
 
 dotenv.config();
 
@@ -19,6 +20,8 @@ app.listen(port, () => {
 mongoose.connect(MONGO_URI).then(() => {
   console.log("Connected to MongoDB");
 });
+
+app.use("/topics", topicsRouter);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Express + TypeScript Server");
