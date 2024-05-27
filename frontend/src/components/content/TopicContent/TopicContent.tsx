@@ -29,12 +29,7 @@ const TopicContent = ({ contentId }: Props) => {
       }
     };
 
-    // This is for loading state
-    const timer = setTimeout(() => {
-      fetchContent();
-    }, 0);
-
-    return () => clearTimeout(timer);
+    fetchContent();
   }, []);
 
   return (
