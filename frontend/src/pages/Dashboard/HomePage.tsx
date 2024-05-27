@@ -1,18 +1,8 @@
+import { Topic } from "@/types";
 import RecommendedProblems from "../../components/dashboard/RecommendedProblems";
 import Statistics from "../../components/dashboard/Statistics";
 import TopicsList from "../../components/dashboard/TopicsList";
 import { Typography } from "@mui/material";
-
-interface Problem {
-  _id: string;
-  title: string;
-}
-
-interface Topic {
-  _id: string;
-  title: string;
-  problems: Problem[];
-}
 
 interface Props {
   topics: Topic[];
