@@ -5,6 +5,7 @@
   width: 100%;
   z-index: 1000;
   display: flex;
+  background-color: white;
   justify-content: space-between;
   border-bottom: 2px solid #e0e0e0;
   align-items: center;
