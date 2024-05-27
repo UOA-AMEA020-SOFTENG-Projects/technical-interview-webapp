@@ -41,7 +41,10 @@
 .learn-page-cont {
   display: flex;
   gap: 2em;
+  align-items: flex-start;
   flex-wrap: wrap;
-  align-items: center;
   padding: 2em;
+  height: 85vh;
+  overflow-y: scroll;
+  scrollbar-width: none;
 }
