@@ -1,7 +1,7 @@
 import { Topic } from "@/types";
 import React, { useCallback, useMemo, useState } from "react";
 import TopicElement from "../../components/dashboard/Topic";
-import TopicContent from "../../components/content/TopicContent/TopicContent";
+import TopicContent from "../../components/dashboard/TopicContent/TopicContent";
 import { IconButton, Typography } from "@mui/material";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 
