@@ -1,15 +1,27 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import styles from "./LoggedInHeader.module.css";
-import { Avatar, IconButton, Tooltip, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  IconButton,
+  Modal,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import HelpOutlineRoundedIcon from "@mui/icons-material/HelpOutlineRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
+import HelpCarousel from "../../../dashboard/HelpCarousel";
 
 interface Props {
   username: string;
 }
 
 const LoggedInHeader = ({ username }: Props) => {
+  const [open, setOpen] = useState(false);
+  const handleOpen = useCallback(() => setOpen(true), []);
+  const handleClose = useCallback(() => setOpen(false), []);
+
   const navigate = useNavigate();
 
   const signoutHandler = () => {
@@ -33,7 +45,7 @@ const LoggedInHeader = ({ username }: Props) => {
 
       <div className={styles.userInfo}>
         <Tooltip title="Help">
-          <IconButton aria-label="help">
+          <IconButton aria-label="help" onClick={handleOpen}>
             <HelpOutlineRoundedIcon />
           </IconButton>
         </Tooltip>
@@ -47,6 +59,8 @@ const LoggedInHeader = ({ username }: Props) => {
         </Typography>
         <Avatar>A</Avatar>
       </div>
+
+      <HelpCarousel handleClose={handleClose} open={open} />
     </header>
   );
 };
