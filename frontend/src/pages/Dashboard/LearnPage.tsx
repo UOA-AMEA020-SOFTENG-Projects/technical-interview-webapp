@@ -38,7 +38,10 @@ const LearnPage = ({ topics }: Props) => {
   }, [topics]);
 
   return (
-    <div className="learn-page-cont">
+    <div
+      className="learn-page-cont"
+      style={{ height: showContent ? "85vh" : "" }}
+    >
       {showContent ? (
         <>
           <IconButton size="small" onClick={toggleShowContent}>
