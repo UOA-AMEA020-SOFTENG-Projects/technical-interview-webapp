@@ -11,7 +11,7 @@
 .home-page {
   display: flex;
   flex-direction: column;
-  padding: 0 3em;
+  padding: 1em 3em;
   margin: auto;
 }
 
@@ -32,7 +32,7 @@
   padding: 1em 2em;
   width: 400px;
   max-width: 400;
-  height: 80vh;
+  height: 75vh;
   background-color: #f5f5f5;
   text-align: center;
   border-radius: 25px;

@@ -12,7 +12,9 @@ const HomePage = ({ topics }: Props) => {
   return (
     <div className="home-page">
       <div>
-        <Typography variant="h3">Welcome Back</Typography>
+        <Typography variant="h3" sx={{ marginBottom: "0.3em" }}>
+          Welcome Back
+        </Typography>
         <div className="home-cols">
           <div className="home-col">
             <TopicsList topics={topics} />
