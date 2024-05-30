@@ -7,8 +7,6 @@ const BaseURL = import.meta.env.VITE_API_BASE_URL;
 const ProblemPage = () => {
   const problem = useLoaderData();
 
-  console.log(problem);
-
   return (
     <div>
       <CodeEditor problem={problem} />

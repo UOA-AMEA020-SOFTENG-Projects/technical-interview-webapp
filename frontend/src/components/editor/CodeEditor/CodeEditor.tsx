@@ -64,7 +64,6 @@ function CodeEditor({ problem }: Props) {
   const [isErrorVisible, setIsErrorVisible] = useState(false);
   const [testResults, setTestResults] = useState([]);
   const [showHint, setShowHint] = useState(false);
-  const [showSolutionModal, setShowSolutionModal] = useState(false);
 
   const saveSolution = (newValue: string, language: string) => {
     axios
@@ -192,8 +191,12 @@ function CodeEditor({ problem }: Props) {
     }
   }, [isErrorVisible]);
 
-  const resultSolutionHandler = async () => {
+  const resultSolutionHandler = () => {
     setValue(problem.boilerplateCode[0].boilerplate);
+  };
+
+  const handleShowSolution = () => {
+    setValue(problem.solution);
   };
 
   return (
@@ -357,7 +360,7 @@ function CodeEditor({ problem }: Props) {
             flexItem
           />
           <Tooltip title="Show Solution">
-            <IconButton onClick={() => setShowSolutionModal(true)}>
+            <IconButton onClick={handleShowSolution}>
               <ScienceOutlinedIcon />
             </IconButton>
           </Tooltip>
@@ -467,24 +470,6 @@ function CodeEditor({ problem }: Props) {
           <p>"{modelAnswer}"</p>
         </div>
       )}
-
-      <Modal
-        show={showSolutionModal}
-        onHide={() => setShowSolutionModal(false)}
-        dialogClassName={styles["modal-custom"]}
-        aria-labelledby="solution-modal"
-      >
-        <Modal.Header closeButton className={styles["modal-header"]}>
-          <div className={styles["modal-title-wrapper"]}>
-            <Modal.Title id="solution-modal">
-              <b>Solution</b>
-            </Modal.Title>
-          </div>
-        </Modal.Header>
-        <Modal.Body className={styles["modal-back"]}>
-          <pre>{problem.solution}</pre>
-        </Modal.Body>
-      </Modal>
 
       {isErrorVisible && (
         <div
