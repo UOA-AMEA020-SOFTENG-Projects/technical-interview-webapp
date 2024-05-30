@@ -1,118 +1,119 @@
 .editor-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #282c34;
-    padding: 20px;
-    box-sizing: border-box;
-}
-  
-.ace_editor {
-    width: 100%;
-    min-height: 500px;
-    border-radius: 5px;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #282c34;
+  box-sizing: border-box;
 }
 
+.ace_editor {
+  width: 100%;
+  min-height: 500px;
+  border-radius: 5px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
 
 .editorWrapper {
-    margin-top: 20rem;
-    padding-bottom: 5rem;
-    min-width: 60vw;
-    max-width: 70vw;
+  max-height: 90vh;
+  display: grid;
+  grid-template-areas:
+    "desc code code"
+    "desc code code"
+    "desc output output";
+  padding-bottom: 5rem;
+  justify-items: stretch;
+}
+
+.editorDesc {
+  grid-area: desc;
+  padding: 1em;
+  min-width: 300px;
+}
+
+.editorCodeContainer {
+  grid-template-areas: code;
+  width: 100%;
+  padding: 0 1em;
+}
+
+.editorCode {
+  min-width: 60vw;
+  min-height: 60vh;
+}
+
+.editorOutput {
+  grid-area: output;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.editorTitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .modal-custom {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    margin: auto;
-    max-width: 100%;
-    width: 90%; 
-    max-height: 30vh; 
-    height: auto;
-    background-color: #8fac51;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  max-width: 100%;
+  width: 90%;
+  max-height: 30vh;
+  height: auto;
+  background-color: #8fac51;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .modal-back {
-    background-color: #8fac51;
-    overflow-y: auto;
-    max-height: 30vh;
+  background-color: #8fac51;
+  overflow-y: auto;
+  max-height: 30vh;
 }
 
 .modal-header {
-    background-color: #8fac51;
-    width: 100%;
+  background-color: #8fac51;
+  width: 100%;
 }
 
 .modal-title-wrapper {
-    display: flex;
-    justify-content: center;
-    width: 100%;
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
 
 @media (min-width: 768px) {
   .modal-custom {
-    width: 70%; 
-    max-height: 30vh; 
+    width: 70%;
+    max-height: 30vh;
   }
 }
 
 @media (min-width: 1024px) {
   .modal-custom {
-    width: 50%; 
-    max-height: 30vh; 
+    width: 50%;
+    max-height: 30vh;
   }
 }
-
 
 .switchContainer {
-    display: flex;
-    align-items: center;
-    margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
 }
-  
+
 .onText {
-    color: green; 
-    font-weight: bold; 
-  }
-  
-  .offText {
-    color: red; 
-    font-weight: bold; 
-  }
-
-
-@media (max-height: 1070px) {
-    .editorWrapper {
-        margin-top: 15rem;
-        padding-bottom: 5rem;
-        min-width: 70vw;
-        max-width: 90vw;
-    } 
+  color: green;
+  font-weight: bold;
 }
 
-@media (max-height: 900px) {
-    .editorWrapper {
-        margin-top: 12.5rem;
-        padding-bottom: 5rem;
-        min-width: 70vw;
-        max-width: 90vw;
-    } 
-}
-
-@media (max-height: 700px) {
-    .editorWrapper {
-        margin-top: 11rem;
-        padding-bottom: 5rem;
-        min-width: 70vw;
-        max-width: 90vw;
-    } 
+.offText {
+  color: red;
+  font-weight: bold;
 }
