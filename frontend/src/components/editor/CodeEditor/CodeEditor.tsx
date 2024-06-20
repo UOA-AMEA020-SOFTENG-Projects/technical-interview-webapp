@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, SetStateAction } from "react";
 import "../../../../config/aceConfig.js";
 import useSolution from "../../../hooks/useSolution.js";
 import AceEditor from "react-ace";
@@ -25,12 +25,18 @@ import ScienceOutlinedIcon from "@mui/icons-material/ScienceOutlined";
 import PublishRoundedIcon from "@mui/icons-material/PublishRounded";
 import RefreshOutlinedIcon from "@mui/icons-material/RefreshOutlined";
 import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Slider,
   ButtonGroup,
   Typography,
   Button,
   IconButton,
   Tooltip,
   Divider,
+  Box,
 } from "@mui/material";
 
 const BaseURL = import.meta.env.VITE_API_BASE_URL;
@@ -64,6 +70,8 @@ function CodeEditor({ problem }: Props) {
   const [isErrorVisible, setIsErrorVisible] = useState(false);
   const [testResults, setTestResults] = useState([]);
   const [showHint, setShowHint] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [sliderValue, setSliderValue] = useState(3);
 
   const saveSolution = (newValue: string, language: string) => {
     axios
@@ -120,23 +128,38 @@ function CodeEditor({ problem }: Props) {
   const submitHandler = async () => {
     try {
       // call endpoint 2 here
-      const response = await axios.post(
-        `${BaseURL}/editor/code`,
-        { code: value },
-        { params: { language_id: selectedLanguage } }
-      );
+      // const response = await axios.post(
+      //   `${BaseURL}/editor/code`,
+      //   { code: value },
+      //   { params: { language_id: selectedLanguage } }
+      // );
+      // setOutput(response.data.output);
+      setModalOpen(true);
 
-      if (response.status !== 200) {
-        setErrorMsg("Something went wrong.");
-        setIsErrorVisible(true);
-        return;
-      }
+      // if (response.status !== 200) {
+      //   setErrorMsg("Something went wrong.");
+      //   setIsErrorVisible(true);
+      //   return;
+      // }
 
-      setOutput(response.data.output);
+      // if (response.status === 200) {
+      //   setOutput(response.data.output);
+      //   setModalOpen(true);
+      // }
+
+      // setOutput(response.data.output);
     } catch (error) {
       setErrorMsg("Code not compiling");
       setIsErrorVisible(true);
     }
+  };
+
+  const handleSliderChange = (event: any, newValue: number) => {
+    setSliderValue(newValue);
+  };
+
+  const handleSliderSubmit = () => {
+    setModalOpen(false);
   };
 
   const testSubmitHandler = async () => {
@@ -486,6 +509,37 @@ function CodeEditor({ problem }: Props) {
           {errorMsg}
         </div>
       )}
+      <Dialog
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        sx={{ "& .MuiDialog-paper": { width: "500px", height: "250px" } }}
+      >
+        <DialogTitle>Difficulty Rating</DialogTitle>
+        <DialogContent>
+          <Typography>How hard was that question?</Typography>
+          <Box mt={2}>
+            <Slider
+              value={sliderValue}
+              onChange={handleSliderChange}
+              step={1}
+              min={1}
+              max={5}
+              valueLabelDisplay="auto"
+              marks={[
+                { value: 1, label: "1" },
+                { value: 2, label: "2" },
+                { value: 3, label: "3" },
+                { value: 4, label: "4" },
+                { value: 5, label: "5" },
+              ]}
+            />
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => handleSliderSubmit()}>Submit</Button>
+          <Button onClick={() => setModalOpen(false)}>Close</Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }
