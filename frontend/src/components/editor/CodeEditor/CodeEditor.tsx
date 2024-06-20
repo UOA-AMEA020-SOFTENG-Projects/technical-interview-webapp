@@ -71,7 +71,21 @@ function CodeEditor({ problem }: Props) {
   const [testResults, setTestResults] = useState([]);
   const [showHint, setShowHint] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
-  const [sliderValue, setSliderValue] = useState(3);
+  const [difficultyValue, setDifficultyValue] = useState(3);
+  const [clarityValue, setClarityValue] = useState(3);
+  const [satisfactionValue, setSatisfactionValue] = useState(3);
+
+  const handleDifficultyChange = (event, newValue) => {
+    setDifficultyValue(newValue);
+  };
+
+  const handleClarityChange = (event, newValue) => {
+    setClarityValue(newValue);
+  };
+
+  const handleSatisfactionChange = (event, newValue) => {
+    setSatisfactionValue(newValue);
+  };
 
   const saveSolution = (newValue: string, language: string) => {
     axios
@@ -152,10 +166,6 @@ function CodeEditor({ problem }: Props) {
       setErrorMsg("Code not compiling");
       setIsErrorVisible(true);
     }
-  };
-
-  const handleSliderChange = (event: any, newValue: number) => {
-    setSliderValue(newValue);
   };
 
   const handleSliderSubmit = () => {
@@ -512,25 +522,76 @@ function CodeEditor({ problem }: Props) {
       <Dialog
         open={modalOpen}
         onClose={() => setModalOpen(false)}
-        sx={{ "& .MuiDialog-paper": { width: "500px", height: "250px" } }}
+        sx={{
+          "& .MuiDialog-paper": {
+            width: "100%",
+            maxWidth: "800px",
+            height: "auto",
+            paddingX: "40px",
+          },
+        }}
       >
         <DialogTitle>Difficulty Rating</DialogTitle>
-        <DialogContent>
-          <Typography>How hard was that question?</Typography>
+        <DialogContent sx={{ overflowY: "visible" }}>
+          <Typography variant="h6" gutterBottom>
+            How would you rate the difficulty of this problem?
+          </Typography>
           <Box mt={2}>
             <Slider
-              value={sliderValue}
-              onChange={handleSliderChange}
+              value={difficultyValue}
+              onChange={handleDifficultyChange}
               step={1}
               min={1}
               max={5}
               valueLabelDisplay="auto"
               marks={[
-                { value: 1, label: "1" },
-                { value: 2, label: "2" },
-                { value: 3, label: "3" },
-                { value: 4, label: "4" },
-                { value: 5, label: "5" },
+                { value: 1, label: "Easy" },
+                { value: 2, label: "Moderate" },
+                { value: 3, label: "Medium" },
+                { value: 4, label: "Hard" },
+                { value: 5, label: "Very Hard" },
+              ]}
+            />
+          </Box>
+
+          <Typography variant="h6" gutterBottom>
+            How clear was the problem statement?
+          </Typography>
+          <Box mt={2}>
+            <Slider
+              value={clarityValue}
+              onChange={handleClarityChange}
+              step={1}
+              min={1}
+              max={5}
+              valueLabelDisplay="auto"
+              marks={[
+                { value: 1, label: "Very Unclear" },
+                { value: 2, label: "Unclear" },
+                { value: 3, label: "Neutral" },
+                { value: 4, label: "Clear" },
+                { value: 5, label: "Very Clear" },
+              ]}
+            />
+          </Box>
+
+          <Typography variant="h6" gutterBottom>
+            How satisfied are you with your solution?
+          </Typography>
+          <Box mt={2}>
+            <Slider
+              value={satisfactionValue}
+              onChange={handleSatisfactionChange}
+              step={1}
+              min={1}
+              max={5}
+              valueLabelDisplay="auto"
+              marks={[
+                { value: 1, label: "Very Unsatisfied" },
+                { value: 2, label: "Unsatisfied" },
+                { value: 3, label: "Neutral" },
+                { value: 4, label: "Satisfied" },
+                { value: 5, label: "Very Satisfied" },
               ]}
             />
           </Box>
