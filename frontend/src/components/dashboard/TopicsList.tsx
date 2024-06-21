@@ -7,6 +7,7 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
 import { Topic } from "@/types";
+import TopicElement from "./Topic";
 
 interface Props {
   topics: Topic[];
@@ -44,28 +45,12 @@ const TopicsList = ({ topics }: Props) => {
   const topicListItems = useMemo(() => {
     return topics.length ? (
       topics.map((topic, index) => (
-        <AnimatedCard
-          variant="outlined"
-          onClick={() => handleShowQuestionsList(topic)}
+        <TopicElement
           key={index}
+          topic={topic}
           delay={index * 0.075}
-        >
-          <CardContent style={{ textAlign: "left", padding: "1em" }}>
-            <Typography variant="subtitle1" fontWeight="600">
-              {topic.title}
-            </Typography>
-            <Typography
-              variant="body2"
-              lineHeight="1.5"
-              fontSize="0.8rem"
-              fontWeight="300"
-              color="#787486"
-            >
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quidem,
-              ab!
-            </Typography>
-          </CardContent>
-        </AnimatedCard>
+          handleClick={handleShowQuestionsList}
+        />
       ))
     ) : (
       <>
@@ -141,7 +126,7 @@ const TopicsList = ({ topics }: Props) => {
 
       <div
         style={{
-          height: "70vh",
+          height: "65vh",
           overflowY: "scroll",
           scrollbarWidth: "none",
         }}
