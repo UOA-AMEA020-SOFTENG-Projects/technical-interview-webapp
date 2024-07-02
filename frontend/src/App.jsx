@@ -14,9 +14,7 @@ import DashboardPage from "./pages/Dashboard/DashboardPage.tsx";
 import { loader as problemLoader } from "./pages/ProblemPage.jsx";
 import { action as signupAction } from "./pages/SignupPage.jsx";
 import { loader as usernameLoader } from "./pages/HomeRootPage.jsx";
-import { loader as questionsLoader } from "./pages/QuestionnairePage.jsx";
 import { action as loginAction } from "./pages/LoginPage.jsx";
-import QuestionnairePage from "./pages/QuestionnairePage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -32,11 +30,6 @@ const router = createBrowserRouter([
         element: <HomeRootPage />,
         loader: usernameLoader,
         children: [
-          {
-            path: "questionnaire",
-            element: <QuestionnairePage />,
-            loader: questionsLoader,
-          },
           {
             path: "dashboard",
             element: <DashboardPage />,
