@@ -2,7 +2,6 @@ import { useState, useEffect, SetStateAction } from "react";
 import "../../../../config/aceConfig.js";
 import useSolution from "../../../hooks/useSolution.js";
 import AceEditor from "react-ace";
-import { Modal } from "react-bootstrap";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Badge from "react-bootstrap/Badge";
@@ -45,6 +44,14 @@ interface Props {
   problem: Problem;
 }
 
+interface TestResult {
+  passed: boolean;
+  testcase: string;
+  input: string;
+  expectedOutput: string;
+  actualOutput: string;
+}
+
 function CodeEditor({ problem }: Props) {
   const token = localStorage.getItem("authToken");
 
@@ -53,7 +60,7 @@ function CodeEditor({ problem }: Props) {
     "GET",
     true,
     token,
-    problem.boilerplateCode[0].language
+    problem.boilerplateCode[0].language,
   );
 
   const [value, setValue] = useState(problem.boilerplateCode[0].boilerplate);
@@ -64,27 +71,33 @@ function CodeEditor({ problem }: Props) {
   const [modelAnswer, setModelAnswer] = useState("");
   const [testCaseLoading, setTestCaseLoading] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState(
-    problem.boilerplateCode[0].language
+    problem.boilerplateCode[0].language,
   );
   const [errorMsg, setErrorMsg] = useState("");
   const [isErrorVisible, setIsErrorVisible] = useState(false);
-  const [testResults, setTestResults] = useState([]);
+  const [testResults, setTestResults] = useState<TestResult[]>([]);
   const [showHint, setShowHint] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [difficultyValue, setDifficultyValue] = useState(3);
   const [clarityValue, setClarityValue] = useState(3);
   const [satisfactionValue, setSatisfactionValue] = useState(3);
 
-  const handleDifficultyChange = (event, newValue) => {
-    setDifficultyValue(newValue);
+  const handleDifficultyChange = (
+    event: Event,
+    newValue: number | number[],
+  ) => {
+    setDifficultyValue(newValue as number);
   };
 
-  const handleClarityChange = (event, newValue) => {
-    setClarityValue(newValue);
+  const handleClarityChange = (event: Event, newValue: number | number[]) => {
+    setClarityValue(newValue as number);
   };
 
-  const handleSatisfactionChange = (event, newValue) => {
-    setSatisfactionValue(newValue);
+  const handleSatisfactionChange = (
+    event: Event,
+    newValue: number | number[],
+  ) => {
+    setSatisfactionValue(newValue as number);
   };
 
   const saveSolution = (newValue: string, language: string) => {
@@ -95,7 +108,7 @@ function CodeEditor({ problem }: Props) {
         {
           params: { language_id: language },
           headers: { Authorization: `Bearer ${token}` },
-        }
+        },
       )
       .then((response) => {
         console.log(response.data);
@@ -125,7 +138,9 @@ function CodeEditor({ problem }: Props) {
     }
   };
 
-  const dropDownChangeHandler = (event) => {
+  const dropDownChangeHandler = (
+    event: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
     setSelectedLanguage(event.target.value);
 
     // use the hook to get the latest use solution or if none exists then the boilerplate by default
@@ -182,7 +197,7 @@ function CodeEditor({ problem }: Props) {
         {
           params: { language_id: selectedLanguage },
           headers: { Authorization: `Bearer ${token}` },
-        }
+        },
       );
 
       if (response.status !== 200) {
@@ -195,7 +210,7 @@ function CodeEditor({ problem }: Props) {
 
       // Check if all test cases passed
       const allTestCasesPassed = response.data.testResults.every(
-        (result) => result.passed
+        (result: any) => result.passed,
       );
 
       if (allTestCasesPassed) {
@@ -275,7 +290,7 @@ function CodeEditor({ problem }: Props) {
                                         </strong>,
                                         inputItem,
                                       ]
-                                    : [inputItem]
+                                    : [inputItem],
                                 ),
                             ]
                           : outputItem
@@ -290,8 +305,8 @@ function CodeEditor({ problem }: Props) {
                                       </strong>,
                                       inputItem,
                                     ]
-                                  : [inputItem]
-                              )
+                                  : [inputItem],
+                              ),
                       ),
                   ]
                 : item
@@ -315,7 +330,7 @@ function CodeEditor({ problem }: Props) {
                                       </strong>,
                                       inputItem,
                                     ]
-                                  : [inputItem]
+                                  : [inputItem],
                               ),
                           ]
                         : outputItem
@@ -328,16 +343,16 @@ function CodeEditor({ problem }: Props) {
                                     </strong>,
                                     inputItem,
                                   ]
-                                : [inputItem]
-                            )
-                    )
+                                : [inputItem],
+                            ),
+                    ),
             )}
         </p>
 
         <p>{`Selected language is ${selectedLanguage}`}</p>
         <select
           value={selectedLanguage}
-          default={selectedLanguage}
+          defaultValue={selectedLanguage}
           onChange={dropDownChangeHandler}
         >
           {problem.boilerplateCode.map((boilerplate, index) => (
