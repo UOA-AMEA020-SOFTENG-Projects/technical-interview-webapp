@@ -1,6 +1,49 @@
 import mongoose from "mongoose";
 import Schema from "mongoose";
 
+const problemAttemptSchema = new mongoose.Schema(
+  {
+    problem: {
+      type: Schema.Types.ObjectId,
+      ref: "Problem",
+    },
+    solution: String,
+    measuredData: {
+      correctness: Boolean,
+      timeSpent: Number,
+      hintUsage: Boolean,
+      codeEfficiency: Number, // Representing Big O notation as a number
+    },
+    userFeedback: {
+      difficulty: {
+        type: Number,
+        min: 1,
+        max: 5,
+      },
+      confidence: {
+        type: Number,
+        min: 1,
+        max: 5,
+      },
+      understanding: {
+        type: Number,
+        min: 1,
+        max: 5,
+      },
+    },
+    qualityOfResponse: {
+      type: Number,
+      min: 0,
+      max: 5,
+    },
+    attemptDate: {
+      type: Date,
+      default: Date.now,
+    },
+  },
+  { _id: true }
+);
+
 const userSchema = new mongoose.Schema(
   {
     username: {
@@ -29,7 +72,7 @@ const userSchema = new mongoose.Schema(
         },
         language: String,
         solution: String,
-      }
+      },
     ],
     problemsCompleted: [
       {
@@ -43,12 +86,13 @@ const userSchema = new mongoose.Schema(
         ref: "Problem",
       },
     ],
+    problemAttempts: [problemAttemptSchema],
   },
+
   {
     timestamps: {},
   }
 );
-
 
 export const User = mongoose.model("User", userSchema);
 
