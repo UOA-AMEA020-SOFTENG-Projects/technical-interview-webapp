@@ -1,6 +1,18 @@
 import React from "react";
-import { Button, ButtonGroup, Typography } from "@mui/material";
+import {
+  Button,
+  ButtonGroup,
+  IconButton,
+  Paper,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { useEffect } from "react";
+import styles from "./CodeEditor.module.css";
+import SpeedIcon from "@mui/icons-material/Speed";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import PauseIcon from "@mui/icons-material/Pause";
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
 
 interface TimerDisplayProps {
   setIsTimerRunning: React.Dispatch<React.SetStateAction<boolean>>;
@@ -46,18 +58,28 @@ const TimerDisplay: React.FC<TimerDisplayProps> = ({
   };
 
   return (
-    <div>
-      <Typography>{formatTime(timeSpent)}</Typography>
+    <Paper elevation={0} className={styles.timerDisplayContainer}>
       <ButtonGroup variant="contained" size="small">
-        <Button onClick={startTimer} disabled={isTimerRunning}>
-          Play
-        </Button>
-        <Button onClick={pauseTimer} disabled={!isTimerRunning}>
-          Pause
-        </Button>
-        <Button onClick={resetTimer}>Reset</Button>
+        <Tooltip title="Start Timer">
+          <IconButton onClick={startTimer} disabled={isTimerRunning}>
+            <PlayArrowIcon />
+          </IconButton>
+        </Tooltip>
+
+        <Tooltip title="Pause Timer">
+          <IconButton onClick={pauseTimer} disabled={!isTimerRunning}>
+            <PauseIcon />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Reset Timer">
+          <IconButton onClick={resetTimer}>
+            <RestartAltIcon />
+          </IconButton>
+        </Tooltip>
       </ButtonGroup>
-    </div>
+      <SpeedIcon />
+      <Typography>{formatTime(timeSpent)}</Typography>
+    </Paper>
   );
 };
 

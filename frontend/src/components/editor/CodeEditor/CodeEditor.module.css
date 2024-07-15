@@ -53,6 +53,14 @@
   align-items: center;
 }
 
+.timerDisplayContainer{
+  display: flex;
+  gap: 1rem;
+  border-radius: 5px;
+  padding: 1em;
+  align-items: center;
+}
+
 .modal-custom {
   position: fixed;
   top: 0;

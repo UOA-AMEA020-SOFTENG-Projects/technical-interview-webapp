@@ -28,6 +28,9 @@ import {
   DialogTitle,
   Divider,
   IconButton,
+  Modal,
+  Paper,
+  Popover,
   Slider,
   Tooltip,
   Typography,
@@ -63,7 +66,7 @@ function CodeEditor({ problem }: Props) {
     "GET",
     true,
     token,
-    problem.boilerplateCode[0].language
+    problem.boilerplateCode[0].language,
   );
 
   const [value, setValue] = useState(problem.boilerplateCode[0].boilerplate);
@@ -75,7 +78,7 @@ function CodeEditor({ problem }: Props) {
   const [modelAnswer, setModelAnswer] = useState("");
   const [testCaseLoading, setTestCaseLoading] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState(
-    problem.boilerplateCode[0].language
+    problem.boilerplateCode[0].language,
   );
   const [errorMsg, setErrorMsg] = useState("");
   const [isErrorVisible, setIsErrorVisible] = useState(false);
@@ -90,9 +93,19 @@ function CodeEditor({ problem }: Props) {
   const [hintUsage, setHintUsage] = useState(false);
   const [currentAttemptId, setCurrentAttemptId] = useState("");
 
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handlePropoverClose = () => {
+    setAnchorEl(null);
+  };
+
   const handleDifficultyChange = (
     event: Event,
-    newValue: number | number[]
+    newValue: number | number[],
   ) => {
     setDifficultyValue(newValue as number);
   };
@@ -103,7 +116,7 @@ function CodeEditor({ problem }: Props) {
 
   const handleSatisfactionChange = (
     event: Event,
-    newValue: number | number[]
+    newValue: number | number[],
   ) => {
     setSatisfactionValue(newValue as number);
   };
@@ -117,7 +130,7 @@ function CodeEditor({ problem }: Props) {
           {
             params: { language_id: currentLanguage },
             headers: { Authorization: `Bearer ${token}` },
-          }
+          },
         )
         .then((response) => {
           console.log("Solution saved:", response.data);
@@ -128,7 +141,7 @@ function CodeEditor({ problem }: Props) {
           setIsErrorVisible(true);
         });
     },
-    [problem._id, token]
+    [problem._id, token],
   );
 
   const userInputHandler = (newValue: string) => {
@@ -151,7 +164,7 @@ function CodeEditor({ problem }: Props) {
   };
 
   const dropDownChangeHandler = (
-    event: React.ChangeEvent<HTMLSelectElement>
+    event: React.ChangeEvent<HTMLSelectElement>,
   ) => {
     setSelectedLanguage(event.target.value);
 
@@ -182,7 +195,7 @@ function CodeEditor({ problem }: Props) {
         {
           params: { language_id: selectedLanguage },
           headers: { Authorization: `Bearer ${token}` },
-        }
+        },
       );
 
       if (testResponse.status !== 200) {
@@ -206,7 +219,7 @@ function CodeEditor({ problem }: Props) {
       let allTestsPassed = false;
 
       if (data && data.testResults) {
-        allTestsPassed = data.testResults.every((test) => test.passed);
+        allTestsPassed = data.testResults.every((test: any) => test.passed);
       }
 
       const response = await axios.post(
@@ -224,7 +237,7 @@ function CodeEditor({ problem }: Props) {
         },
         {
           headers: { Authorization: `Bearer ${token}` },
-        }
+        },
       );
 
       if (response.status === 201) {
@@ -252,7 +265,7 @@ function CodeEditor({ problem }: Props) {
           },
           {
             headers: { Authorization: `Bearer ${token}` },
-          }
+          },
         );
       } catch (error) {
         console.error("Error updating user feedback:", error);
@@ -276,14 +289,14 @@ function CodeEditor({ problem }: Props) {
         {
           params: { language_id: selectedLanguage },
           headers: { Authorization: `Bearer ${token}` },
-        }
+        },
       );
 
       if (response.status === 200) {
         setTestResults(response.data.testResults);
 
         const allTestCasesPassed = response.data.testResults.every(
-          (result: any) => result.passed
+          (result: any) => result.passed,
         );
 
         if (allTestCasesPassed) {
@@ -302,7 +315,7 @@ function CodeEditor({ problem }: Props) {
             },
             {
               headers: { Authorization: `Bearer ${token}` },
-            }
+            },
           );
         }
       }
@@ -341,10 +354,12 @@ function CodeEditor({ problem }: Props) {
         },
         {
           headers: { Authorization: `Bearer ${token}` },
-        }
+        },
       );
     }
   };
+
+  const openHintPopover = Boolean(anchorEl);
 
   return (
     <div className={styles.editorWrapper}>
@@ -389,7 +404,7 @@ function CodeEditor({ problem }: Props) {
                                         </strong>,
                                         inputItem,
                                       ]
-                                    : [inputItem]
+                                    : [inputItem],
                                 ),
                             ]
                           : outputItem
@@ -404,8 +419,8 @@ function CodeEditor({ problem }: Props) {
                                       </strong>,
                                       inputItem,
                                     ]
-                                  : [inputItem]
-                              )
+                                  : [inputItem],
+                              ),
                       ),
                   ]
                 : item
@@ -429,7 +444,7 @@ function CodeEditor({ problem }: Props) {
                                       </strong>,
                                       inputItem,
                                     ]
-                                  : [inputItem]
+                                  : [inputItem],
                               ),
                           ]
                         : outputItem
@@ -442,9 +457,9 @@ function CodeEditor({ problem }: Props) {
                                     </strong>,
                                     inputItem,
                                   ]
-                                : [inputItem]
-                            )
-                    )
+                                : [inputItem],
+                            ),
+                    ),
             )}
         </p>
 
@@ -497,8 +512,8 @@ function CodeEditor({ problem }: Props) {
           />
           <Tooltip title="Show Hint">
             <IconButton
-              onClick={() => {
-                setShowHint(true);
+              onClick={(e) => {
+                handleClick(e);
                 setHintUsage(true);
               }}
             >
@@ -544,11 +559,9 @@ function CodeEditor({ problem }: Props) {
         />
 
         <div className={styles.editorOutput}>
-          <div
+          <Paper
             style={{
-              backgroundColor: "#8FAC51",
-              borderRadius: "10px",
-              padding: "20px",
+              padding: "1em",
               overflow: "auto",
             }}
           >
@@ -591,29 +604,35 @@ function CodeEditor({ problem }: Props) {
                 </p>
               </div>
             ))}
-          </div>
+          </Paper>
 
-          <div
+          <Paper
             style={{
-              backgroundColor: "#8FAC51",
-              borderRadius: "10px",
-              padding: "20px",
+              padding: "1em",
               overflow: "auto",
             }}
           >
             <h3>Output: </h3>
             <p>{output}</p>
-          </div>
+          </Paper>
         </div>
       </div>
 
-      {showHint && (
-        <div style={{ marginTop: "1rem" }}>
+      <Popover
+        open={openHintPopover}
+        onClose={handlePropoverClose}
+        anchorEl={anchorEl}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+      >
+        <div style={{ padding: "1rem", maxWidth: "400px" }}>
           <p>
             <b>Hint:</b> {problem.hint}
           </p>
         </div>
-      )}
+      </Popover>
 
       {showFeedback && (
         <div style={{ marginTop: "2%" }}>
