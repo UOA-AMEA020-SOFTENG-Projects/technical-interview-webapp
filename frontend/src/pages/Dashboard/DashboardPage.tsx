@@ -7,6 +7,7 @@ import LightbulbOutlinedIcon from "@mui/icons-material/LightbulbOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import { useEffect, useState } from "react";
 import { Topic } from "@/types";
+import LearnPage from "./LearnPage";
 
 const BaseURL = import.meta.env.VITE_API_BASE_URL;
 
@@ -38,7 +39,11 @@ const DashboardPage = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const navItems = [<HomePage topics={topics} />, <div>2 </div>, <div>3 </div>];
+  const navItems = [
+    <HomePage topics={topics} />,
+    <LearnPage topics={topics}></LearnPage>,
+    <div>3 </div>,
+  ];
   const navHeadinds = [
     <>
       <GridViewOutlinedIcon />

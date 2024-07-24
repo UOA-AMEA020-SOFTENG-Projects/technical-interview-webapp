@@ -6,19 +6,15 @@ import "./App.css";
 import LandingPage from "./pages/LandingPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import SignupPage from "./pages/SignupPage.jsx";
-import ContentPage from "./pages/ContentPage.jsx";
 import ProblemPage from "./pages/ProblemPage.jsx";
 import ErrorPage from "./pages/ErrorPage.tsx";
 import RootPage from "./pages/RootPage.jsx";
 import HomeRootPage from "./pages/HomeRootPage.jsx";
 import DashboardPage from "./pages/Dashboard/DashboardPage.tsx";
 import { loader as problemLoader } from "./pages/ProblemPage.jsx";
-import { loader as contentLoader } from "./pages/ContentPage.jsx";
 import { action as signupAction } from "./pages/SignupPage.jsx";
 import { loader as usernameLoader } from "./pages/HomeRootPage.jsx";
-import { loader as questionsLoader } from "./pages/QuestionnairePage.jsx";
 import { action as loginAction } from "./pages/LoginPage.jsx";
-import QuestionnairePage from "./pages/QuestionnairePage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -35,18 +31,8 @@ const router = createBrowserRouter([
         loader: usernameLoader,
         children: [
           {
-            path: "questionnaire",
-            element: <QuestionnairePage />,
-            loader: questionsLoader,
-          },
-          {
             path: "dashboard",
             element: <DashboardPage />,
-          },
-          {
-            path: "content/:topicId",
-            element: <ContentPage />,
-            loader: contentLoader,
           },
           {
             path: "problem/:problemId",
