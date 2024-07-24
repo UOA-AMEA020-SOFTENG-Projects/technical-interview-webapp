@@ -222,10 +222,12 @@ function CodeEditor({ problem }: Props) {
     clarityValue: number,
     satisfactionValue: number,
   ) => {
+    // We have to %5 because the slider values are from reverted, in SR 5 = perfect resposne,
+    // in our slider 5 is hard
     const userFeedback = new UserFeedback(
-      difficultyValue,
-      clarityValue,
-      satisfactionValue,
+      difficultyValue % 5,
+      clarityValue % 5,
+      satisfactionValue % 5,
     );
 
     // Adjust score based on user feedback - 50% weightage user, heuristic
