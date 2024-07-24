@@ -28,7 +28,6 @@ import {
   DialogTitle,
   Divider,
   IconButton,
-  Modal,
   Paper,
   Popover,
   Slider,
@@ -42,6 +41,12 @@ import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/snippets/java";
 import { useNavigate } from "react-router-dom";
 import TimerDisplay from "./TimerDisplay.js";
+import { Metrics } from "../../../heuristics/Metrics.js";
+import {
+  combineScores,
+  HeuristicPipeline,
+} from "../../../heuristics/HeuristicPipelint.js";
+import { CorrectnessHeuristic } from "../../../heuristics/HeuristicStrategies.js";
 
 const BaseURL = import.meta.env.VITE_API_BASE_URL;
 
@@ -92,6 +97,7 @@ function CodeEditor({ problem }: Props) {
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [hintUsage, setHintUsage] = useState(false);
   const [currentAttemptId, setCurrentAttemptId] = useState("");
+  const [numOfTimesTestsRan, setNumOfTimesTestsRan] = useState(0);
 
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
@@ -187,6 +193,28 @@ function CodeEditor({ problem }: Props) {
   // run code: req.body is the code, query param is the selected language
   // run tests: req.body -> code, query param -> language, and path param is problem id
 
+  const calculateQualityOfResponse = (
+    correctness: boolean,
+    numOfTimesTestsRan: number,
+    hintUsage: boolean,
+  ) => {
+    const metrics = new Metrics(
+      120, // time spent
+      correctness,
+      hintUsage, // hint usage
+      85, // code efficiency
+      numOfTimesTestsRan,
+    );
+
+    const pipeline = new HeuristicPipeline();
+    pipeline.addStrategy(new CorrectnessHeuristic());
+
+    const scores = pipeline.execute(metrics);
+    const finalScore = combineScores(scores);
+
+    return finalScore;
+  };
+
   const submitHandler = async () => {
     try {
       const testResponse = await axios.post(
@@ -222,6 +250,13 @@ function CodeEditor({ problem }: Props) {
         allTestsPassed = data.testResults.every((test: any) => test.passed);
       }
 
+      const qualityOfResponse = calculateQualityOfResponse(
+        allTestsPassed,
+        0,
+        hintUsage,
+      );
+
+      // When user clicks submit we count it as one attempt
       const response = await axios.post(
         `${BaseURL}/user/problem-attempt`,
         {
@@ -232,8 +267,9 @@ function CodeEditor({ problem }: Props) {
             timeSpent,
             hintUsage,
             codeEfficiency: 1,
+            numberOfTestRuns: numOfTimesTestsRan,
           },
-          qualityOfResponse: 0,
+          qualityOfResponse: qualityOfResponse,
         },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -281,6 +317,7 @@ function CodeEditor({ problem }: Props) {
   };
 
   const testSubmitHandler = async () => {
+    setNumOfTimesTestsRan((prev) => prev + 1);
     setTestCaseLoading(true);
     try {
       const response = await axios.post(
@@ -303,20 +340,6 @@ function CodeEditor({ problem }: Props) {
           toast.success("Problem successfully Completed!", {
             position: toast.POSITION.BOTTOM_CENTER,
           });
-        }
-
-        if (currentAttemptId) {
-          await axios.patch(
-            `${BaseURL}/user/problem-attempt/${currentAttemptId}`,
-            {
-              measuredData: {
-                correctness: allTestCasesPassed,
-              },
-            },
-            {
-              headers: { Authorization: `Bearer ${token}` },
-            },
-          );
         }
       }
     } catch (error) {

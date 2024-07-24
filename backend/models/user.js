@@ -13,6 +13,7 @@ const problemAttemptSchema = new mongoose.Schema(
       timeSpent: Number,
       hintUsage: Boolean,
       codeEfficiency: Number, // Representing Big O notation as a number
+      numberOfTestRuns: Number,
     },
     userFeedback: {
       difficulty: {
