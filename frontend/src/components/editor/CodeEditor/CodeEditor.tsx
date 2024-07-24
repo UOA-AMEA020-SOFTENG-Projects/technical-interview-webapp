@@ -42,11 +42,10 @@ import "ace-builds/src-noconflict/snippets/java";
 import { useNavigate } from "react-router-dom";
 import TimerDisplay from "./TimerDisplay.js";
 import { Metrics } from "../../../heuristics/Metrics.js";
-import {
-  combineScores,
-  HeuristicPipeline,
-} from "../../../heuristics/HeuristicPipelint.js";
+import { HeuristicPipeline } from "../../../heuristics/HeuristicPipeline.js";
 import { CorrectnessHeuristic } from "../../../heuristics/HeuristicStrategies.js";
+import { UserFeedback } from "../../../heuristics/UserFeedback.js";
+import { adjustScore, combineScores } from "../../../heuristics/index.js";
 
 const BaseURL = import.meta.env.VITE_API_BASE_URL;
 
@@ -98,6 +97,7 @@ function CodeEditor({ problem }: Props) {
   const [hintUsage, setHintUsage] = useState(false);
   const [currentAttemptId, setCurrentAttemptId] = useState("");
   const [numOfTimesTestsRan, setNumOfTimesTestsRan] = useState(0);
+  const [heuristicScore, setHeuristicScore] = useState(3);
 
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
@@ -211,8 +211,25 @@ function CodeEditor({ problem }: Props) {
     // We will add more strategies here
 
     const scores = pipeline.execute(metrics);
-    const finalScore = combineScores(scores);
+    const heuristicScore = combineScores(scores);
 
+    return heuristicScore;
+  };
+
+  const adjustQualityOfResponseFromUserFeedback = (
+    heuristicScore: number,
+    difficultyValue: number,
+    clarityValue: number,
+    satisfactionValue: number,
+  ) => {
+    const userFeedback = new UserFeedback(
+      difficultyValue,
+      clarityValue,
+      satisfactionValue,
+    );
+
+    // Adjust score based on user feedback - 50% weightage user, heuristic
+    const finalScore = adjustScore(heuristicScore, userFeedback, 0.8, 0.2);
     return finalScore;
   };
 
@@ -251,11 +268,13 @@ function CodeEditor({ problem }: Props) {
         allTestsPassed = data.testResults.every((test: any) => test.passed);
       }
 
-      const qualityOfResponse = calculateQualityOfResponse(
+      const heuristicScore = calculateQualityOfResponse(
         allTestsPassed,
         0,
         hintUsage,
       );
+
+      setHeuristicScore(heuristicScore);
 
       // When user clicks submit we count it as one attempt
       const response = await axios.post(
@@ -270,7 +289,7 @@ function CodeEditor({ problem }: Props) {
             codeEfficiency: 1,
             numberOfTestRuns: numOfTimesTestsRan,
           },
-          qualityOfResponse: qualityOfResponse,
+          qualityOfResponse: heuristicScore,
         },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -289,6 +308,13 @@ function CodeEditor({ problem }: Props) {
   };
 
   const handleSliderSubmit = async () => {
+    const finalAdjustedScore = adjustQualityOfResponseFromUserFeedback(
+      heuristicScore,
+      difficultyValue,
+      clarityValue,
+      satisfactionValue,
+    );
+
     if (currentAttemptId) {
       try {
         await axios.patch(
@@ -299,6 +325,7 @@ function CodeEditor({ problem }: Props) {
               confidence: clarityValue,
               understanding: satisfactionValue,
             },
+            qualityOfResponse: finalAdjustedScore, // update this based on user feedback
           },
           {
             headers: { Authorization: `Bearer ${token}` },
@@ -765,7 +792,7 @@ function CodeEditor({ problem }: Props) {
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => handleSliderSubmit()}>Submit</Button>
+          <Button onClick={handleSliderSubmit}>Submit</Button>
           <Button onClick={() => setModalOpen(false)}>Close</Button>
         </DialogActions>
       </Dialog>

@@ -12,7 +12,3 @@ export class HeuristicPipeline {
     return this.strategies.map((strategy) => strategy.execute(metrics));
   }
 }
-
-export const combineScores = (scores: number[]): number => {
-  return scores.reduce((a, b) => a + b, 0) / scores.length;
-};
