@@ -208,6 +208,7 @@ function CodeEditor({ problem }: Props) {
 
     const pipeline = new HeuristicPipeline();
     pipeline.addStrategy(new CorrectnessHeuristic());
+    // We will add more strategies here
 
     const scores = pipeline.execute(metrics);
     const finalScore = combineScores(scores);
