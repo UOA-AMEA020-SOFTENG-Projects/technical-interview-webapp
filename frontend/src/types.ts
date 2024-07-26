@@ -26,6 +26,12 @@ export interface Problem {
   updatedAt: string;
 }
 
+export interface RecommendedProblem {
+  _id: string;
+  problem: Problem;
+  nextReviewDate: Date;
+}
+
 export interface Topic {
   _id: string;
   title: string;

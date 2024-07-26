@@ -4,6 +4,8 @@ import Statistics from "../../components/dashboard/Statistics";
 import TopicsList from "../../components/dashboard/TopicsList";
 import { Typography } from "@mui/material";
 
+const FEATURE_FLAG_RECOMMENDEDPROBLEMS = true;
+
 interface Props {
   topics: Topic[];
 }
@@ -19,9 +21,11 @@ const HomePage = ({ topics }: Props) => {
           <div className="home-col">
             <TopicsList topics={topics} />
           </div>
-          <div className="home-col">
-            <RecommendedProblems />
-          </div>
+          {FEATURE_FLAG_RECOMMENDEDPROBLEMS && (
+            <div className="home-col">
+              <RecommendedProblems />
+            </div>
+          )}
           <div className="home-col">
             <Statistics />
           </div>

@@ -1,8 +1,8 @@
-import { Card, Chip, Skeleton, Typography } from "@mui/material";
+import { Box, Card, Chip, Grid, Skeleton, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import { keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
-import { Problem as ProblemType } from "@/types";
+import { RecommendedProblem as RecommendedProblemType } from "@/types";
 
 const difficultyColors: { [key: string]: string[] } = {
   hard: ["#FF5151", "#FCE9E3"],
@@ -41,15 +41,27 @@ const AnimatedCard = styled(Card)<{ delay: number }>`
 `;
 
 interface Props {
-  problem: ProblemType;
+  recProblem: RecommendedProblemType;
   loading?: boolean;
   delay?: number;
 }
 
-const Problem = ({ problem, loading = false, delay = 0 }: Props) => {
+const Problem = ({ recProblem, loading = false, delay = 0 }: Props) => {
+  const timeUntilReview = () => {
+    const now = new Date();
+    const reviewDate = new Date(recProblem.nextReviewDate);
+    const diffTime = reviewDate.getTime() - now.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDays < 0) return "Review Overdue";
+    if (diffDays === 0) return "Review Today";
+    if (diffDays === 1) return "Review Tomorrow";
+    return `Review in ${diffDays} days`;
+  };
+
   return (
     <Link
-      to={`/home/problem/${problem._id}`}
+      to={`/home/problem/${recProblem.problem._id}`}
       style={{ textDecoration: "none" }}
     >
       {loading ? (
@@ -75,10 +87,41 @@ const Problem = ({ problem, loading = false, delay = 0 }: Props) => {
         </AnimatedCard>
       ) : (
         <AnimatedCard variant="outlined" delay={delay}>
-          <Typography variant="subtitle1" fontWeight="600" textAlign="left">
-            {problem.title}
-          </Typography>
-          <DifficultyTag size="small" label={problem.difficulty} />
+          <Grid
+            container
+            spacing={2}
+            direction="column"
+            style={{ height: "100%" }}
+          >
+            <Grid item>
+              <Box
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <Typography
+                  variant="subtitle1"
+                  fontWeight="600"
+                  textAlign="left"
+                >
+                  {recProblem.problem.title}
+                </Typography>
+                <DifficultyTag
+                  size="small"
+                  label={recProblem.problem.difficulty}
+                />
+              </Box>
+            </Grid>
+            <Grid item>
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                style={{ textAlign: "left" }}
+              >
+                {timeUntilReview()}
+              </Typography>
+            </Grid>
+          </Grid>
         </AnimatedCard>
       )}
     </Link>
