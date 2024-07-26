@@ -52,7 +52,6 @@ const getRecommendedProblems = async (username) => {
   }
 
   const now = new Date();
-  now.setDate(now.getDate() + 30);
 
   const recommendedProblems = user.sm2Data
     .filter((item) => {
