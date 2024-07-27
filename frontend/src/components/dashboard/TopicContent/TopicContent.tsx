@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./TopicContent.module.css";
 import { Content } from "@/types";
 import { Card, CardContent, Typography } from "@mui/material";

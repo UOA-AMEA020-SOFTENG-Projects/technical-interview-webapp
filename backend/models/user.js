@@ -127,6 +127,22 @@ const userSchema = new mongoose.Schema(
         ref: "Problem",
       },
     ],
+    weights: {
+      type: [Number],
+      default: [2.8152907722816307, -0.16979919111602879, 0.08516121149998879],
+      validate: {
+        validator: function (v) {
+          return v.length === 3;
+        },
+        message: (props) => `${props.value} must have exactly 3 elements!`,
+      },
+    },
+    bias: {
+      type: Number,
+      default: function () {
+        return Math.random();
+      },
+    },
     problemAttempts: [problemAttemptSchema],
     sm2Data: [sm2Schema],
   },
