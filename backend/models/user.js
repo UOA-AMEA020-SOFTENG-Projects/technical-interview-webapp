@@ -139,9 +139,7 @@ const userSchema = new mongoose.Schema(
     },
     bias: {
       type: Number,
-      default: function () {
-        return Math.random();
-      },
+      default: 1.2664053703038871
     },
     problemAttempts: [problemAttemptSchema],
     sm2Data: [sm2Schema],
