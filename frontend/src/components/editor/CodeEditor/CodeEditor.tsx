@@ -12,7 +12,9 @@ import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/theme-solarized_light";
 
-import { Problem } from "@/types.js";
+import useQualityOfResponse from "../../..//hooks/useQualityOfResponse.ts";
+import { Problem } from "../../../types.js";
+import { updateQualityOfResponse } from "./../../../utils/qualityOfResponse.ts";
 import LightbulbOutlinedIcon from "@mui/icons-material/LightbulbOutlined";
 import PlayCircleFilledWhiteOutlinedIcon from "@mui/icons-material/PlayCircleFilledWhiteOutlined";
 import PublishRoundedIcon from "@mui/icons-material/PublishRounded";
@@ -41,11 +43,6 @@ import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/snippets/java";
 import { useNavigate } from "react-router-dom";
 import TimerDisplay from "./TimerDisplay.js";
-import {
-  calculateQualityOfResponse,
-  updateQualityOfResponse,
-} from "@/utils/qualityOfResponse.js";
-import useQualityOfResponse from "@/hooks/useQualityOfResponse.js";
 
 const BaseURL = import.meta.env.VITE_API_BASE_URL;
 

@@ -3,7 +3,7 @@ import {
   getUpdatedWeightsAndBias,
   getWeightsAndBias,
   updateWeightsAndBias,
-} from "@/utils/qualityOfResponse";
+} from "../utils/qualityOfResponse";
 import { useEffect, useState } from "react";
 
 const useQualityOfResponse = (token: string | null) => {
