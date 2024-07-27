@@ -24,12 +24,7 @@ export interface Problem {
   title: string;
   topic: string;
   updatedAt: string;
-}
-
-export interface RecommendedProblem {
-  _id: string;
-  problem: Problem;
-  nextReviewDate: Date;
+  nextReviewDate?: Date;
 }
 
 export interface Topic {

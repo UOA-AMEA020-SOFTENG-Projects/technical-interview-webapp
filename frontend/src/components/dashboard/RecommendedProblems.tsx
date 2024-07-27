@@ -2,14 +2,14 @@ import { useEffect, useMemo, useState } from "react";
 import Stack from "@mui/material/Stack";
 import ProblemElement from "./Problem";
 import { Typography } from "@mui/material";
-import { RecommendedProblem } from "@/types";
+import { Problem } from "@/types";
 
 const BaseURL = import.meta.env.VITE_API_BASE_URL;
 
 const RecommendedProblems = () => {
-  const [recommendedProblems, setRecommendedProblems] = useState<
-    RecommendedProblem[]
-  >(Array(5).fill([]));
+  const [recommendedProblems, setRecommendedProblems] = useState<Problem[]>(
+    Array(5).fill([])
+  );
 
   const [loading, setLoading] = useState(true);
 
@@ -41,15 +41,12 @@ const RecommendedProblems = () => {
 
   const recommendedProblemItems = useMemo(() => {
     return recommendedProblems.length ? (
-      recommendedProblems.map((recProblem, index) => {
-        if (!recProblem || !recProblem.problem) {
-          return null;
-        }
+      recommendedProblems.map((problem, index) => {
         return (
           <ProblemElement
             key={index}
             delay={index * 0.075}
-            recProblem={recProblem}
+            problem={problem}
             loading={loading}
           />
         );

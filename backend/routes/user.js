@@ -243,8 +243,6 @@ userRouter.patch(
           attempt.problem,
           updateData.qualityOfResponse
         );
-        console.log("api");
-        console.log(user.sm2Data);
 
         await user.save();
 

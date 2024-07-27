@@ -2,7 +2,7 @@ import { Box, Card, Chip, Grid, Skeleton, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import { keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
-import { RecommendedProblem as RecommendedProblemType } from "@/types";
+import { Problem as ProblemType } from "@/types";
 
 const difficultyColors: { [key: string]: string[] } = {
   hard: ["#FF5151", "#FCE9E3"],
@@ -41,15 +41,19 @@ const AnimatedCard = styled(Card)<{ delay: number }>`
 `;
 
 interface Props {
-  recProblem: RecommendedProblemType;
+  problem: ProblemType;
   loading?: boolean;
   delay?: number;
 }
 
-const Problem = ({ recProblem, loading = false, delay = 0 }: Props) => {
+const Problem = ({ problem, loading = false, delay = 0 }: Props) => {
   const timeUntilReview = () => {
     const now = new Date();
-    const reviewDate = new Date(recProblem.nextReviewDate);
+    const reviewDate = problem.nextReviewDate
+      ? new Date(problem.nextReviewDate)
+      : null;
+    if (!reviewDate) return;
+
     const diffTime = reviewDate.getTime() - now.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
@@ -61,7 +65,7 @@ const Problem = ({ recProblem, loading = false, delay = 0 }: Props) => {
 
   return (
     <Link
-      to={`/home/problem/${recProblem.problem._id}`}
+      to={`/home/problem/${problem._id}`}
       style={{ textDecoration: "none" }}
     >
       {loading ? (
@@ -104,23 +108,22 @@ const Problem = ({ recProblem, loading = false, delay = 0 }: Props) => {
                   fontWeight="600"
                   textAlign="left"
                 >
-                  {recProblem.problem.title}
+                  {problem.title}
                 </Typography>
-                <DifficultyTag
-                  size="small"
-                  label={recProblem.problem.difficulty}
-                />
+                <DifficultyTag size="small" label={problem.difficulty} />
               </Box>
             </Grid>
-            <Grid item>
-              <Typography
-                variant="body2"
-                color="text.secondary"
-                style={{ textAlign: "left" }}
-              >
-                {timeUntilReview()}
-              </Typography>
-            </Grid>
+            {problem.nextReviewDate && (
+              <Grid item>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  style={{ textAlign: "left" }}
+                >
+                  {timeUntilReview()}
+                </Typography>
+              </Grid>
+            )}
           </Grid>
         </AnimatedCard>
       )}

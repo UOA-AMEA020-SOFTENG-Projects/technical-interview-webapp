@@ -55,10 +55,18 @@ const getRecommendedProblems = async (username) => {
 
   const recommendedProblems = user.sm2Data
     .filter((item) => {
-      return item.nextReviewDate && item.nextReviewDate <= now;
+      if (!item.nextReviewDate) return false;
+
+      const nextReviewDate = new Date(item.nextReviewDate);
+      const today = new Date(now);
+
+      nextReviewDate.setHours(0, 0, 0, 0);
+      today.setHours(0, 0, 0, 0);
+
+      return nextReviewDate <= today;
     })
     .map((item) => ({
-      problem: item.problem,
+      ...item.problem.toObject(),
       nextReviewDate: item.nextReviewDate,
     }))
     .sort((a, b) => a.nextReviewDate - b.nextReviewDate);
