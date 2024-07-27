@@ -56,6 +56,7 @@ const getRecommendedProblems = async (username) => {
   const recommendedProblems = user.sm2Data
     .filter((item) => {
       if (!item.nextReviewDate) return false;
+      return true;
 
       const nextReviewDate = new Date(item.nextReviewDate);
       const today = new Date(now);

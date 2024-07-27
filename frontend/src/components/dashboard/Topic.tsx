@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
 import { Card, CardContent, Typography } from "@mui/material";
-import { Topic as TopicType } from "@/types";
+import { Content, Topic as TopicType } from "@/types";
+
+const BaseURL = import.meta.env.VITE_API_BASE_URL;
 
 const fadeIn = keyframes`
   from {
@@ -37,6 +39,28 @@ const Topic = ({
   cardcolor = "white",
   handleClick,
 }: Props) => {
+  const [content, setContent] = useState<Content>();
+
+  useEffect(() => {
+    const fetchContent = async () => {
+      try {
+        const response = await fetch(`${BaseURL}/content/${topic.content}`);
+
+        if (!response.ok) {
+          console.error("Could not fetch content: ", response.statusText);
+          return;
+        } else {
+          const data = await response.json();
+          setContent(data);
+        }
+      } catch (err) {
+        console.error("Error while fetching: ", err);
+      }
+    };
+
+    fetchContent();
+  }, []);
+
   return (
     <AnimatedCard
       onClick={() => handleClick(topic)}
@@ -55,7 +79,7 @@ const Topic = ({
           fontWeight="300"
           color="#787486"
         >
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quidem, ab!
+          {content?.primaryDescription?.slice(0, 69)}
         </Typography>
       </CardContent>
     </AnimatedCard>

@@ -48,14 +48,19 @@ interface Props {
 
 const Problem = ({ problem, loading = false, delay = 0 }: Props) => {
   const timeUntilReview = () => {
-    const now = new Date();
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
     const reviewDate = problem.nextReviewDate
       ? new Date(problem.nextReviewDate)
       : null;
+
     if (!reviewDate) return;
 
-    const diffTime = reviewDate.getTime() - now.getTime();
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    reviewDate.setHours(0, 0, 0, 0);
+
+    const diffTime = reviewDate.getTime() - today.getTime();
+    const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
 
     if (diffDays < 0) return "Review Overdue";
     if (diffDays === 0) return "Review Today";

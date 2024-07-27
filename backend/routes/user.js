@@ -303,4 +303,50 @@ userRouter.get(
   }
 );
 
+userRouter.patch(
+  "/user/weights-bias",
+  authenticateToken,
+  async (req, res, next) => {
+    try {
+      const { weights, bias } = req.body;
+      const user = await User.findOne({ username: req.user.username });
+
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      user.weights = weights;
+
+      user.bias = bias;
+
+      await user.save();
+      res.json({
+        message: "Weights and bias updated successfully",
+        weights: user.weights,
+        bias: user.bias,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+userRouter.get(
+  "/user/weights-bias",
+  authenticateToken,
+  async (req, res, next) => {
+    try {
+      const user = await User.findOne({ username: req.user.username });
+
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      res.json({ weights: user.weights, bias: user.bias });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 export default userRouter;
