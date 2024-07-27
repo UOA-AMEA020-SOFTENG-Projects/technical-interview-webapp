@@ -24,6 +24,7 @@ export interface Problem {
   title: string;
   topic: string;
   updatedAt: string;
+  nextReviewDate?: Date;
 }
 
 export interface Topic {

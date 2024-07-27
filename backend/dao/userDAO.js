@@ -10,12 +10,12 @@ const addRecommendedProblem = async (username, problemId) => {
   const user = await User.findOne({ username: username });
 
   if (!user) {
-      throw new Error("User not found");
+    throw new Error("User not found");
   }
 
   // Check if the problemId is already in the problemsRecommended array
   if (user.problemsRecommended.includes(problemId)) {
-      throw new Error("Problem already in recommended problems");
+    throw new Error("Problem already in recommended problems");
   }
 
   user.problemsRecommended.push(problemId);
@@ -36,29 +36,47 @@ const getCompletedProblemsCount = async (username) => {
   const notCompletedProblems = totalProblems - completedProblems;
 
   return [
-    { name: "Completed", problems: completedProblems }, 
+    { name: "Completed", problems: completedProblems },
     { name: "Not Completed", problems: notCompletedProblems },
   ];
 };
 
 const getRecommendedProblems = async (username) => {
   const user = await User.findOne({ username: username })
-    .populate("problemsRecommended")
+    .populate("sm2Data.problem")
+    .populate("problemsCompleted")
     .exec();
 
   if (!user) {
     throw new Error("User not found");
   }
 
-  // Exclude problems that the user has already completed
-  const recommendedButNotCompleted = user.problemsRecommended.filter(problem => {
-    return !user.problemsCompleted.includes(problem._id);
-  });
+  const now = new Date();
 
-  return recommendedButNotCompleted;
+  const recommendedProblems = user.sm2Data
+    .filter((item) => {
+      if (!item.nextReviewDate) return false;
+
+      const nextReviewDate = new Date(item.nextReviewDate);
+      const today = new Date(now);
+
+      nextReviewDate.setHours(0, 0, 0, 0);
+      today.setHours(0, 0, 0, 0);
+
+      return nextReviewDate <= today;
+    })
+    .map((item) => ({
+      ...item.problem.toObject(),
+      nextReviewDate: item.nextReviewDate,
+    }))
+    .sort((a, b) => a.nextReviewDate - b.nextReviewDate);
+
+  return recommendedProblems;
 };
 
-
-
-export { createUser, addRecommendedProblem, getCompletedProblemsCount, getRecommendedProblems };
-
+export {
+  createUser,
+  addRecommendedProblem,
+  getCompletedProblemsCount,
+  getRecommendedProblems,
+};

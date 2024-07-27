@@ -225,7 +225,6 @@ userRouter.patch(
     try {
       const { attemptId } = req.params;
       const updateData = req.body;
-
       const user = await User.findOne({ username: req.user.username });
       if (!user) {
         return res.status(404).json({ message: "User not found" });
@@ -238,9 +237,23 @@ userRouter.patch(
 
       // Update the attempt with the new data
       Object.assign(attempt, updateData);
-      await user.save();
 
-      res.json({ message: "Problem attempt updated successfully" });
+      if (updateData.qualityOfResponse !== undefined) {
+        const nextReviewDate = user.updateSM2(
+          attempt.problem,
+          updateData.qualityOfResponse
+        );
+
+        await user.save();
+
+        res.json({
+          message: "Problem attempt updated successfully",
+          nextReviewDate: nextReviewDate,
+        });
+      } else {
+        await user.save();
+        res.json({ message: "Problem attempt updated successfully" });
+      }
     } catch (error) {
       next(error);
     }

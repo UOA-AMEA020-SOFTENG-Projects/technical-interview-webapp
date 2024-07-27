@@ -41,14 +41,16 @@ const RecommendedProblems = () => {
 
   const recommendedProblemItems = useMemo(() => {
     return recommendedProblems.length ? (
-      recommendedProblems.map((problem, index) => (
-        <ProblemElement
-          key={index}
-          delay={index * 0.075}
-          problem={problem}
-          loading={loading}
-        />
-      ))
+      recommendedProblems.map((problem, index) => {
+        return (
+          <ProblemElement
+            key={index}
+            delay={index * 0.075}
+            problem={problem}
+            loading={loading}
+          />
+        );
+      })
     ) : (
       <Typography variant="caption">
         No problems specifically recommended for you. Please work on other

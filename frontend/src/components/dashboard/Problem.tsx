@@ -1,4 +1,4 @@
-import { Card, Chip, Skeleton, Typography } from "@mui/material";
+import { Box, Card, Chip, Grid, Skeleton, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import { keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
@@ -47,6 +47,22 @@ interface Props {
 }
 
 const Problem = ({ problem, loading = false, delay = 0 }: Props) => {
+  const timeUntilReview = () => {
+    const now = new Date();
+    const reviewDate = problem.nextReviewDate
+      ? new Date(problem.nextReviewDate)
+      : null;
+    if (!reviewDate) return;
+
+    const diffTime = reviewDate.getTime() - now.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDays < 0) return "Review Overdue";
+    if (diffDays === 0) return "Review Today";
+    if (diffDays === 1) return "Review Tomorrow";
+    return `Review in ${diffDays} days`;
+  };
+
   return (
     <Link
       to={`/home/problem/${problem._id}`}
@@ -75,10 +91,40 @@ const Problem = ({ problem, loading = false, delay = 0 }: Props) => {
         </AnimatedCard>
       ) : (
         <AnimatedCard variant="outlined" delay={delay}>
-          <Typography variant="subtitle1" fontWeight="600" textAlign="left">
-            {problem.title}
-          </Typography>
-          <DifficultyTag size="small" label={problem.difficulty} />
+          <Grid
+            container
+            spacing={2}
+            direction="column"
+            style={{ height: "100%" }}
+          >
+            <Grid item>
+              <Box
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <Typography
+                  variant="subtitle1"
+                  fontWeight="600"
+                  textAlign="left"
+                >
+                  {problem.title}
+                </Typography>
+                <DifficultyTag size="small" label={problem.difficulty} />
+              </Box>
+            </Grid>
+            {problem.nextReviewDate && (
+              <Grid item>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  style={{ textAlign: "left" }}
+                >
+                  {timeUntilReview()}
+                </Typography>
+              </Grid>
+            )}
+          </Grid>
         </AnimatedCard>
       )}
     </Link>
