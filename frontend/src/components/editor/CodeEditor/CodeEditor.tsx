@@ -67,7 +67,7 @@ function CodeEditor({ problem }: Props) {
     "GET",
     true,
     token,
-    problem.boilerplateCode[0].language,
+    problem.boilerplateCode[0].language
   );
 
   const [value, setValue] = useState(problem.boilerplateCode[0].boilerplate);
@@ -79,7 +79,7 @@ function CodeEditor({ problem }: Props) {
   const [modelAnswer, setModelAnswer] = useState("");
   const [testCaseLoading, setTestCaseLoading] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState(
-    problem.boilerplateCode[0].language,
+    problem.boilerplateCode[0].language
   );
   const [errorMsg, setErrorMsg] = useState("");
   const [isErrorVisible, setIsErrorVisible] = useState(false);
@@ -112,7 +112,7 @@ function CodeEditor({ problem }: Props) {
 
   const handleDifficultyChange = (
     event: Event,
-    newValue: number | number[],
+    newValue: number | number[]
   ) => {
     setDifficultyValue(newValue as number);
   };
@@ -123,7 +123,7 @@ function CodeEditor({ problem }: Props) {
 
   const handleSatisfactionChange = (
     event: Event,
-    newValue: number | number[],
+    newValue: number | number[]
   ) => {
     setSatisfactionValue(newValue as number);
   };
@@ -137,7 +137,7 @@ function CodeEditor({ problem }: Props) {
           {
             params: { language_id: currentLanguage },
             headers: { Authorization: `Bearer ${token}` },
-          },
+          }
         )
         .then((response) => {
           console.log("Solution saved:", response.data);
@@ -148,7 +148,7 @@ function CodeEditor({ problem }: Props) {
           setIsErrorVisible(true);
         });
     },
-    [problem._id, token],
+    [problem._id, token]
   );
 
   const userInputHandler = (newValue: string) => {
@@ -171,7 +171,7 @@ function CodeEditor({ problem }: Props) {
   };
 
   const dropDownChangeHandler = (
-    event: React.ChangeEvent<HTMLSelectElement>,
+    event: React.ChangeEvent<HTMLSelectElement>
   ) => {
     setSelectedLanguage(event.target.value);
 
@@ -202,7 +202,7 @@ function CodeEditor({ problem }: Props) {
         {
           params: { language_id: selectedLanguage },
           headers: { Authorization: `Bearer ${token}` },
-        },
+        }
       );
 
       if (testResponse.status !== 200) {
@@ -231,10 +231,12 @@ function CodeEditor({ problem }: Props) {
 
       setAllTestsPassed(correctness);
 
+      console.log("aaaaaaaaaa");
+      console.log(correctness);
       const qualityOfResponse = handleUpdateQualityOfResponse(
         correctness,
         hintUsage,
-        numOfTimesTestsRan,
+        numOfTimesTestsRan
       );
 
       // When user clicks submit we count it as one attempt
@@ -246,7 +248,7 @@ function CodeEditor({ problem }: Props) {
         hintUsage,
         numOfTimesTestsRan,
         token,
-        qualityOfResponse,
+        qualityOfResponse
       );
 
       if (response.status === 201) {
@@ -262,7 +264,7 @@ function CodeEditor({ problem }: Props) {
 
   const handleSliderSubmit = async () => {
     if (currentAttemptId) {
-      handleUpdateWeightsAndBias(
+      await handleUpdateWeightsAndBias(
         hintUsage,
         allTestsPassed,
         numOfTimesTestsRan,
@@ -270,7 +272,7 @@ function CodeEditor({ problem }: Props) {
           difficultyValue,
           clarityValue,
           satisfactionValue,
-        },
+        }
       );
     }
 
@@ -293,14 +295,14 @@ function CodeEditor({ problem }: Props) {
         {
           params: { language_id: selectedLanguage },
           headers: { Authorization: `Bearer ${token}` },
-        },
+        }
       );
 
       if (response.status === 200) {
         setTestResults(response.data.testResults);
 
         const allTestCasesPassed = response.data.testResults.every(
-          (result: any) => result.passed,
+          (result: any) => result.passed
         );
 
         if (allTestCasesPassed) {
@@ -344,7 +346,7 @@ function CodeEditor({ problem }: Props) {
         },
         {
           headers: { Authorization: `Bearer ${token}` },
-        },
+        }
       );
     }
   };
@@ -394,7 +396,7 @@ function CodeEditor({ problem }: Props) {
                                         </strong>,
                                         inputItem,
                                       ]
-                                    : [inputItem],
+                                    : [inputItem]
                                 ),
                             ]
                           : outputItem
@@ -409,8 +411,8 @@ function CodeEditor({ problem }: Props) {
                                       </strong>,
                                       inputItem,
                                     ]
-                                  : [inputItem],
-                              ),
+                                  : [inputItem]
+                              )
                       ),
                   ]
                 : item
@@ -434,7 +436,7 @@ function CodeEditor({ problem }: Props) {
                                       </strong>,
                                       inputItem,
                                     ]
-                                  : [inputItem],
+                                  : [inputItem]
                               ),
                           ]
                         : outputItem
@@ -447,9 +449,9 @@ function CodeEditor({ problem }: Props) {
                                     </strong>,
                                     inputItem,
                                   ]
-                                : [inputItem],
-                            ),
-                    ),
+                                : [inputItem]
+                            )
+                    )
             )}
         </p>
 
