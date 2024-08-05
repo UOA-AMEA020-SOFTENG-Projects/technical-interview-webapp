@@ -12,7 +12,9 @@ import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/theme-solarized_light";
 
-import { Problem } from "@/types.js";
+import useQualityOfResponse from "../../..//hooks/useQualityOfResponse.ts";
+import { Problem } from "../../../types.js";
+import { updateQualityOfResponse } from "./../../../utils/qualityOfResponse.ts";
 import LightbulbOutlinedIcon from "@mui/icons-material/LightbulbOutlined";
 import PlayCircleFilledWhiteOutlinedIcon from "@mui/icons-material/PlayCircleFilledWhiteOutlined";
 import PublishRoundedIcon from "@mui/icons-material/PublishRounded";
@@ -41,11 +43,6 @@ import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/snippets/java";
 import { useNavigate } from "react-router-dom";
 import TimerDisplay from "./TimerDisplay.js";
-import { Metrics } from "../../../heuristics/Metrics.js";
-import { HeuristicPipeline } from "../../../heuristics/HeuristicPipeline.js";
-import { CorrectnessHeuristic } from "../../../heuristics/HeuristicStrategies.js";
-import { UserFeedback } from "../../../heuristics/UserFeedback.js";
-import { adjustScore, combineScores } from "../../../heuristics/index.js";
 
 const BaseURL = import.meta.env.VITE_API_BASE_URL;
 
@@ -97,9 +94,13 @@ function CodeEditor({ problem }: Props) {
   const [hintUsage, setHintUsage] = useState(false);
   const [currentAttemptId, setCurrentAttemptId] = useState("");
   const [numOfTimesTestsRan, setNumOfTimesTestsRan] = useState(0);
-  const [heuristicScore, setHeuristicScore] = useState(3);
+  const [allTestsPassed, setAllTestsPassed] = useState(false);
 
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+
+  const {
+    operations: { handleUpdateWeightsAndBias, handleUpdateQualityOfResponse },
+  } = useQualityOfResponse(token);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -193,48 +194,6 @@ function CodeEditor({ problem }: Props) {
   // run code: req.body is the code, query param is the selected language
   // run tests: req.body -> code, query param -> language, and path param is problem id
 
-  const calculateQualityOfResponse = (
-    correctness: boolean,
-    numOfTimesTestsRan: number,
-    hintUsage: boolean
-  ) => {
-    const metrics = new Metrics(
-      120, // time spent
-      correctness,
-      hintUsage, // hint usage
-      85, // code efficiency
-      numOfTimesTestsRan
-    );
-
-    const pipeline = new HeuristicPipeline();
-    pipeline.addStrategy(new CorrectnessHeuristic());
-    // We will add more strategies here
-
-    const scores = pipeline.execute(metrics);
-    const heuristicScore = combineScores(scores);
-
-    return heuristicScore;
-  };
-
-  const adjustQualityOfResponseFromUserFeedback = (
-    heuristicScore: number,
-    difficultyValue: number,
-    clarityValue: number,
-    satisfactionValue: number
-  ) => {
-    // We have to %5 because the slider values are from reverted, in SR 5 = perfect resposne,
-    // in our slider 5 is hard
-    const userFeedback = new UserFeedback(
-      difficultyValue % 5,
-      clarityValue,
-      satisfactionValue
-    );
-
-    // Adjust score based on user feedback - 50% weightage user, heuristic
-    const finalScore = adjustScore(heuristicScore, userFeedback, 0.8, 0.2);
-    return finalScore;
-  };
-
   const submitHandler = async () => {
     try {
       const testResponse = await axios.post(
@@ -264,38 +223,32 @@ function CodeEditor({ problem }: Props) {
       }
 
       const { data } = testResponse;
-      let allTestsPassed = false;
+      let correctness = false;
 
       if (data && data.testResults) {
-        allTestsPassed = data.testResults.every((test: any) => test.passed);
+        correctness = data.testResults.every((test: any) => test.passed);
       }
 
-      const heuristicScore = calculateQualityOfResponse(
-        allTestsPassed,
-        0,
-        hintUsage
+      setAllTestsPassed(correctness);
+
+      console.log("aaaaaaaaaa");
+      console.log(correctness);
+      const qualityOfResponse = handleUpdateQualityOfResponse(
+        correctness,
+        hintUsage,
+        numOfTimesTestsRan
       );
 
-      setHeuristicScore(heuristicScore);
-
       // When user clicks submit we count it as one attempt
-      const response = await axios.post(
-        `${BaseURL}/user/problem-attempt`,
-        {
-          problem: problem._id,
-          solution: value,
-          measuredData: {
-            correctness: allTestsPassed,
-            timeSpent,
-            hintUsage,
-            codeEfficiency: 1,
-            numberOfTestRuns: numOfTimesTestsRan,
-          },
-          qualityOfResponse: heuristicScore,
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+      const response = await updateQualityOfResponse(
+        problem,
+        value,
+        correctness,
+        timeSpent,
+        hintUsage,
+        numOfTimesTestsRan,
+        token,
+        qualityOfResponse
       );
 
       if (response.status === 201) {
@@ -310,33 +263,19 @@ function CodeEditor({ problem }: Props) {
   };
 
   const handleSliderSubmit = async () => {
-    const finalAdjustedScore = adjustQualityOfResponseFromUserFeedback(
-      heuristicScore,
-      difficultyValue,
-      clarityValue,
-      satisfactionValue
-    );
-
     if (currentAttemptId) {
-      try {
-        await axios.patch(
-          `${BaseURL}/user/problem-attempt/${currentAttemptId}`,
-          {
-            userFeedback: {
-              difficulty: difficultyValue,
-              confidence: clarityValue,
-              understanding: satisfactionValue,
-            },
-            qualityOfResponse: finalAdjustedScore, // update this based on user feedback
-          },
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-      } catch (error) {
-        console.error("Error updating user feedback:", error);
-      }
+      await handleUpdateWeightsAndBias(
+        hintUsage,
+        allTestsPassed,
+        numOfTimesTestsRan,
+        {
+          difficultyValue,
+          clarityValue,
+          satisfactionValue,
+        }
+      );
     }
+
     await axios.delete(`${BaseURL}/editor/${problem._id}/clearSolution`, {
       params: { language_id: selectedLanguage },
       headers: { Authorization: `Bearer ${token}` },
