@@ -204,13 +204,30 @@ userRouter.post(
       user.problemAttempts.push(newAttempt);
       await user.save();
 
-      const addedAttempt =
-        user.problemAttempts[user.problemAttempts.length - 1];
+      if (newAttempt.qualityOfResponse !== undefined) {
+        const nextReviewDate = user.updateSM2(
+          newAttempt.problem,
+          newAttempt.qualityOfResponse
+        );
 
-      res.status(201).json({
-        message: "Problem attempt recorded successfully",
-        attemptId: addedAttempt._id,
-      });
+        await user.save();
+
+        // res.json({
+        //   message: "Problem attempt updated successfully",
+        //   nextReviewDate: nextReviewDate,
+        // });
+        const addedAttempt =
+          user.problemAttempts[user.problemAttempts.length - 1];
+
+        res.status(201).json({
+          message: "Problem attempt recorded successfully",
+          attemptId: addedAttempt._id,
+          nextReviewDate: nextReviewDate,
+        });
+      } else {
+        await user.save();
+        res.json({ message: "Problem attempt updated successfully" });
+      }
     } catch (error) {
       console.log(error);
       next(error);

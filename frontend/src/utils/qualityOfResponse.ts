@@ -13,7 +13,7 @@ export const getUpdatedWeightsAndBias = (
   hintUsage: boolean,
   numOfTimesTestsRan: number,
   actual: number,
-  predictedQualityOfResponse: number,
+  predictedQualityOfResponse: number
 ): [number[], number] => {
   const learningRate: number = 0.01;
   const normalizedNumberOfTestRuns = numOfTimesTestsRan / MAX_TEST_RUNS;
@@ -35,7 +35,7 @@ export const calculateQualityOfResponse = (
   hintUsage: boolean,
   numberOfTestRuns: number,
   weights: number[],
-  bias: number,
+  bias: number
 ) => {
   // Trivial Case 1 - Ran tests lot of times, hence very hard for user
   if (numberOfTestRuns > 10) return 0;
@@ -68,7 +68,7 @@ export const updateQualityOfResponse = async (
   hintUsage: boolean,
   numOfTimesTestsRan: number,
   token: string | null,
-  qualityOfResponse: number,
+  qualityOfResponse: number
 ) => {
   try {
     const res = await axios.post(
@@ -87,7 +87,7 @@ export const updateQualityOfResponse = async (
       },
       {
         headers: { Authorization: `Bearer ${token}` },
-      },
+      }
     );
 
     return res;
@@ -112,7 +112,7 @@ export const getWeightsAndBias = async (token: string | null) => {
 export const updateWeightsAndBias = async (
   token: string | null,
   weights: number[],
-  bias: number,
+  bias: number
 ) => {
   try {
     await axios.patch(
@@ -123,7 +123,7 @@ export const updateWeightsAndBias = async (
       },
       {
         headers: { Authorization: `Bearer ${token}` },
-      },
+      }
     );
   } catch (error) {
     console.error("Error updating weights and bias:", error);

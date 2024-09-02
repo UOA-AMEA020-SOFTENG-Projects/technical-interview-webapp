@@ -29,7 +29,7 @@ const useQualityOfResponse = (token: string | null) => {
       difficultyValue: number;
       clarityValue: number;
       satisfactionValue: number;
-    },
+    }
   ) => {
     const userFeedbackAvg =
       (userFeedback.difficultyValue +
@@ -47,7 +47,7 @@ const useQualityOfResponse = (token: string | null) => {
       hintUsage,
       cappeddNumOfTimesTestsRan,
       userFeedbackAvg,
-      qualityOfResponse,
+      qualityOfResponse
     );
 
     setWeights(newWeights);
@@ -59,17 +59,17 @@ const useQualityOfResponse = (token: string | null) => {
   const handleUpdateQualityOfResponse = (
     allTestsPassed: boolean,
     hintUsage: boolean,
-    numOfTimesTestsRan: number,
+    numOfTimesTestsRan: number
   ) => {
     const qualityOfResponse = calculateQualityOfResponse(
       allTestsPassed,
       hintUsage,
       numOfTimesTestsRan,
       weights,
-      bias,
+      bias
     );
     setQualityOfResponse(qualityOfResponse);
-
+    console.log(qualityOfResponse);
     return qualityOfResponse;
   };
 
