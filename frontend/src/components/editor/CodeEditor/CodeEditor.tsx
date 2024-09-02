@@ -117,17 +117,6 @@ function CodeEditor({ problem }: Props) {
     setDifficultyValue(newValue as number);
   };
 
-  const handleClarityChange = (event: Event, newValue: number | number[]) => {
-    setClarityValue(newValue as number);
-  };
-
-  const handleSatisfactionChange = (
-    event: Event,
-    newValue: number | number[]
-  ) => {
-    setSatisfactionValue(newValue as number);
-  };
-
   const saveSolution = useCallback(
     (currentValue: string, currentLanguage: string) => {
       axios
@@ -231,13 +220,11 @@ function CodeEditor({ problem }: Props) {
 
       setAllTestsPassed(correctness);
 
-      console.log("aaaaaaaaaa");
-      console.log(correctness);
-      const qualityOfResponse = handleUpdateQualityOfResponse(
-        correctness,
-        hintUsage,
-        numOfTimesTestsRan
-      );
+      // const qualityOfResponse = handleUpdateQualityOfResponse(
+      //   correctness,
+      //   hintUsage,
+      //   numOfTimesTestsRan,
+      // );
 
       // When user clicks submit we count it as one attempt
       const response = await updateQualityOfResponse(
@@ -248,7 +235,7 @@ function CodeEditor({ problem }: Props) {
         hintUsage,
         numOfTimesTestsRan,
         token,
-        qualityOfResponse
+        difficultyValue
       );
 
       if (response.status === 201) {
@@ -670,7 +657,8 @@ function CodeEditor({ problem }: Props) {
         <DialogTitle>Difficulty Rating</DialogTitle>
         <DialogContent sx={{ overflowY: "visible" }}>
           <Typography variant="h6" gutterBottom>
-            How would you rate the difficulty of this problem?
+            If you encountered this problem in an interview two months from now,
+            how confident are you that you could solve it?{" "}
           </Typography>
           <Box mt={2}>
             <Slider
@@ -681,53 +669,11 @@ function CodeEditor({ problem }: Props) {
               max={5}
               valueLabelDisplay="auto"
               marks={[
-                { value: 1, label: "Easy" },
-                { value: 2, label: "Moderate" },
-                { value: 3, label: "Medium" },
-                { value: 4, label: "Hard" },
-                { value: 5, label: "Very Hard" },
-              ]}
-            />
-          </Box>
-
-          <Typography variant="h6" gutterBottom>
-            How confident are you that you can do this again in an interview?
-          </Typography>
-          <Box mt={2}>
-            <Slider
-              value={clarityValue}
-              onChange={handleClarityChange}
-              step={1}
-              min={1}
-              max={5}
-              valueLabelDisplay="auto"
-              marks={[
-                { value: 1, label: "Not at all confident" },
-                { value: 2, label: "Slightly confident" },
-                { value: 3, label: "Moderately confident" },
-                { value: 4, label: "Very confident" },
-                { value: 5, label: "Extremely confident" },
-              ]}
-            />
-          </Box>
-
-          <Typography variant="h6" gutterBottom>
-            How well do you understand the solution?
-          </Typography>
-          <Box mt={2}>
-            <Slider
-              value={satisfactionValue}
-              onChange={handleSatisfactionChange}
-              step={1}
-              min={1}
-              max={5}
-              valueLabelDisplay="auto"
-              marks={[
-                { value: 1, label: "Don't understand at all" },
-                { value: 2, label: "Understand a little" },
-                { value: 3, label: "Understand somewhat" },
-                { value: 4, label: "Understand well" },
-                { value: 5, label: "Understand completely" },
+                { value: 1, label: "Completely lost" },
+                { value: 2, label: "Shaky " },
+                { value: 3, label: "Somewhat sure" },
+                { value: 4, label: "Pretty confident" },
+                { value: 5, label: "I've mastered this" },
               ]}
             />
           </Box>
@@ -742,3 +688,4 @@ function CodeEditor({ problem }: Props) {
 }
 
 export default CodeEditor;
+LOCALHOST: 30;
