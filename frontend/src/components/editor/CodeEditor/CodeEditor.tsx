@@ -227,21 +227,11 @@ function CodeEditor({ problem }: Props) {
       // );
 
       // When user clicks submit we count it as one attempt
-      const response = await updateQualityOfResponse(
-        problem,
-        value,
-        correctness,
-        timeSpent,
-        hintUsage,
-        numOfTimesTestsRan,
-        token,
-        difficultyValue
-      );
 
-      if (response.status === 201) {
-        setModalOpen(true);
-        setCurrentAttemptId(response.data.attemptId);
-      }
+      // if (response.status === 201) {
+      setModalOpen(true);
+      //   setCurrentAttemptId(response.data.attemptId);
+      // }
     } catch (error) {
       console.error(error);
       setErrorMsg("Error submitting attempt");
@@ -250,18 +240,28 @@ function CodeEditor({ problem }: Props) {
   };
 
   const handleSliderSubmit = async () => {
-    if (currentAttemptId) {
-      await handleUpdateWeightsAndBias(
-        hintUsage,
-        allTestsPassed,
-        numOfTimesTestsRan,
-        {
-          difficultyValue,
-          clarityValue,
-          satisfactionValue,
-        }
-      );
-    }
+    const response = await updateQualityOfResponse(
+      problem,
+      value,
+      allTestsPassed,
+      timeSpent,
+      hintUsage,
+      numOfTimesTestsRan,
+      token,
+      difficultyValue
+    );
+    // if (currentAttemptId) {
+    //   await handleUpdateWeightsAndBias(
+    //     hintUsage,
+    //     allTestsPassed,
+    //     numOfTimesTestsRan,
+    //     {
+    //       difficultyValue,
+    //       clarityValue,
+    //       satisfactionValue,
+    //     }
+    //   );
+    // }
 
     await axios.delete(`${BaseURL}/editor/${problem._id}/clearSolution`, {
       params: { language_id: selectedLanguage },
@@ -269,7 +269,7 @@ function CodeEditor({ problem }: Props) {
     });
     setModalOpen(false);
 
-    navigate("/home/dashboard");
+    // navigate("/home/dashboard");
   };
 
   const testSubmitHandler = async () => {
