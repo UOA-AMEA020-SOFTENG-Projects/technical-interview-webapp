@@ -53,7 +53,7 @@ const useQualityOfResponse = (token: string | null) => {
     setWeights(newWeights);
     setBias(newBias);
 
-    updateWeightsAndBias(token, newWeights, newBias);
+    await updateWeightsAndBias(token, newWeights, newBias);
   };
 
   const handleUpdateQualityOfResponse = (
