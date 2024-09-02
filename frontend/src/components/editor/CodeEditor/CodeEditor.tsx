@@ -269,7 +269,7 @@ function CodeEditor({ problem }: Props) {
     });
     setModalOpen(false);
 
-    // navigate("/home/dashboard");
+    navigate("/home/dashboard");
   };
 
   const testSubmitHandler = async () => {
