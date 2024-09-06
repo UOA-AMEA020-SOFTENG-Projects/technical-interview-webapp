@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -15,6 +15,9 @@ import { loader as problemLoader } from "./pages/ProblemPage.jsx";
 import { action as signupAction } from "./pages/SignupPage.jsx";
 import { loader as usernameLoader } from "./pages/HomeRootPage.jsx";
 import { action as loginAction } from "./pages/LoginPage.jsx";
+import { StatsigProvider } from "@statsig/react-bindings";
+
+const STATSIG_SDK = import.meta.env.STATSIG_SDK;
 
 const router = createBrowserRouter([
   {
@@ -46,10 +49,19 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
+
+  const [user, setUser] = useState({ userID: "initial-user" });
+
   return (
     <>
-      <ToastContainer />
-      <RouterProvider router={router} />
+      <StatsigProvider
+        sdkKey={STATSIG_SDK}
+        user={user}
+        setUser={setUser}
+      >
+        <ToastContainer />
+        <RouterProvider router={router} />
+      </StatsigProvider>
     </>
   );
 }

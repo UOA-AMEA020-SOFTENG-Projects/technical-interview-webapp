@@ -43,6 +43,7 @@ import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/snippets/java";
 import { useNavigate } from "react-router-dom";
 import TimerDisplay from "./TimerDisplay.js";
+import { useStatsigClient } from "@statsig/react-bindings";
 
 const BaseURL = import.meta.env.VITE_API_BASE_URL;
 
@@ -60,6 +61,7 @@ interface TestResult {
 
 function CodeEditor({ problem }: Props) {
   const navigate = useNavigate();
+  const { client } = useStatsigClient();
   const token = localStorage.getItem("authToken");
 
   const { data, isLoading, error, refetch, setLanguage } = useSolution(
@@ -67,7 +69,7 @@ function CodeEditor({ problem }: Props) {
     "GET",
     true,
     token,
-    problem.boilerplateCode[0].language
+    problem.boilerplateCode[0].language,
   );
 
   const [value, setValue] = useState(problem.boilerplateCode[0].boilerplate);
@@ -79,7 +81,7 @@ function CodeEditor({ problem }: Props) {
   const [modelAnswer, setModelAnswer] = useState("");
   const [testCaseLoading, setTestCaseLoading] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState(
-    problem.boilerplateCode[0].language
+    problem.boilerplateCode[0].language,
   );
   const [errorMsg, setErrorMsg] = useState("");
   const [isErrorVisible, setIsErrorVisible] = useState(false);
@@ -99,7 +101,7 @@ function CodeEditor({ problem }: Props) {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
   const {
-    operations: { handleUpdateWeightsAndBias, handleUpdateQualityOfResponse },
+    operations: {},
   } = useQualityOfResponse(token);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -112,7 +114,7 @@ function CodeEditor({ problem }: Props) {
 
   const handleDifficultyChange = (
     event: Event,
-    newValue: number | number[]
+    newValue: number | number[],
   ) => {
     setDifficultyValue(newValue as number);
   };
@@ -126,7 +128,7 @@ function CodeEditor({ problem }: Props) {
           {
             params: { language_id: currentLanguage },
             headers: { Authorization: `Bearer ${token}` },
-          }
+          },
         )
         .then((response) => {
           console.log("Solution saved:", response.data);
@@ -137,7 +139,7 @@ function CodeEditor({ problem }: Props) {
           setIsErrorVisible(true);
         });
     },
-    [problem._id, token]
+    [problem._id, token],
   );
 
   const userInputHandler = (newValue: string) => {
@@ -160,7 +162,7 @@ function CodeEditor({ problem }: Props) {
   };
 
   const dropDownChangeHandler = (
-    event: React.ChangeEvent<HTMLSelectElement>
+    event: React.ChangeEvent<HTMLSelectElement>,
   ) => {
     setSelectedLanguage(event.target.value);
 
@@ -191,7 +193,7 @@ function CodeEditor({ problem }: Props) {
         {
           params: { language_id: selectedLanguage },
           headers: { Authorization: `Bearer ${token}` },
-        }
+        },
       );
 
       if (testResponse.status !== 200) {
@@ -214,8 +216,18 @@ function CodeEditor({ problem }: Props) {
       const { data } = testResponse;
       let correctness = false;
 
+      let correct = 0;
       if (data && data.testResults) {
-        correctness = data.testResults.every((test: any) => test.passed);
+        correctness = data.testResults.every((test: any) => {
+          if (test.passed) correct++;
+          return test.passed;
+        });
+
+        const score = correctness
+          ? 100
+          : (correct / data.testResults.length) * 100;
+
+        client.logEvent("user_submitted_question", score);
       }
 
       setAllTestsPassed(correctness);
@@ -248,7 +260,7 @@ function CodeEditor({ problem }: Props) {
       hintUsage,
       numOfTimesTestsRan,
       token,
-      difficultyValue
+      difficultyValue,
     );
     // if (currentAttemptId) {
     //   await handleUpdateWeightsAndBias(
@@ -262,6 +274,8 @@ function CodeEditor({ problem }: Props) {
     //     }
     //   );
     // }
+
+    client.logEvent("quality_of_response", difficultyValue);
 
     await axios.delete(`${BaseURL}/editor/${problem._id}/clearSolution`, {
       params: { language_id: selectedLanguage },
@@ -282,21 +296,30 @@ function CodeEditor({ problem }: Props) {
         {
           params: { language_id: selectedLanguage },
           headers: { Authorization: `Bearer ${token}` },
-        }
+        },
       );
 
       if (response.status === 200) {
         setTestResults(response.data.testResults);
 
+        let correct = 0;
         const allTestCasesPassed = response.data.testResults.every(
-          (result: any) => result.passed
+          (result: any) => {
+            if (result.passed) correct++;
+            return result.passed;
+          },
         );
+
+        const score = allTestCasesPassed
+          ? 100
+          : (correct / response.data.testResults.length) * 100;
 
         if (allTestCasesPassed) {
           toast.success("Problem successfully Completed!", {
             position: toast.POSITION.BOTTOM_CENTER,
           });
         }
+        client.logEvent("user_ran_tests", score);
       }
     } catch (error) {
       setErrorMsg("Code not compiling");
@@ -322,6 +345,7 @@ function CodeEditor({ problem }: Props) {
 
   const handleShowSolution = () => {
     setValue(problem.solution);
+    client.logEvent("user_viewed_solution");
     setHintUsage(true);
     if (currentAttemptId) {
       axios.patch(
@@ -333,7 +357,7 @@ function CodeEditor({ problem }: Props) {
         },
         {
           headers: { Authorization: `Bearer ${token}` },
-        }
+        },
       );
     }
   };
@@ -383,7 +407,7 @@ function CodeEditor({ problem }: Props) {
                                         </strong>,
                                         inputItem,
                                       ]
-                                    : [inputItem]
+                                    : [inputItem],
                                 ),
                             ]
                           : outputItem
@@ -398,8 +422,8 @@ function CodeEditor({ problem }: Props) {
                                       </strong>,
                                       inputItem,
                                     ]
-                                  : [inputItem]
-                              )
+                                  : [inputItem],
+                              ),
                       ),
                   ]
                 : item
@@ -423,7 +447,7 @@ function CodeEditor({ problem }: Props) {
                                       </strong>,
                                       inputItem,
                                     ]
-                                  : [inputItem]
+                                  : [inputItem],
                               ),
                           ]
                         : outputItem
@@ -436,9 +460,9 @@ function CodeEditor({ problem }: Props) {
                                     </strong>,
                                     inputItem,
                                   ]
-                                : [inputItem]
-                            )
-                    )
+                                : [inputItem],
+                            ),
+                    ),
             )}
         </p>
 
@@ -494,6 +518,7 @@ function CodeEditor({ problem }: Props) {
               onClick={(e) => {
                 handleClick(e);
                 setHintUsage(true);
+                client.logEvent("user_used_hint");
               }}
             >
               <LightbulbOutlinedIcon />

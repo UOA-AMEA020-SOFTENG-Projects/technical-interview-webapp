@@ -1,6 +1,7 @@
 import React from "react";
-import { redirect, json } from "react-router-dom";
+import { json, redirect } from "react-router-dom";
 import SignInForm from "../components/forms/SignInForm/SignInForm";
+
 
 const BaseURL = import.meta.env.VITE_API_BASE_URL;
 
@@ -47,11 +48,14 @@ export const action = async ({ request, params }) => {
     );
   }
 
+
+
   // set the auth token and redirect the user to the dashboard page
   const resData = await response.json();
 
   const token = resData.accessToken;
 
+  localStorage.setItem('userName', requestData.username)
   localStorage.setItem("authToken", token);
 
   return redirect("/home/dashboard");

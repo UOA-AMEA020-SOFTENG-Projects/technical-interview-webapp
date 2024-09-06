@@ -1,18 +1,31 @@
-import "./DashboardPage.css";
-import Sidenav from "../../components/dashboard/Sidenav";
-import HomePage from "./HomePage";
+import { Topic } from "@/types";
 import GridViewOutlinedIcon from "@mui/icons-material/GridViewOutlined";
-import { Typography } from "@mui/material";
 import LightbulbOutlinedIcon from "@mui/icons-material/LightbulbOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
+import { Typography } from "@mui/material";
+import { useStatsigClient, useStatsigUser } from "@statsig/react-bindings";
 import { useEffect, useState } from "react";
-import { Topic } from "@/types";
+import Sidenav from "../../components/dashboard/Sidenav";
+import "./DashboardPage.css";
+import HomePage from "./HomePage";
 import LearnPage from "./LearnPage";
 
 const BaseURL = import.meta.env.VITE_API_BASE_URL;
 
 const DashboardPage = () => {
   const [topics, setTopics] = useState<Topic[]>([]);
+
+  const { client } = useStatsigClient();
+  const { updateUserAsync } = useStatsigUser();
+
+  useEffect(() => {
+    const userName = localStorage.getItem("userName");
+    updateUserAsync({ userID: userName ?? "1234" });
+  }, []);
+
+  const SHOW_SR_RECOMMENDATIONS = client
+    .getExperiment("sr_for_coding_interviews")
+    .get("show_sr_recommendations", false);
 
   useEffect(() => {
     const fetchTopics = async () => {
@@ -40,7 +53,10 @@ const DashboardPage = () => {
   }, []);
 
   const navItems = [
-    <HomePage topics={topics} />,
+    <HomePage
+      topics={topics}
+      SHOW_SR_RECOMMENDATIONS={SHOW_SR_RECOMMENDATIONS}
+    />,
     <LearnPage topics={topics}></LearnPage>,
     <div>3 </div>,
   ];

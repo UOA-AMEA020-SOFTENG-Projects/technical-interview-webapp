@@ -1,7 +1,7 @@
 import React from "react";
-import { redirect, json } from "react-router-dom";
+import { json, redirect } from "react-router-dom";
 import SignUpForm from "../components/forms/SignUpForm/SignUpForm";
-import { deserializeUserDetails } from "../utils/parseJWT";
+
 
 const BaseURL = import.meta.env.VITE_API_BASE_URL;
 
@@ -54,6 +54,7 @@ export const action = async ({ request, params }) => {
 
   const token = resData.accessToken;
 
+  localStorage.setItem('userName', requestData.username)
   localStorage.setItem("authToken", token);
 
   // when the user creates a new account it is their first time logging in so redirect to the questionnaire page

@@ -1,16 +1,15 @@
 import { Topic } from "@/types";
+import { Typography } from "@mui/material";
 import RecommendedProblems from "../../components/dashboard/RecommendedProblems";
 import Statistics from "../../components/dashboard/Statistics";
 import TopicsList from "../../components/dashboard/TopicsList";
-import { Typography } from "@mui/material";
-
-const FEATURE_FLAG_RECOMMENDED_PROBLEMS = true;
 
 interface Props {
   topics: Topic[];
+  SHOW_SR_RECOMMENDATIONS?: boolean;
 }
 
-const HomePage = ({ topics }: Props) => {
+const HomePage = ({ topics, SHOW_SR_RECOMMENDATIONS = false }: Props) => {
   return (
     <div className="home-page">
       <div>
@@ -21,7 +20,7 @@ const HomePage = ({ topics }: Props) => {
           <div className="home-col">
             <TopicsList topics={topics} />
           </div>
-          {FEATURE_FLAG_RECOMMENDED_PROBLEMS && (
+          {SHOW_SR_RECOMMENDATIONS && (
             <div className="home-col">
               <RecommendedProblems />
             </div>
