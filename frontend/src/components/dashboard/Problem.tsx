@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
 import { Problem as ProblemType } from "@/types";
+import { useStatsigClient } from "@statsig/react-bindings";
 
 const difficultyColors: { [key: string]: string[] } = {
   hard: ["#FF5151", "#FCE9E3"],
@@ -47,6 +48,8 @@ interface Props {
 }
 
 const Problem = ({ problem, loading = false, delay = 0 }: Props) => {
+  const { client } = useStatsigClient();
+
   const timeUntilReview = () => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -68,8 +71,13 @@ const Problem = ({ problem, loading = false, delay = 0 }: Props) => {
     return `Review in ${diffDays} days`;
   };
 
+  const handleClickProblem = () => {
+    client.logEvent("problem_clicked");
+  };
+
   return (
     <Link
+      onClick={handleClickProblem}
       to={`/home/problem/${problem._id}`}
       style={{ textDecoration: "none" }}
     >
