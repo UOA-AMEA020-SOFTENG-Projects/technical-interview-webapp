@@ -163,23 +163,9 @@ Now your browser window should show the following home screen for the applicatio
 From here click the `Signin` button to go the sign in page from where you can click the `Don't have an account? Sign up.` link to create an account:
 ![image](https://github.com/iane056/technical-interview-webapp/assets/79944764/1f69fa50-a513-46e2-ab63-f201831e4dc0)
 
-After creating an account you will find yourself on the in-app onboarding questionnaire screen, this is a short quiz to gauge your current knowledge level,
-based on which the app can recommend you problems that would best benefit your learning needs:
-![image](https://github.com/iane056/technical-interview-webapp/assets/79944764/f8b5d3ef-6801-489d-acb5-d8116e9fcb42)
-
-Once you complete the quiz you will arrive to the dashboard page, from where your learning journey with Algochamp begins!
-
 Dashboard
-![image](https://github.com/iane056/technical-interview-webapp/assets/79944764/6d4c2b9a-b6c7-4aec-9187-81bd58ab9709)
-
-Choose problems by clicking on a category
-![image](https://github.com/iane056/technical-interview-webapp/assets/79944764/a6ceb803-6355-4929-bddc-15ac35c65321)
-
-Navigate to the content page for a category to learn more about the topic before you attempt the problems
-![image](https://github.com/iane056/technical-interview-webapp/assets/79944764/6d31479c-8ec8-4a09-a73f-b8c9418506e1)
-
-Click on the AlgoChamp banner in the navigation to always return back to the dashboard screen, and solve problems on the problem page after selecting one
-![image](https://github.com/iane056/technical-interview-webapp/assets/79944764/618b246e-ec76-4e92-b0cb-e321caccaf92)
+<img width="1708" alt="image" src="https://github.com/user-attachments/assets/6597acd0-526f-475d-ae6a-dfb93e5995bb">
 
 Features:
-![image](https://github.com/iane056/technical-interview-webapp/assets/79944764/83bbb48a-d4e1-449a-b56b-4541257f6a89)
+<img width="425" alt="image" src="https://github.com/user-attachments/assets/fea098af-0caa-4aaa-b881-8a035c02c141">
+
