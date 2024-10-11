@@ -8,7 +8,7 @@ const BaseURL = import.meta.env.VITE_API_BASE_URL;
 
 const RecommendedProblems = () => {
   const [recommendedProblems, setRecommendedProblems] = useState<Problem[]>(
-    Array(5).fill([])
+    Array(5).fill([]),
   );
 
   const [loading, setLoading] = useState(true);
@@ -79,7 +79,7 @@ const RecommendedProblems = () => {
             backgroundColor: "#FFA500",
           }}
         />
-        Ai Recommendations
+        Recommendations
       </Typography>
 
       <div
