@@ -15,7 +15,6 @@ You might ask how is AlgoChamp different from something like LeetCode? Well, Alg
 - MaterialUI
 - Bootstrap
 - Pytorch
-- Sentence Transformers
 
 ## Project Structure
 
