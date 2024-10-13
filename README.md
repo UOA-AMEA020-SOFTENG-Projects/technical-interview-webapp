@@ -145,10 +145,9 @@ VITE_API_BASE_URL=http://localhost:3000
 
 Now we can run the application:
 
-Open up two terminals and cd into the frontend folder of the project directory for one of them and cd into to the backend folder for the other:
-![image](https://github.com/iane056/technical-interview-webapp/assets/79944764/e60fc54c-dc7f-4707-bead-a476bb46c2d4)
+First install the packages in the `frontend/` and `backend/` folders.
 
-from there for both terminals, enter the following (enter the command in the backend terminal first):
+Then in the root file run the following command
 **NOTE:** Once again, please ensure that JOBE is running before you start the application, you can double check this with the test url provided in one of the previous sections \*.
 
 ```
