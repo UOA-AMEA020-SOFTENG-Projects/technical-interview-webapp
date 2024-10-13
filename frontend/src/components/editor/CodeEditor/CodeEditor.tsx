@@ -69,7 +69,7 @@ function CodeEditor({ problem }: Props) {
     "GET",
     true,
     token,
-    problem.boilerplateCode[0].language,
+    problem.boilerplateCode[0].language
   );
 
   const [value, setValue] = useState(problem.boilerplateCode[0].boilerplate);
@@ -81,7 +81,7 @@ function CodeEditor({ problem }: Props) {
   const [modelAnswer, setModelAnswer] = useState("");
   const [testCaseLoading, setTestCaseLoading] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState(
-    problem.boilerplateCode[0].language,
+    problem.boilerplateCode[0].language
   );
   const [errorMsg, setErrorMsg] = useState("");
   const [isErrorVisible, setIsErrorVisible] = useState(false);
@@ -114,7 +114,7 @@ function CodeEditor({ problem }: Props) {
 
   const handleDifficultyChange = (
     event: Event,
-    newValue: number | number[],
+    newValue: number | number[]
   ) => {
     setDifficultyValue(newValue as number);
   };
@@ -128,7 +128,7 @@ function CodeEditor({ problem }: Props) {
           {
             params: { language_id: currentLanguage },
             headers: { Authorization: `Bearer ${token}` },
-          },
+          }
         )
         .then((response) => {
           console.log("Solution saved:", response.data);
@@ -139,7 +139,7 @@ function CodeEditor({ problem }: Props) {
           setIsErrorVisible(true);
         });
     },
-    [problem._id, token],
+    [problem._id, token]
   );
 
   const userInputHandler = (newValue: string) => {
@@ -162,7 +162,7 @@ function CodeEditor({ problem }: Props) {
   };
 
   const dropDownChangeHandler = (
-    event: React.ChangeEvent<HTMLSelectElement>,
+    event: React.ChangeEvent<HTMLSelectElement>
   ) => {
     setSelectedLanguage(event.target.value);
 
@@ -193,7 +193,7 @@ function CodeEditor({ problem }: Props) {
         {
           params: { language_id: selectedLanguage },
           headers: { Authorization: `Bearer ${token}` },
-        },
+        }
       );
 
       if (testResponse.status !== 200) {
@@ -260,7 +260,7 @@ function CodeEditor({ problem }: Props) {
       hintUsage,
       numOfTimesTestsRan,
       token,
-      difficultyValue,
+      difficultyValue
     );
     // if (currentAttemptId) {
     //   await handleUpdateWeightsAndBias(
@@ -296,18 +296,27 @@ function CodeEditor({ problem }: Props) {
         {
           params: { language_id: selectedLanguage },
           headers: { Authorization: `Bearer ${token}` },
-        },
+        }
       );
+
+      if (response.data.outcome === 11) {
+        setOutput(response.data.error);
+        setTestResults([]);
+
+        setErrorMsg("Code not compiling");
+        setIsErrorVisible(true);
+        return;
+      }
 
       if (response.status === 200) {
         setTestResults(response.data.testResults);
 
         let correct = 0;
-        const allTestCasesPassed = response.data.testResults.every(
+        const allTestCasesPassed = response.data.testResults?.every(
           (result: any) => {
             if (result.passed) correct++;
             return result.passed;
-          },
+          }
         );
 
         const score = allTestCasesPassed
@@ -357,7 +366,7 @@ function CodeEditor({ problem }: Props) {
         },
         {
           headers: { Authorization: `Bearer ${token}` },
-        },
+        }
       );
     }
   };
@@ -407,7 +416,7 @@ function CodeEditor({ problem }: Props) {
                                         </strong>,
                                         inputItem,
                                       ]
-                                    : [inputItem],
+                                    : [inputItem]
                                 ),
                             ]
                           : outputItem
@@ -422,8 +431,8 @@ function CodeEditor({ problem }: Props) {
                                       </strong>,
                                       inputItem,
                                     ]
-                                  : [inputItem],
-                              ),
+                                  : [inputItem]
+                              )
                       ),
                   ]
                 : item
@@ -447,7 +456,7 @@ function CodeEditor({ problem }: Props) {
                                       </strong>,
                                       inputItem,
                                     ]
-                                  : [inputItem],
+                                  : [inputItem]
                               ),
                           ]
                         : outputItem
@@ -460,9 +469,9 @@ function CodeEditor({ problem }: Props) {
                                     </strong>,
                                     inputItem,
                                   ]
-                                : [inputItem],
-                            ),
-                    ),
+                                : [inputItem]
+                            )
+                    )
             )}
         </p>
 
@@ -570,7 +579,7 @@ function CodeEditor({ problem }: Props) {
             }}
           >
             <h3>Test Case Results: </h3>
-            {testResults.map((result, index) => (
+            {testResults?.map((result, index) => (
               <div key={index} style={{ paddingTop: "0.5rem" }}>
                 <hr></hr>
                 <p>

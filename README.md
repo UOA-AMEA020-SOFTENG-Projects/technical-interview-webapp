@@ -115,8 +115,17 @@ git clone https://github.com/iane056/technical-interview-webapp.git
 
 Once the repository has been cloned, check the `.env` file in the backend and ensure that it includes the following line (provided that you are running jobe on port 400):
 
+Frontend env
+
 ```
-DB_URL=mongodb+srv://root:root1234@algochamp-cluster.npdxemw.mongodb.net/test?retryWrites=true&w=majority
+VITE_API_BASE_URL=http://localhost:3000
+VITE_STATSIG_SDK=
+```
+
+Backend env
+
+```
+MONGO_URI=""
 SECRET_KEY=secretkey23456
 PORT=3000
 JOBE_URL=http://localhost:4000
@@ -167,4 +176,3 @@ Dashboard
 
 Features:
 <img width="425" alt="image" src="https://github.com/user-attachments/assets/fea098af-0caa-4aaa-b881-8a035c02c141">
-
